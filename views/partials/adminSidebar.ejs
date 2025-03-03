@@ -1,0 +1,159 @@
+
+	<!-- Boxicons CSS (for icons styling) -->
+<!-- <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> -->
+
+<!-- Boxicons JavaScript (for animated icons, etc.) -->
+<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+
+
+<!-- Admin Dashboard Link (Visible Always) -->
+
+
+<!-- Navbar Toggle Button -->
+<button class="admin-navbar-toggler" id="adminToggler">
+    <span class="admin-navbar-toggler-icon">&#9776;</span>
+</button>
+
+<!-- SIDEBAR -->
+<section id="admin-sidebar">
+    <ul class="admin-side-menu">
+        <li>
+            <a href="/admin/dashboard">
+                <i class='bx bxs-dashboard bx-sm'></i>
+                <span class="text">Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/user">
+                <i class='bx bxs-user bx-sm'></i>
+                <span class="text">User</span>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/category">
+                <i class='bx bxs-category bx-sm'></i>
+                <span class="text">Category</span>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/products">
+                <i class='bx bxs-box bx-sm'></i>
+                <span class="text">Products</span>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/team">
+                <i class='bx bxs-group bx-sm'></i>
+                <span class="text">Team</span>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/settings">
+                <i class='bx bxs-cog bx-sm bx-spin-hover'></i>
+                <span class="text">Settings</span>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/logout" class="admin-logout">
+                <i class='bx bx-power-off bx-sm bx-burst-hover'></i>
+                <span class="text">Logout</span>
+            </a>
+        </li>
+    </ul>
+</section>
+<!-- SIDEBAR END -->
+
+<style>
+    /* 📌 Admin Dashboard Link (Visible at Top Left) */
+.admin-dashboard-link {
+    position: absolute;
+    top: 15px;
+    left: 65px;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    z-index: 1001;
+}
+
+/* 📌 Sidebar Styling (Now on the Left Side) */
+#admin-sidebar {
+    width: 0;
+    background: #ffffff; /* White Background */
+    color: black;
+    position: fixed;
+    height: 100vh;
+    left: 0; /* Now Positioned on the Left */
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    border-right: 2px solid #ddd; /* Light Border */
+    padding: 0;
+}
+
+/* When Sidebar is Expanded */
+#admin-sidebar.show {
+    width: 250px;
+    padding: 15px;
+}
+
+/* 📌 Navbar Toggle Button */
+.admin-navbar-toggler {
+    background: transparent;
+    border: none;
+    color: black;
+    font-size: 24px;
+    position: absolute;
+    left: 20px; /* Move Toggle Button to Left */
+    top: 15px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.admin-navbar-toggler-icon {
+    display: block;
+}
+
+/* 📌 Sidebar Menu */
+.admin-side-menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.admin-side-menu li {
+    padding: 10px;
+}
+
+.admin-side-menu li a {
+    color: black;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.admin-side-menu li a:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* 📌 Logout Button */
+.admin-logout {
+    color: red;
+}
+
+</style>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const sidebar = document.getElementById("admin-sidebar");
+    const toggler = document.getElementById("adminToggler");
+
+    // Toggle Sidebar
+    toggler.addEventListener("click", function () {
+        sidebar.classList.toggle("show");
+    });
+});
+
+</script>

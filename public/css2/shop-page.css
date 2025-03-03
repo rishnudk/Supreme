@@ -1,0 +1,178 @@
+
+
+
+
+
+
+  .items-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.items-count {
+    font-weight: bold;
+}
+
+.layout-toggle, .sort-options {
+    display: flex;
+    align-items: center;
+}
+
+.grid-view {
+    background: none;
+    border: 1px solid #E0E0E0;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.sort-options {
+    margin-left: 20px;
+}
+
+
+
+
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: #6b5f33; /* Light beige background */
+    border-radius: 25px; /* Rounded corners */
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+    font-size: 16px;
+    flex-grow: 1; /* Allow the input to grow */
+}
+
+.search-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.search-button img {
+    width: 20px; /* Adjust icon size */
+    height: 20px;
+}
+
+
+
+
+
+
+.price-slider {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.slider-container {
+    position: relative;
+    margin: 20px 0;
+}
+
+.slider {
+    position: relative;
+    height: 5px;
+    background-color: #ff4081; /* Pink track */
+    border-radius: 5px;
+}
+
+.track {
+    position: absolute;
+    top: -2.5px;
+    height: 5px;
+    background: white;
+    z-index: 1;
+}
+
+.thumb {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: white;
+    border: 2px solid #ff4081; /* Circle border color */
+    border-radius: 50%;
+    top: -5px;
+    z-index: 2;
+}
+
+.thumb.left {
+    left: 0; /* Position of left thumb */
+}
+
+.thumb.right {
+    right: 0; /* Position of right thumb */
+}
+
+.price-range {
+    font-size: 16px;
+    font-weight: normal;
+    margin-top: 10px;
+    text-align: center;
+}
+
+
+
+
+
+
+
+.filter-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    position: relative;
+    width: 300px;
+    border-radius: 5px;
+}
+
+.filter-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.color-filter {
+    margin-bottom: 15px;
+}
+
+.color-filter label {
+    margin-right: 10px;
+}
+
+.discount-filter {
+    margin-bottom: 15px;
+}
+
+.discount-filter input {
+    margin-right: 5px;
+}
+
+.category-filter,
+.brand-filter {
+    margin-bottom: 15px;
+}
+
+.price-filter {
+    margin-top: 15px;
+}
+
+.price-range {
+    width: 100%;
+}

@@ -1,0 +1,454 @@
+<!-- /*
+* Bootstrap 5
+* Template Name: Furni
+* Template Author: Untree.co
+* Template URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="favicon.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+		<!-- Bootstrap CSS -->
+		<link href="/css2/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+		<link href="/css2/tiny-slider.css" rel="stylesheet">
+		<link href="/css2/style.css" rel="stylesheet">
+		<link href="/css2/product-page.css" rel="stylesheet">
+		<title>Product Page </title>
+	</head>
+
+	<body>
+
+        <%- include('../partials/userNavbar') %>
+
+
+
+        
+
+		<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>Product</h1>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+
+
+
+
+
+
+
+
+
+
+
+ <!-- <div class="container">
+    <div class="product-container">
+
+
+
+
+
+        <div class="product-images">
+  <img id="mainImage" 
+       src="<%= product.images.length > 0 ? product.images[0] : '/images/default.png' %>" 
+       alt="<%= product.name %>" 
+       class="main-image"
+       onmousemove="zoomImage(this, event)"
+       onmouseleave="resetZoom(this)">
+
+  <% if (product.images.length > 1) { %>
+    <div class="thumbnail-container">
+      <% product.images.slice(0, 4).forEach((img, index) => { %>
+        <img src="<%= img %>" 
+             alt="Thumbnail <%= index + 1 %>" 
+             class="thumbnail <%= index === 0 ? 'active' : '' %>" 
+             onclick="changeImage('<%= img %>')">
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+        
+
+        <div class="product-info">
+            <div class="product-path">
+                <a href="/user/home">Home</a> &gt; <a href="#"><%= product.category.name %></a>
+            </div>
+            
+            <h1 class="product-title"><%= product.name %></h1>
+            <div class="product-brand">Brand: <%= product.brand %></div>
+            
+            <div class="product-rating">
+                <div class="stars">★★★★☆</div>
+                <div class="review-count">245 Reviews</div>
+            </div>
+            
+            <div class="product-price">
+                <div class="current-price">₹<%= product.price %></div>
+            </div>
+            
+            <p class="product-description"><%= product.description %></p>
+            
+            <div class="product-meta">
+                <div class="meta-item">
+                    <div class="meta-label">Category:</div>
+                    <div class="meta-value"><%= product.category.name %></div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">SKU:</div>
+                    <div class="meta-value"><%= product.sku %></div>
+                </div>
+            </div>
+            
+            <div class="product-colors">
+                <div class="section-title">Color Variants</div>
+                <div class="color-options">
+                    <% product.variants.forEach(variant => { %>
+                        <div class="color-option" style="background-color: <%= variant.color %>;" title="<%= variant.colorName %>"></div>
+                    <% }) %>
+                </div>
+            </div>
+            
+            <div class="product-actions">
+                <button class="btn btn-primary">Add to Cart</button>
+                <button class="btn btn-secondary">Order Now</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+	
+
+
+    <div class="related-products">
+		<h2 class="related-title">Related Products</h2>
+		<div class="related-products-container">
+			<% if (relatedProducts && relatedProducts.length > 0) { %>
+				<% relatedProducts.forEach(product => { %>
+					<div class="related-product-card" onclick="window.location.href='/user/product/<%= product._id %>'" style="cursor: pointer;">
+						<img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/default.png' %>"
+							 alt="<%= product.name %>"
+							 class="related-product-image">
+						<div class="related-product-name"><%= product.name %></div>
+						<div class="related-product-price">₹<%= product.price %></div>
+						<button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('<%= product._id %>')">Add to Cart</button>
+					</div>
+				<% }) %>
+			<% } else { %>
+				<p>No related products available.</p>
+			<% } %>
+		</div>
+	</div>
+
+
+
+</div> -->
+
+	
+
+
+<div class="container">
+    <div class="product-container">
+
+        <div class="product-images">
+            <img id="mainImage" 
+                 src="<%= product.images.length > 0 ? product.images[0] : '/images/default.png' %>" 
+                 alt="<%= product.name %>" 
+                 class="main-image"
+                 onmousemove="zoomImage(this, event)"
+                 onmouseleave="resetZoom(this)">
+
+            <% if (product.images.length > 1) { %>
+                <div class="thumbnail-container">
+                    <% product.images.slice(0, 4).forEach((img, index) => { %>
+                        <img src="<%= img %>" 
+                             alt="Thumbnail <%= index + 1 %>" 
+                             class="thumbnail <%= index === 0 ? 'active' : '' %>" 
+                             onclick="changeImage('<%= img %>')">
+                    <% }); %>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="product-info">
+            <div class="product-path">
+                <a href="/user/home">Home</a> &gt; <a href="#"><%= product.category ? product.category.name : 'Unknown' %></a>
+            </div>
+
+            <h1 class="product-title"><%= product.name %></h1>
+            <div class="product-brand">Brand: <%= product.brand %></div>
+
+            <div class="product-rating">
+                <div class="stars">★★★★☆</div>
+                <div class="review-count">245 Reviews</div>
+            </div>
+
+            <div class="product-price">
+                <div class="current-price">₹<%= product.price %></div>
+            </div>
+
+            <p class="product-description"><%= product.description %></p>
+
+            <div class="product-meta">
+                <div class="meta-item">
+                    <div class="meta-label">Category:</div>
+                    <div class="meta-value"><%= product.category ? product.category.name : 'Unknown' %></div>
+                </div>
+            </div>
+
+            <div class="product-colors">
+                <div class="section-title">Color Variants</div>
+                <div class="color-options">
+                    <% product.variant.forEach(variant => { %>
+                        <div class="color-option" style="background-color: <%= variant.color %>;" title="<%= variant.color %>"></div>
+                    <% }) %>
+                </div>
+            </div>
+
+            <div class="product-actions">
+                <button class="btn btn-primary">Add to Cart</button>
+                <button class="btn btn-secondary">Order Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+     
+
+
+
+			
+
+
+
+
+
+
+		<!-- Start Footer Section -->
+		<footer class="footer-section">
+			<div class="container relative">
+
+			
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="subscription-form">
+							<h3 class="d-flex align-items-center"><span class="me-1"><img src="images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
+
+							<form action="#" class="row g-3">
+								<div class="col-auto">
+									<input type="text" class="form-control" placeholder="Enter your name">
+								</div>
+								<div class="col-auto">
+									<input type="email" class="form-control" placeholder="Enter your email">
+								</div>
+								<div class="col-auto">
+									<button class="btn btn-primary">
+										<span class="fa fa-paper-plane"></span>
+									</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="row g-5 mb-5">
+					<div class="col-lg-4">
+						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Supreme<span>.</span></a></div>
+						<p class="mb-4">Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant</p>
+
+						<ul class="list-unstyled custom-social">
+							<li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>
+							<li><a href="#"><span class="fa fa-brands fa-twitter"></span></a></li>
+							<li><a href="#"><span class="fa fa-brands fa-instagram"></span></a></li>
+							<li><a href="#"><span class="fa fa-brands fa-linkedin"></span></a></li>
+						</ul>
+					</div>
+
+					<div class="col-lg-8">
+						<div class="row links-wrap">
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">About us</a></li>
+									<li><a href="#">Services</a></li>
+									<li><a href="#">Blog</a></li>
+									<li><a href="#">Contact us</a></li>
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">Support</a></li>
+									<li><a href="#">Knowledge base</a></li>
+									<li><a href="#">Live chat</a></li>
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">Jobs</a></li>
+									<li><a href="#">Our team</a></li>
+									<li><a href="#">Leadership</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">Nordic Chair</a></li>
+									<li><a href="#">Kruzo Aero</a></li>
+									<li><a href="#">Ergonomic Chair</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="border-top copyright">
+					<div class="row pt-4">
+						<div class="col-lg-6">
+							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a>  Distributed By <a href="https://themewagon.com">ThemeWagon</a> <!-- License information: https://untree.co/license/ -->
+            </p>
+						</div>
+
+						<div class="col-lg-6 text-center text-lg-end">
+							<ul class="list-unstyled d-inline-flex ms-auto">
+								<li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
+								<li><a href="#">Privacy Policy</a></li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</footer>
+		<!-- End Footer Section -->	
+
+
+		<script src="js/bootstrap.bundle.min.js"></script>
+		<script src="js/tiny-slider.js"></script>
+		<script src="js/custom.js"></script>
+
+
+
+		<script>
+
+function changeImage(newImage) {
+    let mainImage = document.getElementById("mainImage");
+    let thumbnails = document.querySelectorAll(".thumbnail");
+
+    // Swap main image
+    mainImage.src = newImage;
+
+    // Remove 'active' class from all thumbnails
+    thumbnails.forEach(thumbnail => thumbnail.classList.remove("active"));
+
+    // Add 'active' class to clicked thumbnail
+    thumbnails.forEach(thumbnail => {
+        if (thumbnail.src === newImage) {
+            thumbnail.classList.add("active");
+        }
+    });
+}
+
+
+
+
+function zoomImage(imageElement, event) {
+    const rect = imageElement.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const xPercent = (x / rect.width) * 100;
+    const yPercent = (y / rect.height) * 100;
+
+    imageElement.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+    imageElement.style.transform = "scale(2.0)";
+    imageElement.style.cursor = "zoom-in";
+  }
+
+  function resetZoom(imageElement) {
+    imageElement.style.transform = "scale(1)";
+    imageElement.style.cursor = "default";
+  }
+
+  function changeImage(imageSrc) {
+    const mainImage = document.getElementById('mainImage');
+    mainImage.src = imageSrc;
+    resetZoom(mainImage);
+  }
+
+
+
+//   function addToCart(productId) {
+//     fetch('/cart/add', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ productId: productId })
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.success) {
+//             alert('Product added to cart!');
+//             // Update cart UI if needed
+//         } else {
+//             alert('Failed to add to cart.');
+//         }
+//     })
+//     .catch(error => console.error('Error:', error));
+// }
+
+
+
+
+function addToCart(productId) {
+    fetch('/user/cart/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId: productId })
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url; // Follow redirect to cart page
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+        </script>
+
+	</body>
+
+</html>

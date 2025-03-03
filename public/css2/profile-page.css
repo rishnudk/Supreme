@@ -1,0 +1,264 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+  }
+  
+  .profile-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  /* Header Section */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .profile-photo {
+    position: relative;
+  }
+  
+  .profile-photo img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+  }
+  
+  .edit-photo-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .welcome-message h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .quick-links button {
+    margin-left: 10px;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .quick-links button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Tabbed Navigation */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+  }
+  
+  .tab-button {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    background-color: #f1f1f1;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .tab-button.active {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .tab-content {
+    display: none;
+    padding: 20px;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  /* Dashboard Tab */
+  .order-list .order-item,
+  .wishlist-items .wishlist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .order-list button,
+  .wishlist-items button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .order-list button:hover,
+  .wishlist-items button:hover {
+    background-color: #0056b3;
+  }
+  
+  .wallet-balance p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .quick-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .quick-actions button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .quick-actions button:hover {
+    background-color: #0056b3;
+  }
+
+  /* Wallet Tab */
+.wallet-balance {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .transaction-history .transaction-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Address Book Tab */
+  .saved-addresses .address-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .saved-addresses button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .saved-addresses button:hover {
+    background-color: #0056b3;
+  }
+  
+  .add-new-address-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-new-address-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Payments Tab */
+  .payment-methods .payment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .payment-methods button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .payment-methods button:hover {
+    background-color: #0056b3;
+  }
+  
+  .add-new-payment-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-new-payment-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Settings Tab */
+  .edit-profile-form,
+  .change-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .edit-profile-form input,
+  .change-password-form input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .edit-profile-form button,
+  .change-password-form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .edit-profile-form button:hover,
+  .change-password-form button:hover {
+    background-color: #0056b3;
+  }

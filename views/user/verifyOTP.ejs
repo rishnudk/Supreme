@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Phone Verification</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f7ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .otp-input {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            text-align: center;
+            background: #f8f8f8;
+            transition: all 0.3s;
+        }
+
+        .otp-input:focus {
+            border-color: #4f46e5;
+            background: white;
+            outline: none;
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .verify-btn:hover {
+            background: #4338ca;
+        }
+
+        .verify-btn:disabled {
+            background: #a5a5a5;
+            cursor: not-allowed;
+        }
+
+        .resend-container {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .resend-link {
+            color: #4f46e5;
+            text-decoration: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        .resend-link:hover {
+            text-decoration: underline;
+        }
+
+        .timer {
+            color: #666;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .password-input:focus {
+            border-color: #4f46e5;
+            outline: none;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Mobile Phone Verification</h1>
+        <p class="subtitle">Enter the 4-digit verification code that was sent to your phone number.</p>
+        
+        <form id="otpForm" action="/user/verify-otp" method="POST">
+            <div class="otp-container">
+                <input type="text" class="otp-input" maxlength="1" pattern="\d" required>
+                <input type="text" class="otp-input" maxlength="1" pattern="\d" required>
+                <input type="text" class="otp-input" maxlength="1" pattern="\d" required>
+                <input type="text" class="otp-input" maxlength="1" pattern="\d" required>
+            </div>
+            <div class="error-message">Please enter all 4 digits</div>
+            <input type="hidden" name="otp" id="finalOtp">
+            <button type="submit" class="verify-btn" disabled>Verify Account</button>
+        </form>
+
+        <div class="resend-container">
+            <span class="timer">Resend code in <span id="countdown">01:00</span></span>
+            <a href="#" class="resend-link" id="resendLink">Resend</a>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="passwordModal">
+        <div class="modal-content">
+            <h1>Set New Password</h1>
+            <p class="subtitle">Create a strong password for your account</p>
+    
+            <form id="passwordForm" action="/user/reset-password" method="POST">
+                <input type="password" name="password" class="password-input" placeholder="New Password" required>
+                <input type="password" name="confirm" class="password-input" placeholder="Confirm Password" required>
+                <div class="error-message" style="display: none;">Passwords do not match</div>
+                <button type="submit" class="verify-btn">Set Password</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('otpForm');
+            const inputs = form.querySelectorAll('.otp-input');
+            const finalOtpInput = document.getElementById('finalOtp');
+            const submitButton = form.querySelector('.verify-btn');
+            const errorMessage = form.querySelector('.error-message');
+            const resendLink = document.getElementById('resendLink');
+            const countdownEl = document.getElementById('countdown');
+            const timerEl = document.querySelector('.timer');
+            const modal = document.getElementById('passwordModal');
+
+            // Timer functionality
+            let timeLeft = 60; // 1 minute
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    timerEl.style.display = 'none';
+                    resendLink.style.display = 'inline';
+                } else {
+                    timeLeft--;
+                    setTimeout(updateTimer, 1000);
+                }
+            }
+
+            updateTimer();
+
+            // Resend functionality
+            resendLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Add your resend API call here
+                
+                // Reset timer
+                timeLeft = 60;
+                timerEl.style.display = 'inline';
+                resendLink.style.display = 'none';
+                updateTimer();
+            });
+
+            // Handle input
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    e.target.value = value;
+
+                    if (value) {
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    }
+
+                    updateFormState();
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, inputs.length);
+                    
+                    pastedData.split('').forEach((digit, i) => {
+                        if (inputs[i]) {
+                            inputs[i].value = digit;
+                        }
+                    });
+
+                    const nextEmptyIndex = [...inputs].findIndex(input => !input.value);
+                    const focusIndex = nextEmptyIndex === -1 ? inputs.length - 1 : nextEmptyIndex;
+                    inputs[focusIndex].focus();
+
+                    updateFormState();
+                });
+            });
+
+            function updateFormState() {
+                const otp = [...inputs].map(input => input.value).join('');
+                finalOtpInput.value = otp;
+                const isComplete = otp.length === inputs.length;
+                submitButton.disabled = !isComplete;
+                errorMessage.style.display = otp.length > 0 && !isComplete ? 'block' : 'none';
+            }
+
+            // Form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const otp = finalOtpInput.value;
+                
+                // Simulate OTP verification
+                if (otp.length === inputs.length) {
+                    // Add your OTP verification API call here
+                    // For demo, showing modal after 1 second delay
+                    setTimeout(() => {
+                        modal.style.display = 'flex';
+                    }, 1000);
+                } else {
+                    errorMessage.style.display = 'block';
+                }
+            });
+
+            // Password form handling
+            document.addEventListener('DOMContentLoaded', () => {
+        const passwordForm = document.getElementById('passwordForm');
+        const passwordInputs = passwordForm.querySelectorAll('input[type="password"]');
+        const passwordError = passwordForm.querySelector('.error-message');
+
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const password = passwordInputs[0].value;
+            const confirmPassword = passwordInputs[1].value;
+
+            if (password !== confirmPassword) {
+                passwordError.style.display = 'block';
+                return;
+            }
+
+            // Prepare the data to be sent to the backend
+            const data = { password, confirm: confirmPassword };
+
+            try {
+                // Make the POST request to reset the password
+                const response = await fetch('/user/reset-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Password changed successfully!');
+                    document.getElementById('passwordModal').style.display = 'none';
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+    });
+        }); 
+    </script>
+</body>
+</html>

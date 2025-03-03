@@ -1,0 +1,314 @@
+/* 📌 Root Variables for Consistency */
+:root {
+    --primary: #1e88e5;
+    --secondary: #ff4081;
+    --background: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #212121;
+    --text-light: #757575;
+    --error: #d32f2f;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --sidebar-width-closed: 0px;
+    --sidebar-width-open: 250px; /* Match adminSidebar.css */
+}
+
+/* 📌 Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* 📌 Container with Sidebar Offset */
+.container {
+    margin-left: var(--sidebar-width-closed);
+    padding: 2rem;
+    min-height: 100vh;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+/* Adjust container when sidebar is open */
+#admin-sidebar.show ~ .container {
+    margin-left: var(--sidebar-width-open);
+    width: calc(100% - var(--sidebar-width-open));
+}
+
+/* 📌 Card Styling */
+.card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+/* 📌 Form Title */
+.form-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 📌 Form Group */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* 📌 Form Label */
+.form-label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+/* 📌 Form Control */
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(30, 136, 229, 0.2);
+    outline: none;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* 📌 Variant Item */
+.variant-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* 📌 Image Upload Container */
+.image-upload-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.image-upload-box {
+    position: relative;
+    text-align: center;
+}
+
+.upload-label {
+    display: block;
+    background: var(--primary);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.upload-label:hover {
+    background: #1565c0;
+}
+
+.image-preview {
+    display: none;
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    object-fit: cover;
+}
+
+.image-preview.cropped {
+    display: block;
+}
+
+.remove-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--error);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.remove-image:hover {
+    background: #b71c1c;
+}
+
+/* 📌 Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1565c0;
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    background: #bdbdbd;
+}
+
+/* 📌 Error Message */
+.error-message {
+    color: var(--error);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+/* 📌 Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: var(--shadow);
+}
+
+.cropper-container {
+    max-height: 400px;
+    overflow: hidden;
+}
+
+#cropperImage {
+    max-width: 100%;
+}
+
+.modal-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+/* 📌 Responsive Adjustments */
+@media (max-width: 768px) {
+    #admin-sidebar.show ~ .container {
+        margin-left: var(--sidebar-width-open);
+        width: calc(100% - var(--sidebar-width-open));
+    }
+
+    .container {
+        margin-left: 0;
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    .image-upload-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .variant-item {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    #admin-sidebar.show ~ .container {
+        margin-left: 0; /* Sidebar likely overlays on small screens */
+        width: 100%;
+    }
+
+    .container {
+        padding: 0.5rem;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+
+    .form-title {
+        font-size: 1.25rem;
+    }
+
+    .image-upload-container {
+        grid-template-columns: 1fr;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+    }
+
+    .image-upload-box {
+        width: 120px; /* Smaller images on mobile */
+    }
+
+    .image-preview {
+        max-width: 120px;
+    }
+}

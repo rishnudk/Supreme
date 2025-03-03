@@ -1,0 +1,263 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="favicon.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+		<!-- Bootstrap CSS -->
+		<link href="/css2/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+		<link href="/css2/tiny-slider.css" rel="stylesheet">
+		<link href="/css2/style.css" rel="stylesheet">
+		<link href="/css2/profile-page.css" rel="stylesheet">
+	</head>
+
+	<body>
+
+        <%- include('../partials/userNavbar') %>
+
+
+
+        
+
+		<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>profile</h1>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+
+
+
+
+
+
+          <div class="profile-container">
+            <!-- Header Section -->
+            <div class="profile-header">
+              <div class="profile-photo">
+                <img src="https://via.placeholder.com/100" alt="Profile Photo">
+                <button class="edit-photo-btn">Edit</button>
+              </div>
+              <div class="welcome-message">
+                <h1>Hello, Rishnu!</h1>
+              </div>
+              <div class="quick-links">
+                <button class="edit-profile-btn">Edit Profile</button>
+                <button class="change-password-btn">Change Password</button>
+                <button class="logout-btn">Logout</button>
+              </div>
+            </div>
+        
+            <!-- Tabbed Navigation -->
+            <div class="tabs">
+              <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+              <button class="tab-button" data-tab="orders">Orders</button>
+              <button class="tab-button" data-tab="wishlist">Wishlist</button>
+              <button class="tab-button" data-tab="wallet">Wallet</button>
+              <button class="tab-button" data-tab="address-book">Address Book</button>
+              <button class="tab-button" data-tab="payments">Payments</button>
+              <button class="tab-button" data-tab="settings">Settings</button>
+            </div>
+        
+            <!-- Dashboard Tab (Default) -->
+            <div id="dashboard" class="tab-content active">
+              <h2>Recent Orders</h2>
+              <div class="order-list">
+                <div class="order-item">
+                  <p>Order #1234 - Delivered</p>
+                  <button class="view-details-btn">View Details</button>
+                </div>
+                <div class="order-item">
+                  <p>Order #1235 - Pending</p>
+                  <button class="track-order-btn">Track Order</button>
+                </div>
+                <button class="view-all-orders-btn">View All Orders</button>
+              </div>
+        
+              <h2>Wallet Balance</h2>
+              <div class="wallet-balance">
+                <p>$50.00</p>
+                <button class="add-funds-btn">Add Funds</button>
+                <button class="transaction-history-btn">View Transaction History</button>
+              </div>
+        
+              <h2>Quick Actions</h2>
+              <div class="quick-actions">
+                <button class="add-address-btn">Add New Address</button>
+                <button class="manage-payments-btn">Manage Payments</button>
+                <button class="view-wishlist-btn">View Wishlist</button>
+              </div>
+            </div>
+        
+            <!-- Orders Tab -->
+            <div id="orders" class="tab-content">
+              <h2>Order History</h2>
+              <div class="order-history">
+                <div class="order-item">
+                  <p>Order #1234 - Delivered</p>
+                  <button class="view-details-btn">View Details</button>
+                </div>
+                <div class="order-item">
+                  <p>Order #1235 - Pending</p>
+                  <button class="track-order-btn">Track Order</button>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Wishlist Tab -->
+            <div id="wishlist" class="tab-content">
+              <h2>Your Wishlist</h2>
+              <div class="wishlist-items">
+                <div class="wishlist-item">
+                  <p>Product Name 1</p>
+                  <button class="move-to-cart-btn">Move to Cart</button>
+                  <button class="remove-item-btn">Remove</button>
+                </div>
+                <div class="wishlist-item">
+                  <p>Product Name 2</p>
+                  <button class="move-to-cart-btn">Move to Cart</button>
+                  <button class="remove-item-btn">Remove</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+
+
+              <!-- Wallet Tab -->
+    <div id="wallet" class="tab-content">
+        <h2>Wallet Balance</h2>
+        <div class="wallet-balance">
+          <p>$50.00</p>
+          <button class="add-funds-btn">Add Funds</button>
+          <button class="transaction-history-btn">View Transaction History</button>
+        </div>
+  
+        <h2>Transaction History</h2>
+        <div class="transaction-history">
+          <div class="transaction-item">
+            <p>Date: 2023-10-01 | Amount: $20.00 | Description: Added Funds</p>
+          </div>
+          <div class="transaction-item">
+            <p>Date: 2023-09-25 | Amount: $30.00 | Description: Purchase</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Address Book Tab -->
+      <div id="address-book" class="tab-content">
+        <h2>Address Book</h2>
+        <div class="saved-addresses">
+          <div class="address-item">
+            <p>John Doe, 123 Main St, City, State, 12345</p>
+            <button class="edit-address-btn">Edit</button>
+            <button class="delete-address-btn">Delete</button>
+          </div>
+        </div>
+        <button class="add-new-address-btn">Add New Address</button>
+      </div>
+  
+      <!-- Payments Tab -->
+      <div id="payments" class="tab-content">
+        <h2>Saved Payment Methods</h2>
+        <div class="payment-methods">
+          <div class="payment-item">
+            <p>Card Ending in 1234</p>
+            <button class="edit-payment-btn">Edit</button>
+            <button class="delete-payment-btn">Delete</button>
+          </div>
+        </div>
+        <button class="add-new-payment-btn">Add New Payment Method</button>
+      </div>
+  
+      <!-- Settings Tab -->
+      <div id="settings" class="tab-content">
+        <h2>Edit Profile</h2>
+        <form class="edit-profile-form">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" value="John Doe">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" value="johndoe@example.com">
+          <label for="phone">Phone:</label>
+          <input type="tel" id="phone" name="phone" value="123-456-7890">
+          <button type="submit">Save Changes</button>
+        </form>
+  
+        <h2>Change Password</h2>
+        <form class="change-password-form">
+          <label for="current-password">Current Password:</label>
+          <input type="password" id="current-password" name="current-password">
+          <label for="new-password">New Password:</label>
+          <input type="password" id="new-password" name="new-password">
+          <label for="confirm-password">Confirm Password:</label>
+          <input type="password" id="confirm-password" name="confirm-password">
+          <button type="submit">Change Password</button>
+        </form>
+      </div>
+    </div>
+
+   
+
+
+
+     
+
+
+
+			
+
+
+
+
+
+
+
+		<script src="js/bootstrap.bundle.min.js"></script>
+		<script src="js/tiny-slider.js"></script>
+		<script src="js/custom.js"></script>
+
+        <script>
+
+     
+            document.addEventListener("DOMContentLoaded", function () {
+              const tabButtons = document.querySelectorAll(".tab-button");
+              const tabContents = document.querySelectorAll(".tab-content");
+            
+              tabButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                  // Remove active class from all buttons and contents
+                  tabButtons.forEach((btn) => btn.classList.remove("active"));
+                  tabContents.forEach((content) => content.classList.remove("active"));
+            
+                  // Add active class to the clicked button and corresponding content
+                  button.classList.add("active");
+                  const tabId = button.getAttribute("data-tab");
+                  document.getElementById(tabId).classList.add("active");
+                });
+              });
+            });
+                </script>
+                    
+            
+
+		
+	</body>
+
+</html>

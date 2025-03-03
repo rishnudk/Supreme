@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/productUpdate.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+</head>
+<body>
+
+
+
+    <%- include('../partials/adminSidebar') %>
+
+    <div class="prd-container">
+      <div class="prd-card">
+        <h2 class="prd-form-title">Update Product</h2>
+        <form id="productForm" enctype="multipart/form-data">
+          <input type="hidden" id="productId" name="productId" value="<%= product._id %>">
+    
+          <div class="prd-form-group">
+            <label class="prd-form-label" for="name">Product Name</label>
+            <input type="text" id="name" name="name" class="prd-form-control" value="<%= product.name %>">
+            <div class="error-message" id="name-error"></div>
+          </div>
+    
+          <div class="prd-form-group">
+            <label class="prd-form-label" for="brand">Brand</label>
+            <input type="text" id="brand" name="brand" class="prd-form-control" value="<%= product.brand %>">
+            <div class="error-message" id="brand-error"></div>
+          </div>
+    
+          <div class="prd-form-group">
+            <label class="prd-form-label" for="price">Price</label>
+            <input type="number" id="price" name="price" class="prd-form-control" value="<%= product.price %>"
+              min="0" step="0.01">
+            <div class="error-message" id="price-error"></div>
+          </div>
+    
+          <div class="prd-form-group">
+            <label class="prd-form-label" for="description">Description</label>
+            <textarea id="description" name="description" class="prd-form-control" rows="4"><%= product.description %></textarea>
+            <div class="error-message" id="description-error"></div>
+          </div>
+    
+          <div class="prd-form-group">
+            <label class="prd-form-label" for="category">Category</label>
+            <select id="category" name="category" class="prd-form-control">
+              <option value="">Select Category</option>
+              <% categories.forEach(category => { %>
+                <option value="<%= category._id %>" <%= product.category && product.category._id.toString() === category._id.toString() ? "selected" : "" %>>
+                  <%= category.name %>
+                </option>
+              <% }) %>
+            </select>
+            <div class="error-message" id="category-error"></div>
+          </div>
+    
+          <div class="prd-form-group">
+            <label class="prd-form-label">Product Images (Exactly 4 Required)</label>
+            <div class="prd-prod-image-upload-container">
+              <% for (let i = 0; i < 4; i++) { 
+                  const hasImage = i < product.images.length;
+                  const imageSrc = hasImage ? product.images[i] : 'https://via.placeholder.com/150?text=No+Image';
+              %>
+              <div class="prd-prod-image-upload-box">
+                <div class="prd-prod-image-preview-wrapper">
+                  <img class="prd-prod-image-preview <%= hasImage ? 'cropped' : '' %>" 
+                       id="preview<%= i %>" 
+                       src="<%= imageSrc %>" 
+                       alt="Image <%= i + 1 %>">
+                </div>
+                <div class="prd-prod-image-actions">
+                  <% if (hasImage) { %>
+                    <input type="hidden" name="existingImages[]" value="<%= imageSrc %>">
+                  <% } %>
+                  <label for="image<%= i %>" class="prd-prod-upload-btn">
+                    <%= hasImage ? 'Replace Image' : 'Add Image' %>
+                  </label>
+                  <input id="image<%= i %>" type="file" name="images" accept="image/*" 
+                         onchange="showCropper(event.target.files[0], <%= i %>)">
+                  <button type="button" class="prd-remove-image" data-index="<%= i %>" 
+                          style="display: <%= hasImage ? 'block' : 'none' %>;" 
+                          onclick="removeImage(<%= i %>)">Remove</button>
+                </div>
+              </div>
+              <% } %>
+            </div>
+            <div class="error-message" id="images-error"></div>
+          </div>
+    
+          <div class="prd-form-group">
+            <label class="prd-form-label">Variant</label>
+            <div class="variant-item">
+              <input type="text" id="color" name="color" placeholder="Color" class="prd-form-control" 
+                     value="<%= product.variant ? product.variant.color : '' %>">
+              <div class="error-message" id="color-error"></div>
+              <input type="number" id="stock" name="stock" placeholder="Stock" min="0" class="prd-form-control" 
+                     value="<%= product.variant ? product.variant.stock : '' %>">
+              <div class="error-message" id="stock-error"></div>
+            </div>
+          </div>
+    
+          <div class="prd-form-group">
+            <label class="prd-form-label" for="status">Status</label>
+            <select id="status" name="status" class="prd-form-control">
+              <option value="Active" <%= product.status === 'Active' ? 'selected' : '' %>>Active</option>
+              <option value="Inactive" <%= product.status === 'Inactive' ? 'selected' : '' %>>Inactive</option>
+            </select>
+            <div class="error-message" id="status-error"></div>
+          </div>
+    
+          <button type="submit" class="prd-btn-primary">Update Product</button>
+        </form>
+      </div>
+    </div>
+    
+    <div id="cropperModal" class="prd-modal">
+      <div class="prd-modal-content">
+        <div class="prd-cropper-container">
+          <img id="cropperImage" src="" alt="Image to crop">
+        </div>
+        <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+          <button class="prd-btn-primary" onclick="cropImage()">Crop & Save</button>
+          <button class="prd-btn-secondary" onclick="cancelCrop()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="/js/product-update.js"></script>
+
+
+
+
+</body>
+</html>

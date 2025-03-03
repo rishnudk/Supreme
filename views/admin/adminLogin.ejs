@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link rel="stylesheet" href="/css/userLogin.css">
+
+</head>
+<body>
+
+    <section>
+        <div id="cover">
+            <img draggable="false" src="https://i.pinimg.com/736x/cb/20/60/cb206047101b354898b36e564a33cc65.jpg" alt="logo" id="icon" width="40" style="mix-blend-mode: color-dodge;">
+    
+            <input type="radio" name="controler" id="slide1" hidden checked>
+            <input type="radio" name="controler" id="slide2" hidden>
+            <input type="radio" name="controler" id="slide3" hidden>
+            <input type="radio" name="controler" id="slide4" hidden>
+    
+            <div id="sliderContainer">
+                <div id="model1">
+                    <h1>"NoName has become an essential tool in our workflow, helping us create stunning websites effortlessly."</h1>
+                    <span class="about">
+                        <div class="controlLabels">
+                            <label for="slide4" class="before">←</label>
+                            <label for="slide2" class="after">→</label>
+                        </div>
+                    </span>
+                    <img draggable="false" src="https://i.pinimg.com/236x/70/9e/57/709e574de051258a80745a745163acfb.jpg" alt="model1" id="imgModel1" width="110" height="150" style="object-fit: cover">
+                </div>
+                <div id="model2">
+                    <h1>"Since incorporating NoName into our process, every project feels more streamlined and efficient."</h1>
+                    <span class="about">
+                        <div class="controlLabels">
+                            <label for="slide1" class="before">←</label>
+                            <label for="slide3" class="after">→</label>
+                        </div>
+                    </span>
+                    <img draggable="false" src="https://i.pinimg.com/736x/a3/e3/11/a3e311abe61ffe88653cec16b45f051f.jpg" alt="model2" id="imgModel2" width="110" height="150" style="object-fit: cover">
+                </div>
+                <div id="model3">
+                    <h1>"We rely on NoName for every new design, and it’s made a huge difference in our productivity."</h1>
+                    <span class="about">
+                        <div class="controlLabels">
+                            <label for="slide2" class="before">←</label>
+                            <label for="slide4" class="after">→</label>
+                        </div>
+                    </span>
+                    <img draggable="false" src="https://i.pinimg.com/736x/c8/5e/a5/c85ea5f0a0cc23c1f8b21ca769c40a57.jpg" alt="model3" id="imgModel3" width="110" height="150" style="object-fit: cover">
+                </div>
+                <div id="model4">
+                    <h1>"NoName is the backbone of our design process, and we couldn’t imagine working without it."</h1>
+                    <span class="about">
+                        <div class="controlLabels">
+                            <label for="slide3" class="before">←</label>
+                            <label for="slide1" class="after">→</label>
+                        </div>
+                    </span>
+                    <img draggable="false" src="https://i.pinimg.com/236x/4e/79/9a/4e799a1440f4d908af1b8cd3f69505fb.jpg" alt="model4" id="imgModel4" width="110" height="150" style="object-fit: cover">
+                </div>
+            </div>
+        </div>
+        <div id="loginForm">
+            <h1>Welcome Admin</h1>
+            <small>Let's get going...!!</small>
+            <form id="createAccountForm" action="/admin/login" method="POST">
+                
+                <input type="email" name="email" id="email" placeholder="Email" required>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <button type="submit" id="createAccount">Login</button>
+                
+            </form>
+           
+        </div>
+
+
+
+        
+        
+    </section>
+    
+</body>
+</html>
