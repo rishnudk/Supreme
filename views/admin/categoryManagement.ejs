@@ -10,705 +10,8 @@
 
 
 
-  <!-- <style>
-    /* General Styles */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-    }
-
-    /* Header Section */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .header h1 {
-      font-size: 24px;
-      margin: 0;
-    }
-
-    .add-category-btn {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .add-category-btn:hover {
-      background-color: #0056b3;
-    }
-
-    /* Search & Reset Section */
-    .search-section {
-      display: flex;
-      margin-bottom: 20px;
-    }
-
-    .search-input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    .reset-btn {
-      background-color: #6c757d;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      margin-left: 10px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .reset-btn:hover {
-      background-color: #5a6268;
-    }
-
-    /* Category Table */
-    .category-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-
-    .category-table th,
-    .category-table td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .category-table th {
-      background-color: #f8f9fa;
-      font-weight: bold;
-    }
-
-    .category-table tr:hover {
-      background-color: #f1f1f1;
-    }
-
-    .status {
-      padding: 5px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .status.active {
-      background-color: #d4edda;
-      color: #155724;
-    }
-
-    .action-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-
-    .edit-btn {
-      color: #007bff;
-    }
-
-    .delete-btn {
-      color: #dc3545;
-    }
-
-    /* Pagination Controls */
-    .pagination {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .pagination-info {
-      font-size: 14px;
-    }
-
-    .pagination-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .pagination-btn {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .pagination-btn:hover {
-      background-color: #0056b3;
-    }
-
-    /* Modal Styles */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      width: 400px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .modal h2 {
-      margin-top: 0;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .cancel-btn {
-      background-color: #6c757d;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .cancel-btn:hover {
-      background-color: #5a6268;
-    }
-
-    .save-btn {
-      background-color: #28a745;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .save-btn:hover {
-      background-color: #218838;
-    }
-
-
-
-
-
-
-    .status.active {
-        color: green;
-        font-weight: bold;
-      }
-
-      .status.inactive {
-        color: red;
-        font-weight: bold;
-      }
-
-      .action-btn {
-        cursor: pointer;
-        padding: 5px 10px;
-      }
-
-      .pagination {
-        margin-top: 20px;
-      }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .add-category-btn {
-        margin-top: 10px;
-      }
-
-      .search-section {
-        flex-direction: column;
-      }
-
-      .reset-btn {
-        margin-left: 0;
-        margin-top: 10px;
-      }
-
-      .category-table th,
-      .category-table td {
-        padding: 8px;
-      }
-
-      .modal {
-        width: 90%;
-      }
-    }
-  </style> -->
 
 <!-- <style>
-  /* 📌 Root Variables for 2025 Design */
-:root {
-    --primary: #1e88e5; /* Vibrant blue */
-    --secondary: #ff4081; /* Secondary accent */
-    --background: #f5f7fa; /* Light background */
-    --card-bg: #ffffff; /* White card */
-    --text: #212121; /* Dark text */
-    --text-light: #757575; /* Lighter text */
-    --error: #d32f2f; /* Red for errors */
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Modern shadow */
-    --sidebar-width-closed: 0px;
-    --sidebar-width-open: 250px; /* Match adminSidebar.css */
-}
-
-/* 📌 Container Styling */
-.container {
-    margin-left: var(--sidebar-width-closed);
-    padding: 2rem;
-    min-height: 100vh;
-    width: 100%;
-    transition: all 0.3s ease-in-out;
-}
-
-/* Adjust container when sidebar is open */
-#admin-sidebar.show ~ .container {
-    margin-left: var(--sidebar-width-open);
-    width: calc(100% - var(--sidebar-width-open));
-}
-
-/* 📌 Header Section */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-}
-
-.header h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* 📌 Add Category Button */
-.add-category-btn {
-    padding: 0.75rem 1.5rem;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.add-category-btn:hover {
-    background: #1565c0;
-}
-
-/* 📌 Search & Reset Section */
-.search-section {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.search-input {
-    width: 100%;
-    max-width: 400px;
-    padding: 0.75rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.search-input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 8px rgba(30, 136, 229, 0.2);
-    outline: none;
-}
-
-.reset-btn {
-    padding: 0.75rem 1.5rem;
-    background: #e0e0e0;
-    color: var(--text);
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.reset-btn:hover {
-    background: #bdbdbd;
-}
-
-/* 📌 Category Table */
-.category-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--card-bg);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-}
-
-.category-table thead th {
-    background: var(--primary);
-    color: white;
-    padding: 1rem;
-    font-size: 1.1rem;
-    font-weight: 500;
-    text-align: left;
-}
-
-.category-table tbody tr {
-    border-bottom: 1px solid #e0e0e0;
-    transition: background 0.3s ease;
-}
-
-.category-table tbody tr:hover {
-    background: rgba(0, 0, 0, 0.05);
-}
-
-.category-table td {
-    padding: 1rem;
-    font-size: 1rem;
-}
-
-.status.active {
-    color: #1e88e5;
-    font-weight: 500;
-}
-
-.status.inactive {
-    color: var(--error);
-    font-weight: 500;
-}
-
-.action-btn {
-    background: none;
-    border: none;
-    color: var(--primary);
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    margin-right: 0.5rem;
-}
-
-.action-btn:hover {
-    color: #1565c0;
-}
-
-.action-btn.delete-btn {
-    color: var(--error);
-}
-
-.action-btn.delete-btn:hover {
-    color: #b71c1c;
-}
-
-/* 📌 Pagination Controls */
-.pagination {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 2rem;
-}
-
-.pagination-info {
-    font-size: 1rem;
-    color: var(--text-light);
-}
-
-.pagination-buttons {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.pagination-btn {
-    padding: 0.5rem 1rem;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.pagination-btn:hover {
-    background: #1565c0;
-}
-
-/* 📌 Modal Overlay */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* 📌 Modal Content */
-.modal {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 2rem;
-    max-width: 600px;
-    width: 90%;
-    box-shadow: var(--shadow);
-}
-
-.modal h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 1.5rem;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* 📌 Form Group in Modal */
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 8px rgba(30, 136, 229, 0.2);
-    outline: none;
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.error-message {
-    color: var(--error);
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
-}
-
-/* 📌 Form Actions in Modal */
-.form-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 1.5rem;
-}
-
-.cancel-btn {
-    padding: 0.75rem 1.5rem;
-    background: #e0e0e0;
-    color: var(--text);
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.cancel-btn:hover {
-    background: #bdbdbd;
-}
-
-.save-btn {
-    padding: 0.75rem 1.5rem;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.save-btn:hover {
-    background: #1565c0;
-}
-
-/* 📌 Responsive Adjustments */
-@media (max-width: 768px) {
-    #admin-sidebar.show ~ .container {
-        margin-left: 250px;
-        width: calc(100% - 250px);
-    }
-
-    .container {
-        margin-left: 0;
-        padding: 1rem;
-        width: 100%;
-    }
-
-    .header h1 {
-        font-size: 1.5rem;
-    }
-
-    .search-section {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .search-input {
-        max-width: 100%;
-    }
-
-    .category-table th,
-    .category-table td {
-        font-size: 0.9rem;
-        padding: 0.75rem;
-    }
-
-    .modal {
-        padding: 1.5rem;
-    }
-
-    .modal h2 {
-        font-size: 1.25rem;
-    }
-}
-
-@media (max-width: 480px) {
-    #admin-sidebar.show ~ .container {
-        margin-left: 0; /* Sidebar overlays on small screens */
-        width: 100%;
-    }
-
-    .container {
-        padding: 0.5rem;
-    }
-
-    .header {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .header h1 {
-        font-size: 1.25rem;
-    }
-
-    .add-category-btn,
-    .reset-btn,
-    .pagination-btn,
-    .cancel-btn,
-    .save-btn {
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-    }
-
-    .category-table {
-        font-size: 0.8rem;
-    }
-
-    .category-table th,
-    .category-table td {
-        padding: 0.5rem;
-    }
-
-    .pagination {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-}
-</style> -->
-
-
-<style>
   /* 📌 Root Variables for 2025 Design */
 :root {
     --primary: #1e88e5;
@@ -1125,6 +428,428 @@
     }
 }
 </style>
+ -->
+
+
+
+ <style>
+  /* 📌 Root Variables for 2025 Design */
+:root {
+    --primary: #1e88e5;
+    --secondary: #ff4081;
+    --background: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #212121;
+    --text-light: #757575;
+    --error: #d32f2f;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --sidebar-width-closed: 0px;
+    --sidebar-width-open: 250px;
+}
+
+/* 📌 Container Styling */
+.container {
+    margin-left: var(--sidebar-width-closed);
+    padding: 2rem;
+    min-height: 100vh;
+    width: 80%; /* Set to 80% */
+    max-width: 1200px; /* Optional cap for readability */
+    margin-right: auto;
+    margin-left: auto; /* Center the container */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Adjust container when sidebar is open */
+#admin-sidebar.show ~ .container {
+    margin-left: calc(var(--sidebar-width-open) + 10%); /* Adjust for 80% width */
+    width: calc(80% - var(--sidebar-width-open));
+}
+
+/* 📌 Header Section */
+.header {
+    display: flex;
+    justify-content: center; /* Center the h1 */
+    align-items: center;
+    margin-bottom: 2rem;
+    text-align: center; /* Ensure text aligns center */
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex-grow: 1; /* Allow h1 to take available space */
+}
+
+/* 📌 Add Category Button */
+.add-category-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.add-category-btn:hover {
+    background: #1565c0;
+}
+
+/* 📌 Search & Reset Section */
+.search-section {
+    display: flex;
+    justify-content: center; /* Center the search section */
+    gap: 1rem;
+    margin-bottom: 2rem;
+    max-width: 600px; /* Limit width for centering */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(30, 136, 229, 0.2);
+    outline: none;
+}
+
+.reset-btn {
+    padding: 0.75rem 1.5rem;
+    background: #e0e0e0;
+    color: var(--text);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.reset-btn:hover {
+    background: #bdbdbd;
+}
+
+/* 📌 Category Table */
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.category-table thead th {
+    background: var(--primary);
+    color: white;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: left;
+}
+
+.category-table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background 0.3s ease;
+}
+
+.category-table tbody tr:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.category-table td {
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+.status.active {
+    color: #1e88e5;
+    font-weight: 500;
+}
+
+.status.inactive {
+    color: var(--error);
+    font-weight: 500;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    margin-right: 0.5rem;
+}
+
+.action-btn:hover {
+    color: #1565c0;
+}
+
+.action-btn.delete-btn {
+    color: var(--error);
+}
+
+.action-btn.delete-btn:hover {
+    color: #b71c1c;
+}
+
+/* 📌 Pagination Controls */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.pagination-info {
+    font-size: 1rem;
+    color: var(--text-light);
+}
+
+.pagination-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pagination-btn {
+    padding: 0.5rem 1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.pagination-btn:hover {
+    background: #1565c0;
+}
+
+/* 📌 Modal Overlay */
+.modal-overlay {
+    display: none; /* Ensure hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 📌 Modal Content */
+.modal {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: var(--shadow);
+}
+
+.modal h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 📌 Form Group in Modal */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(30, 136, 229, 0.2);
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.error-message {
+    color: var(--error);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+/* 📌 Form Actions in Modal */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.cancel-btn {
+    padding: 0.75rem 1.5rem;
+    background: #e0e0e0;
+    color: var(--text);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #bdbdbd;
+}
+
+.save-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.save-btn:hover {
+    background: #1565c0;
+}
+
+/* 📌 Responsive Adjustments */
+@media (max-width: 768px) {
+    #admin-sidebar.show ~ .container {
+        margin-left: 250px;
+        width: calc(80% - 250px);
+    }
+
+    .container {
+        margin-left: 0;
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .search-section {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .search-input {
+        max-width: 100%;
+    }
+
+    .category-table th,
+    .category-table td {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+
+    .modal {
+        padding: 1.5rem;
+    }
+
+    .modal h2 {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #admin-sidebar.show ~ .container {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .container {
+        padding: 0.5rem;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .header h1 {
+        font-size: 1.25rem;
+    }
+
+    .add-category-btn,
+    .reset-btn,
+    .pagination-btn,
+    .cancel-btn,
+    .save-btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .category-table {
+        font-size: 0.8rem;
+    }
+
+    .category-table th,
+    .category-table td {
+        padding: 0.5rem;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
+
 
 </head>
 

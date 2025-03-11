@@ -42,6 +42,12 @@
             </a>
         </li>
         <li>
+            <a href="/admin/products/inventory">
+                <i class='bx bxs-box bx-sm'></i>
+                <span class="text">Inventory</span>
+            </a>
+        </li>
+        <li>
             <a href="/admin/orders">
                 <i class='bx bxs-group bx-sm'></i>
                 <span class="text">Orders</span>
@@ -63,7 +69,7 @@
 </section>
 <!-- SIDEBAR END -->
 
-<style>
+<!-- <style>
     /* 📌 Admin Dashboard Link (Visible at Top Left) */
 .admin-dashboard-link {
     position: absolute;
@@ -142,8 +148,195 @@
     color: red;
 }
 
-</style>
+</style> 
+ -->
 
+
+
+<style>
+    /* 📌 Root Variables for Consistency with Main Design */
+    :root {
+        --primary: #1e88e5;
+        --secondary: #ff4081;
+        --background: #f5f7fa;
+        --card-bg: #ffffff;
+        --text: #212121;
+        --text-light: #757575;
+        --error: #d32f2f;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        --sidebar-width-closed: 0px;
+        --sidebar-width-open: 250px;
+    }
+    
+    /* 📌 Admin Dashboard Link (Visible at Top Left) */
+    .admin-dashboard-link {
+        position: absolute;
+        top: 15px;
+        left: 65px;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        color: var(--text);
+        z-index: 1001;
+        transition: left 0.3s ease-in-out;
+    }
+    
+    /* 📌 Sidebar Styling (Left Side) */
+    #admin-sidebar {
+        width: var(--sidebar-width-closed);
+        background: var(--card-bg);
+        color: var(--text);
+        position: fixed;
+        height: 100vh;
+        left: 0;
+        top: 0;
+        transition: width 0.3s ease-in-out;
+        overflow: hidden;
+        border-right: 2px solid #ddd;
+        padding: 0;
+        box-shadow: var(--shadow);
+        z-index: 1000;
+    }
+    
+    /* When Sidebar is Expanded */
+    #admin-sidebar.show {
+        width: var(--sidebar-width-open);
+        padding: 15px;
+    }
+    
+    /* 📌 Navbar Toggle Button */
+    .admin-navbar-toggler {
+        background: transparent;
+        border: none;
+        color: var(--text);
+        font-size: 24px;
+        position: fixed;
+        left: 20px;
+        top: 15px;
+        cursor: pointer;
+        z-index: 1001;
+        transition: left 0.3s ease-in-out;
+    }
+    
+    .admin-navbar-toggler-icon {
+        display: block;
+    }
+    
+    /* 📌 Sidebar Menu */
+    .admin-side-menu {
+        list-style: none;
+        padding: 0;
+        margin-top: 60px; /* Increased to account for toggle and link */
+    }
+    
+    .admin-side-menu li {
+        padding: 10px;
+    }
+    
+    .admin-side-menu li a {
+        color: var(--text);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 8px;
+        transition: background 0.3s ease, color 0.3s ease;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    
+    .admin-side-menu li a:hover {
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--primary);
+    }
+    
+    /* 📌 Logout Button */
+    .admin-logout {
+        color: var(--error);
+    }
+    
+    .admin-logout:hover {
+        background: rgba(211, 47, 47, 0.1); /* Light red hover effect */
+        color: #b71c1c; /* Darker red on hover */
+    }
+    
+    /* 📌 Responsive Adjustments */
+    @media (max-width: 768px) {
+        /* Sidebar adjustments */
+        #admin-sidebar.show {
+            width: 200px; /* Slightly narrower on tablets */
+        }
+    
+        .admin-navbar-toggler {
+            left: 15px;
+            font-size: 20px;
+        }
+    
+        .admin-dashboard-link {
+            left: 55px;
+            font-size: 16px;
+        }
+    
+        #admin-sidebar.show ~ .admin-dashboard-link {
+            left: 215px; /* Adjust position when sidebar is open */
+        }
+    
+        .admin-side-menu {
+            margin-top: 50px;
+        }
+    
+        .admin-side-menu li a {
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        /* Sidebar becomes full-width overlay on mobile */
+        #admin-sidebar {
+            width: 0;
+            z-index: 1002; /* Above content */
+        }
+    
+        #admin-sidebar.show {
+            width: 100%;
+            padding: 10px;
+        }
+    
+        /* Toggle button adjustments */
+        .admin-navbar-toggler {
+            left: 10px;
+            top: 10px;
+            font-size: 18px;
+        }
+    
+        /* Hide dashboard link when sidebar is closed on mobile */
+        .admin-dashboard-link {
+            display: none;
+        }
+    
+        #admin-sidebar.show ~ .admin-dashboard-link {
+            display: block;
+            position: static;
+            font-size: 14px;
+            margin: 10px 0;
+            text-align: center;
+        }
+    
+        .admin-side-menu {
+            margin-top: 20px;
+        }
+    
+        .admin-side-menu li {
+            padding: 8px;
+        }
+    
+        .admin-side-menu li a {
+            font-size: 0.85rem;
+            padding: 6px;
+        }
+    }
+    </style> 
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

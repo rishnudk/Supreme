@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
     -->
 
 
- <script>
+ <!-- <script>
     
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".view-details").forEach(button => {
@@ -318,6 +318,365 @@ function getBadgeClass(status) {
 });
 
 
+ </script>
+
+ -->
+
+
+
+
+ <script>
+    // Define CSS for the modal to ensure it works properly
+const modalStyle = document.createElement('style');
+modalStyle.textContent = `
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+#otpInput {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#verifyOtp, #resendOtp {
+    padding: 12px;
+    margin: 10px 5px 10px 0;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#resendOtp {
+    background-color: #f0ad4e;
+}
+
+#verifyOtp:disabled, #resendOtp:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.timer {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+`;
+document.head.appendChild(modalStyle);
+
+// Add resend button and timer to the OTP modal if they don't exist
+function setupOtpModal() {
+    const modalContent = document.querySelector("#otpModal .modal-content");
+    
+    // Add timer element if it doesn't exist
+    if (!document.getElementById("otpTimer")) {
+        const timerDiv = document.createElement("div");
+        timerDiv.id = "otpTimer";
+        timerDiv.className = "timer";
+        timerDiv.innerHTML = "Resend available in: <span id='countdown'>60</span> seconds";
+        
+        // Insert after the verify button
+        const verifyBtn = document.getElementById("verifyOtp");
+        verifyBtn.parentNode.insertBefore(timerDiv, verifyBtn.nextSibling);
+    }
+    
+    // Add resend button if it doesn't exist
+    if (!document.getElementById("resendOtp")) {
+        const resendBtn = document.createElement("button");
+        resendBtn.id = "resendOtp";
+        resendBtn.type = "button";
+        resendBtn.textContent = "Resend OTP";
+        resendBtn.disabled = true; // Initially disabled
+        
+        // Insert after timer
+        document.getElementById("otpTimer").parentNode.insertBefore(resendBtn, document.getElementById("otpTimer").nextSibling);
+        
+        // Add event listener for resend
+        resendBtn.addEventListener("click", resendOTP);
+    }
+}
+
+// Event listener for form submission
+document.getElementById("createAccountForm").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    let isValid = true;
+
+    // Get form values
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const confirmPassword = document.getElementById("confirmPassword").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    
+    // Store form data for later use
+    window.formData = {
+        name,
+        email,
+        password,
+        phone
+    };
+
+    // Validation patterns
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const phonePattern = /^[0-9]{10}$/;
+
+    // Clear previous error messages
+    document.querySelectorAll(".error").forEach(el => el.remove());
+
+    function showError(input, message) {
+        const error = document.createElement("small");
+        error.classList.add("error");
+        error.style.color = "red";
+        error.innerText = message;
+        input.parentNode.insertBefore(error, input.nextSibling);
+    }
+
+    // Validate inputs
+    if (!name) {
+        showError(document.getElementById("name"), "Name cannot be empty.");
+        isValid = false;
+    }
+    if (!emailPattern.test(email)) {
+        showError(document.getElementById("email"), "Enter a valid email.");
+        isValid = false;
+    }
+    if (!passwordPattern.test(password)) {
+        showError(document.getElementById("password"), "Password must be at least 8 characters, include a letter and a number.");
+        isValid = false;
+    }
+    if (password !== confirmPassword) {
+        showError(document.getElementById("confirmPassword"), "Passwords do not match.");
+        isValid = false;
+    }
+    if (!phonePattern.test(phone)) {
+        showError(document.getElementById("phone"), "Enter a valid 10-digit phone number.");
+        isValid = false;
+    }
+
+    // Stop if validation fails
+    if (!isValid) return;
+
+    // Disable the submit button to prevent multiple requests
+    const submitButton = document.getElementById("createAccount");
+    submitButton.disabled = true;
+    submitButton.innerText = "Sending OTP...";
+
+    // Send OTP request to the server
+    try {
+        const response = await fetch("/user/signup/send-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            // Setup the OTP modal with timer and resend button
+            setupOtpModal();
+            
+            // Show the OTP modal
+            const otpModal = document.getElementById("otpModal");
+            otpModal.style.display = "block";
+            
+            // Focus on the OTP input field
+            document.getElementById("otpInput").focus();
+            
+            // Start the resend timer
+            startResendTimer();
+        } else {
+            alert(data.error || "Failed to send OTP");
+        }
+    } catch (error) {
+        console.error("Error sending OTP:", error);
+        alert("Error sending OTP");
+    }
+
+    // Re-enable submit button
+    submitButton.disabled = false;
+    submitButton.innerText = "Create Account";
+});
+
+// Start the countdown timer for OTP resend
+function startResendTimer() {
+    const countdownEl = document.getElementById("countdown");
+    const resendBtn = document.getElementById("resendOtp");
+    let timeLeft = 60; // 60 seconds countdown
+    
+    resendBtn.disabled = true;
+    
+    const timerId = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+        
+        if (timeLeft <= 0) {
+            clearInterval(timerId);
+            document.getElementById("otpTimer").textContent = "You can now resend the OTP";
+            resendBtn.disabled = false;
+        }
+    }, 1000);
+    
+    // Store the timer ID so we can clear it if necessary
+    window.currentTimerId = timerId;
+}
+
+// Function to resend OTP
+function resendOTP() {
+    const email = window.formData.email;
+    const resendBtn = document.getElementById("resendOtp");
+    
+    // Disable button and update text
+    resendBtn.disabled = true;
+    resendBtn.textContent = "Sending...";
+    
+    fetch("/user/signup/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (response.ok) {
+            // Clear any existing timer
+            if (window.currentTimerId) {
+                clearInterval(window.currentTimerId);
+            }
+            
+            // Reset the countdown
+            document.getElementById("otpTimer").innerHTML = "Resend available in: <span id='countdown'>60</span> seconds";
+            startResendTimer();
+            
+            alert("New OTP sent to your email!");
+        } else {
+            alert(data.error || "Failed to resend OTP");
+            resendBtn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error("Error resending OTP:", error);
+        alert("Error resending OTP");
+        resendBtn.disabled = false;
+    })
+    .finally(() => {
+        resendBtn.textContent = "Resend OTP";
+    });
+}
+
+// Close modal when clicking the close button
+document.querySelector(".close").addEventListener("click", function() {
+    document.getElementById("otpModal").style.display = "none";
+    // Clear any active timers when closing modal
+    if (window.currentTimerId) {
+        clearInterval(window.currentTimerId);
+    }
+});
+
+// Also close modal when clicking outside the modal content
+window.addEventListener("click", function(event) {
+    const modal = document.getElementById("otpModal");
+    if (event.target === modal) {
+        modal.style.display = "none";
+        // Clear any active timers when closing modal
+        if (window.currentTimerId) {
+            clearInterval(window.currentTimerId);
+        }
+    }
+});
+
+// OTP Verification - Modified to match backend expectations
+document.getElementById("verifyOtp").addEventListener("click", async function () {
+    const otp = document.getElementById("otpInput").value.trim();
+    
+    // Get all form data
+    const { name, email, password, phone } = window.formData;
+
+    if (!otp) {
+        alert("Please enter the OTP.");
+        return;
+    }
+
+    // Disable verify button to prevent multiple requests
+    const verifyButton = document.getElementById("verifyOtp");
+    verifyButton.disabled = true;
+    verifyButton.innerText = "Verifying...";
+
+    try {
+        // Send verification request with ALL required fields
+        const response = await fetch("/user/signup/verify-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                email, 
+                otp, 
+                name, 
+                password, 
+                phone 
+            })
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert("Account created successfully! Redirecting...");
+            
+            // Redirect based on server response or default to home
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            } else {
+                window.location.href = "/user/home";
+            }
+        } else {
+            alert(data.error || "Invalid OTP");
+        }
+    } catch (error) {
+        console.error("Error during verification:", error);
+        alert("Error verifying OTP");
+    }
+
+    // Re-enable verify button
+    verifyButton.disabled = false;
+    verifyButton.innerText = "Verify OTP";
+});
  </script>
 </body>
 </html>

@@ -12,6 +12,8 @@ const addressController = require("../controllers/userController/addressControll
 const cartController = require("../controllers/userController/cartController")
 const checkoutController = require("../controllers/userController/checkoutController")
 const orderController = require("../controllers/userController/orderController")
+const wishlistController = require("../controllers/userController/wishlistController");
+
 
 // Models
 const Category = require("../models/Category");
@@ -23,20 +25,31 @@ const Product = require("../models/Product");
 // ===============================
 
 // User Login Page
-router.get("/login", (req, res) => {
-  res.render("user/userLogin");
-});
+// router.get("/login", (req, res) => {
+//   res.render("user/userLogin");
+// });
+
+router.get("/login", authController.renderLogin);
 
 // Handle User Login
 router.post("/login", authController.login);
 
 // User Signup Page
-router.get("/signup", (req, res) => {
-  res.render("user/signup", { title: "User Signup" });
-});
+router.get("/signup", authController.renderSignup);
+
+
+
+
+
+
+
+
+
+
+
 
 // Handle User Signup
-router.post("/signup", authController.signup);
+// router.post("/signup", authController.signup);
 
 // Google Authentication
 router.get(
@@ -93,9 +106,14 @@ router.post("/reset-password", authController.changeforgetpass);
 // Verify OTP via Controller
 router.get("/verifyOtp", authController.getVerifyOtp);
 
-// ===============================
-// 🔹 Product & Shopping Routes
-// ===============================
+
+// signup otp
+
+router.post("/signup/send-otp", authController.sendSignupOTP); 
+router.post("/signup/verify-otp", authController.verifySignupOTP); 
+
+//  Product & Shopping Routes
+ 
 
 // Shop Page (Product Listing) 
 router.get("/shop", userController.getShopPage);
@@ -128,12 +146,37 @@ router.get('/checkout/address/:id', checkoutController.getAddress)
 
 //order
 router.post("/place-order", orderController.placeOrder)
+router.get("/user-orders", orderController.getUserOrders);
+
+router.put('/order/cancel/:orderId', orderController.cancelEntireOrder);
+
+router.put('/order/cancel-product/:orderId/:productId', orderController.cancelSingleProduct)
+router.get("/details/:orderId", orderController.getOrderDetails);
+
+
 
 //profile
 router.get("/account", userController.getAccount);
 
 router.get('/profile',  userController.renderUserProfile);
 router.post('/change-password',  userController.changePassword);
+router.put("/update-profile",  userController.updateProfile);
+
+//wishlist
+
+
+router.get("/wishlist", wishlistController.getWishlistPage);
+
+router.post("/wishlist/add", wishlistController.addToWishlist);
+
+router.delete("/wishlist/remove/:productId", wishlistController.removeFromWishlist);
+
+module.exports = router;
+
+
+
+
+
 
 
 

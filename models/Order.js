@@ -16,7 +16,14 @@ const orderSchema = new mongoose.Schema({
             name: { type: String, required: true }, // Furniture name
             price: { type: Number, required: true }, // Price at the time of order
             quantity: { type: Number, required: true, min: 1 }, // Ordered quantity
-            image: { type: String, required: true } // Product image
+            image: { type: String, required: true } , 
+            productStatus: {
+                type: String,
+                enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
+                default: 'Pending',
+            } , 
+            productCancelreason : { type : String, required : false }, 
+            productReturnReason : { type : String, required : false}
         }
     ],
     shippingAddress: {
@@ -47,7 +54,9 @@ const orderSchema = new mongoose.Schema({
     },
     isDelivered: { type: Boolean, default: false },
     deliveredAt: { type: Date },
-    orderDate: { type: Date, default: Date.now }
+    orderDate: { type: Date, default: Date.now },
+    orderID : {type : Number} ,
+    orderCancelreason : { type : String, required : false },
 });
 
 module.exports = mongoose.model('Order', orderSchema);

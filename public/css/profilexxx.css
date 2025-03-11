@@ -197,4 +197,102 @@
         .tab-content {
             padding-top: 24px;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /* Modal Styling */
+.modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-title {
+    font-weight: bold;
+}
+
+.modal-body {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Product List inside the Modal */
+#modalProducts {
+    padding: 0;
+    list-style-type: none;
+}
+
+#modalProducts li {
+    background: #f8f9fa;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Close button */
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+/* Shipping Details */
+#modalShipping {
+    background: #f0f0f0;
+    padding: 10px;
+    border-left: 4px solid #007bff;
+    border-radius: 5px;
+    font-style: italic;
+}
+
+/* Fade-in Animation for Modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal.show .modal-dialog {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Responsive Fix */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 10px;
+    }
+}
+
   

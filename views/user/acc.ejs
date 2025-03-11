@@ -84,7 +84,7 @@
                 <!-- Main Content - My Orders Section -->
                 <div class="col-lg-9 col-md-8">
                     <div class="orders-container">
-                        <!-- <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
                             <h2>My Orders</h2>
                             <div class="dropdown">
                                 <button class="btn btn-outline-secondary dropdown-toggle" type="button"
@@ -100,100 +100,90 @@
                                     <li><a class="dropdown-item" href="#">Cancelled</a></li>
                                 </ul>
                             </div>
-                        </div> -->
+                        </div>
 
                         <div class="row">
 
 
                             <!-- Order 2 -->
-
-
-
                             <div class="col-lg-6 col-md-12 mb-4">
-                              <% if (orders.length > 0) { %>
-                                  <% orders.forEach(order => { %>
-                                      <div class="order-card" id="order-<%= order._id %>">
-                                          <div class="order-header">
-                                              <span class="order-id">Order #<%= order.orderID %></span>
-                                              <span class="order-status <%= order.orderStatus.toLowerCase().replace(/\s+/g, '-') %>">
-                                                  <%= order.orderStatus %>
-                                              </span>
-                                          </div>
-                          
-                                          <% order.products.forEach(product => { %>
-                                              <div class="row">
-                                                  <div class="col-4">
-                                                      <img src="<%= product.image %>" alt="<%= product.name %>" class="order-image">
-                                                  </div>
-                                                  <div class="col-8">
-                                                      <div class="order-details">
-                                                          <p class="order-product"><%= product.name %></p>
-                                                          <p>Placed on: <%= new Date(order.orderDate).toDateString() %></p>
-                                                          <p>Expected by: <%= new Date(new Date(order.orderDate).setDate(new Date(order.orderDate).getDate() + 7)).toDateString() %></p>
-                                                          <p class="order-price">$<%= product.price.toFixed(2) %></p>
-                          
-                                                          <% if (product.productStatus !== "Cancelled" && product.productStatus !== "Delivered") { %>
-                                                              <button type="button" class="btn btn-warning cancel-product-btn"
-                                                                  data-bs-toggle="modal" 
-                                                                  data-bs-target="#cancelOrderModal" 
-                                                                  data-order-id="<%= order._id %>" 
-                                                                  data-product-id="<%= product.product %>">
-                                                                  Cancel This Product
-                                                              </button>
-                                                          <% } %>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          <% }) %>
-                          
-                                          <div class="order-actions">
-                                              <% if (order.orderStatus === 'Pending' || order.orderStatus === 'Processing') { %>
-                                                  <div class="container mt-3">
-                                                      <button type="button" class="btn btn-danger cancel-order-btn"
-                                                          data-bs-toggle="modal" 
-                                                          data-bs-target="#cancelOrderModal"
-                                                          data-order-id="<%= order._id %>">
-                                                          Cancel Order
-                                                      </button>
-                                                  </div>
-                                              <% } %>
-                          
-                                              <div class="container mt-2">
-                                                <button class="btn btn-primary view-details" id="view" data-order-id="<%= order._id %>">
-                                                  View Details
-                                              </button>
-                                              
-                                              </div>
 
-                                              <script>
-                                                document.addEventListener("DOMContentLoaded", function () {
-                                                  document.querySelectorAll(".view-details").forEach(button => {
-                                                    button.addEventListener("click", function () {
-                                                      const orderId = this.getAttribute("data-order-id");
-                                                      if (orderId) {
-                                                        window.location.href = `/user/details/${orderId}`;
-                                                      } else {
-                                                        console.error("Order ID not found!");
-                                                      }
-                                                    });
-                                                  });
-                                                });
-                                              </script>
-                                              
+                                <% if (orders.length> 0) { %>
+                                    <% orders.forEach(order=> { %>
+                                        <div class="order-card" id="order-<%= order._id %>">
+                                            <div class="order-header">
+                                                <span class="order-id">Order #<%= order.orderID %>
+                                                        </span>
+                                                <span
+                                                    class="order-status <%= order.orderStatus.toLowerCase().replace(/\s+/g, '-') %>">
+                                                    <%= order.orderStatus %>
+                                                </span>
+                                            </div>
+
+                                            <% order.products.forEach(product=> { %>
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <img src="<%= product.image %>" alt="<%= product.name %>"
+                                                            class="order-image">
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <div class="order-details">
+                                                            <p class="order-product">
+                                                                <%= product.name %>
+                                                            </p>
+                                                            <p>Placed on: <%= new Date(order.orderDate).toDateString()
+                                                                    %>
+                                                            </p>
+                                                            <p>Expected by: <%= new Date(new
+                                                                    Date(order.orderDate).setDate(new
+                                                                    Date(order.orderDate).getDate() + 7)).toDateString()
+                                                                    %>
+                                                            </p>
+                                                            <p class="order-price">$<%= product.price.toFixed(2) %>
+                                                            </p>
+                                                            <% if(product.productStatus!=="Cancelled"&&product.productStatus!=="Delivered"){%>
+                                                            <button type="button" class="btn btn-warning cancel-product-btn" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#cancelOrderModal" 
+                                                            data-order-id="<%= order._id %>" 
+                                                            data-product-id="<%= product.product %>">
+                                                        Cancel This Product
+                                                    </button>
+                                                    <%}%>
+                                                    
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% }) %>
+
+                                                    <div class="order-actions">
+                                                        <% if (order.orderStatus==='Pending' ||
+                                                            order.orderStatus==='Processing' ) { %>
+                                                                <div class="container mt-5">
+                                                                    <button type="button" class="btn btn-primary cancel-order-btn"
+                                                                    data-bs-toggle="modal" data-bs-target="#cancelOrderModal"
+                                                                    data-order-id="<%= order._id %>">
+                                                                Cancel Order
+                                                            </button>
+
+                                                            <button class="btn btn-primary view-details" data-order='<%- JSON.stringify(order) %>'>
+                                                              View Details
+                                                          </button>
+                                                          
+                                                            
+                                                                  </div>
+                                                            <% } %>
+                                                              
+                                                    </div>
+                                        </div>
+                                        <hr>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <p>No orders found.</p>
+                                                <% } %>
 
 
-
-
-
-                                          </div>
-                                      </div>
-                                      <hr>
-                                  <% }) %>
-                              <% } else { %>
-                                  <p>No orders found.</p>
-                              <% } %>
-                          </div>
-                          
+                            </div>
 
                         </div>
 

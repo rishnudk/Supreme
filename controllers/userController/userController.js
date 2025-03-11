@@ -1,10 +1,14 @@
 
 const Category = require("../../models/Category");
 const Product = require("../../models/Product");
+const Order = require("../../models/Order");
 const Address = require("../../models/Address")
 const User =require('../../models/User')
 const bcrypt = require('bcrypt');
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
+
+
+
 
 
 exports.getShopPage = async (req, res) => {
@@ -45,6 +49,9 @@ exports.getShopPage = async (req, res) => {
       filterQuery.name = { $regex: search, $options: "i" };
     }
 
+   filterQuery.status = "Active";
+
+
     let sortQuery = {};
     if (sort === "low-to-high") {
       sortQuery.price = 1;
@@ -61,10 +68,17 @@ exports.getShopPage = async (req, res) => {
     console.log("Sorting by:", sort);
     console.log("Sort Query:", sortQuery);
 
-    const products = await Product.find(filterQuery)
-      .sort(sortQuery)
-      .skip(skip)
-      .limit(limit);
+    const productsFetched = await Product.find(filterQuery)
+    .populate({
+      path: "category",
+      match: { isDeleted: false }, 
+    })
+    .sort(sortQuery)
+    .skip(skip)
+    .limit(limit);
+
+   
+    const products = productsFetched.filter(product => product.category);
 
     const totalProducts = await Product.countDocuments(filterQuery);
     const totalPages = Math.ceil(totalProducts / limit);
@@ -88,21 +102,37 @@ exports.getShopPage = async (req, res) => {
 
 
 
-// controllers/userController.js
+
 
 exports.getAccount = async (req, res) => {
-    try {
+  try {
       if (!req.session.user) {
-        return res.redirect("/user/login");
+          console.log("User not logged in, redirecting to login...");
+          return res.redirect("/user/login");
       }
-  
-      res.render("user/account", { user: req.session.user });
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-      res.status(500).send("Server Error");
-    }
-  };
-  
+
+      const userId = req.session.user._id;
+      console.log("User ID from session:", userId);
+
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+          console.log("Invalid ObjectId format:", userId);
+          return res.status(400).send("Invalid user ID");
+      }
+
+      const objectId = new mongoose.Types.ObjectId(userId);
+      console.log("Converted ObjectId:", objectId);
+
+      // Fetch orders
+      const orders = await Order.find({ user: objectId }).sort({ orderDate: -1 });
+
+      console.log("Orders fetched:", orders.length);
+
+      res.render("user/account", { user: req.session.user, orders });
+  } catch (error) {
+      console.error("Error fetching account details:", error);
+      res.status(500).send("Internal Server Errorxdd");
+  }
+};
  
 
 
@@ -164,11 +194,7 @@ exports.changePassword = async (req, res) => {
           return res.status(400).json({ success: false, message: "New passwords do not match!" });
       }
 
-      // if (!validatePassword(newPassword)) {
-      //   console.log("Password does not meet the requirements!"); // Debugging step 6
-
-      //     return res.status(400).json({ success: false, message: "Password does not meet the requirements!" });
-      // }
+     
 
       // Hash and update new password
       const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -185,3 +211,49 @@ exports.changePassword = async (req, res) => {
       res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+
+
+
+
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.session.user._id); 
+    const { name, email, phone } = req.body;
+    
+    console.log("Updating profile for:", userId);
+
+    // Find user
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log("User not found!");
+      return res.status(404).json({ success: false, message: "User not found!" });
+    }
+
+    // Check if email already exists (excluding current user)
+    const existingUser = await User.findOne({ email, _id: { $ne: userId } });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: "Email already in use!" });
+    }
+
+    // Update user details (without modifying other fields)
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    await user.save();
+
+    console.log("Profile updated successfully!");
+    res.status(200).json({ success: true, message: "Profile updated successfully!", user });
+
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+
+
+
+
+

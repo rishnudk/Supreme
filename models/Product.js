@@ -21,7 +21,7 @@ const ProductSchema = new Schema({
             message: "Exactly 4 images are required"
         }
     },
-    variant: { type: VariantSchema, required: true }, // Single variant
+    variant: { type: VariantSchema, required: true }, 
     createdAt: { type: Date, required: true, default: Date.now },
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     updatedAt: { type: Date, required: true, default: Date.now },

@@ -6,17 +6,22 @@ const User =require('../../models/User')
 
 
 
-
- 
- exports.getAddressPage =async (req, res) => {
+exports.getAddressPage = async (req, res) => {
     try {
-        const addresses = await Address.find(); // Fetch all addresses without user filter
-        res.render("user/address", { addresses,   user: req.user  }); // Pass data to the template
+        if (!req.session.user) {
+            console.log("Debug: No user in session");
+            return res.redirect("/login"); 
+        }
+
+        const userId = req.session.user._id; 
+        const addresses = await Address.find({ user: userId }); 
+
+        res.render("user/address", { addresses, user: req.session.user });
     } catch (error) {
         console.error("Error fetching addresses:", error);
         res.status(500).send("Server Error");
     }
-}
+};
 
 
 
@@ -24,7 +29,6 @@ exports.addAddress = async (req, res) => {
     try {
         const { fullName, phone, address, city, state, country, pincode, addressType, isDefault } = req.body;
 
-        // Validate required fields
         if (!fullName || !phone || !address || !city || !state || !country || !pincode) {
             return res.status(400).json({ message: "All fields are required" });
         }
@@ -32,14 +36,13 @@ exports.addAddress = async (req, res) => {
 
         if (isDefault) {
             await Address.updateMany(
-                { user: req.session.user._id, isDefault: true }, // Find existing default address
-                { $set: { isDefault: false } } // Change it to false
+                { user: req.session.user._id, isDefault: true }, 
+                { $set: { isDefault: false } } 
             );
         }
 
-        // ✅ Temporarily remove `req.user._id`
         const newAddress = new Address({
-            user: req.session.user._id,  // 🔹 Replace with a real user ID from your database
+            user: req.session.user._id,  
             fullName,
             phone,
             address,
@@ -51,7 +54,6 @@ exports.addAddress = async (req, res) => {
             isDefault: isDefault || false
         });
 
-        // Save to database
         await newAddress.save();
 
         return res.status(201).json({ message: "Address added successfully", address: newAddress });
@@ -79,50 +81,6 @@ exports.getAddressById = async (req, res) => {
 
 
 
-// exports.updateAddress = async (req, res) => {
-//     try {
-//         const addressId = req.params.id;
-//         const {
-//             fullName,
-//             phone,
-//             address,
-//             city,
-//             state,
-//             country,
-//             pincode,
-//             addressType,
-//             isDefault // Changed from setDefault to isDefault
-//         } = req.body;
-
-//         // Find the address by ID and update it
-//         const updatedAddress = await Address.findByIdAndUpdate(
-//             addressId,
-//             {
-//                 fullName,
-//                 phone,
-//                 address,
-//                 city,
-//                 state,
-//                 country,
-//                 pincode,
-//                 addressType,
-//                 isDefault // Changed from setDefault to isDefault
-//             },
-//             { new: true } // Return the updated document
-//         );
-
-//         if (!updatedAddress) {
-//             return res.status(404).json({ success: false, message: 'Address not found' });
-//         }
-        
-
-//         res.json({ success: true, message: 'Address updated successfully', data: updatedAddress });
-//     } catch (error) {
-//         console.error('Error updating address:', error);
-//         res.status(500).json({ success: false, message: 'Internal Server Error' });
-//     }
-// };
-
 
 
 exports.updateAddress = async (req, res) => {
@@ -140,16 +98,13 @@ exports.updateAddress = async (req, res) => {
             isDefault
         } = req.body;
 
-        // **Check if isDefault is true before updating the address**
         if (isDefault) {
-            // **Unset the current default address before setting a new one**
             await Address.updateMany(
                 { user: req.session.user._id, isDefault: true },
                 { $set: { isDefault: false } }
             );
         }
 
-        // **Update the address after resetting the default address**
         const updatedAddress = await Address.findByIdAndUpdate(
             addressId,
             {
@@ -161,7 +116,7 @@ exports.updateAddress = async (req, res) => {
                 country,
                 pincode,
                 addressType,
-                isDefault: isDefault || false // Ensure it's false when not explicitly set
+                isDefault: isDefault || false 
             },
             { new: true }
         );

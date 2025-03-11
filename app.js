@@ -35,8 +35,8 @@ app.use(
   session({
     secret: "yourSecretKey",
     resave: false,
-    saveUninitialized: false, // ✅ Fix: Don't create sessions for unauthenticated users
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Session valid for 1 day
+    saveUninitialized: false, 
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, 
   })
 );
 
@@ -54,6 +54,9 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
+
 // Import Routes
 const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoutes"); 
@@ -63,16 +66,19 @@ const authMiddleware = require("./middlewares/authMiddleware");
 // ✅ Public Routes (Allow access without authentication)
 app.use("/auth", authRoutes);
 app.get("/", (req, res) => {
-  res.send("E-Commerce API is running...");
+  res.redirect("user/home")
 });
 app.get("/login", (req, res) => {
   res.redirect("/user/login");
 });
 
-// ✅ Protected Routes (Require authentication)
-app.use(authMiddleware);
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
+
+// app.use("*", (req, res) => {
+//   res.status(404).send(`Route ${req.originalUrl} not found`);
+// });
+
 
 
 module.exports = app;

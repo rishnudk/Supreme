@@ -133,3 +133,33 @@
             field.type = field.type === "password" ? "text" : "password";
         }
         
+
+        async function updatePreview() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+          
+            const data = { name, email, phone };
+          
+            try {
+              const response = await fetch("/user/update-profile", {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
+          
+              const result = await response.json();
+              if (result.success) {
+                alert("Profile updated successfully!");
+                window.location.reload(); // Reload page after update
+              } else {
+                alert(result.message);
+              }
+            } catch (error) {
+              console.error("Error updating profile:", error);
+              alert("Something went wrong. Please try again!");
+            }
+          }
+        

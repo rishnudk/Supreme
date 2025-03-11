@@ -385,34 +385,7 @@ exports.getProductById = async (req, res) => {
 
 
 
-//working one
-// exports.getProducts = async (req, res) => {
-//   try {
-//     let { page = 1, limit =10, search = "" } = req.query;
-//     page = parseInt(page);
-//     limit = parseInt(limit);
 
-//     const query = search
-//       ? { name: { $regex: search, $options: "i" } } // Case-insensitive search
-//       : {};
-
-//     const total = await Product.countDocuments(query);
-//     const products = await Product.find(query)
-//       .populate("category")
-//       .skip((page - 1) * limit)
-//       .limit(limit);
-
-//     res.render('admin/productManagement',{
-//       products,
-//       page,
-//       totalPages: Math.ceil(total / limit),
-//       total,
-//     });
-//   } catch (error) {
-//     console.error("Error fetching products:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// };
 
 
 
@@ -446,6 +419,60 @@ exports.getProducts = async (req, res) => {
 };
 
 
+
+
+
+
+
+
+
+
+
+exports.getInventory = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10; // Items per page
+        const skip = (page - 1) * limit;
+
+        const totalProducts = await Product.countDocuments();
+        const products = await Product.find()
+            .populate('category')
+            .skip(skip)
+            .limit(limit);
+
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        res.render('admin/inventory', {  // Updated path to admin/inventory
+            products,
+            currentPage: page,
+            totalPages
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+};
+
+exports.updateStock = async (req, res) => {
+    try {
+        const { id } = req.params;  // Updated from productId to id
+        const { stock } = req.body;
+
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        product.variant.stock = stock;
+        product.updatedAt = Date.now();
+        await product.save();
+
+        res.status(200).json({ message: 'Stock updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
 
 
 

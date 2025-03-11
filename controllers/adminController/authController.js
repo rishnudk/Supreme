@@ -3,32 +3,41 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const Admin = require('../../models/Admin')
 
-// Render Admin Login Page
+
 exports.renderAdminLogin = (req, res) => {
+  if (req.session.admin) {
+      return res.redirect("/admin/dashboard"); // Redirect logged-in admins
+  }
   res.render("admin/adminLogin", { title: "Admin Login" });
 };
 
-// Handle Admin Login
-exports.adminLogin = async (req, res, next) => {
 
+
+
+
+
+exports.adminLogin = async (req, res, next) => {
   const { email, password } = req.body; 
   console.log(email, password);
+  console.log("Admin Login Attempt:", email, password);
+  console.log("Session Before Login:", req.session);
 
-    if (!email || !password) {
-
+  if (!email || !password) {
     return res.redirect("/admin/login");
-    }
+  }
 
-    const admin = await Admin.findOne({role: "admin", email: email});
-  
+  const admin = await Admin.findOne({ role: "admin", email: email });
 
-    if (admin){
-      res.redirect('/admin/dashboard');
-    }else{
-      res.redirect('/admin/login');
-    }
+  if (admin) {
+    req.session.admin = admin; 
+    req.session.adminId = admin._id; 
+    console.log("Session After Login:", req.session);
 
-    }
+    res.redirect('/admin/dashboard');
+  } else {
+    res.redirect('/admin/login');
+  }
+};
 
 
 exports.dashboard = (req, res) => {
@@ -51,7 +60,7 @@ exports.adminLogout = async (req, res) => {
         console.log("Error destroying session:", err);
         return res.redirect("/admin/login");
       }
-      res.redirect("/admin/login"); // Redirect after logout
+      res.redirect("/admin/login"); 
     });
   } catch (error) {
     console.log("Error logging out:", error);
