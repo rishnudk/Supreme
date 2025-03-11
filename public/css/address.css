@@ -1,0 +1,234 @@
+
+:root {
+    --primary-color: #2A3F54;
+    --secondary-color: #F4F5F7;
+    --accent-color: #E67E22;
+    --text-color: #333;
+    --light-text: #6C757D;
+    --border-radius: 12px;
+    --box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F8F9FA;
+    color: var(--text-color);
+}
+
+.account-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.page-title {
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 1rem;
+}
+
+.sidebar {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.sidebar-section {
+    margin-bottom: 2rem;
+}
+
+.sidebar-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 0.8rem;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu a:hover, .sidebar-menu a.active {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.sidebar-menu i {
+    margin-right: 10px;
+    color: var(--primary-color);
+}
+
+.invite-subtitle {
+    font-size: 0.75rem;
+    color: var(--light-text);
+    margin-left: 1.8rem;
+}
+
+.addresses-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.address-card {
+    border: 1px solid var(--secondary-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.address-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow);
+}
+
+.address-type {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.address-type-home {
+    background-color: #D4EDDA;
+    color: #155724;
+}
+
+.address-type-work {
+    background-color: #CCE5FF;
+    color: #004085;
+}
+
+.default-badge {
+    position: absolute;
+    top: 3rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: #FFF3CD;
+    color: #856404;
+}
+
+.address-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.address-details {
+    color: var(--light-text);
+    margin-bottom: 0.25rem;
+}
+
+.address-actions {
+    display: flex;
+    margin-top: 1.5rem;
+    gap: 0.5rem;
+}
+
+.add-address-card {
+    border: 2px dashed var(--secondary-color);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-address-card:hover {
+    border-color: var(--accent-color);
+    background-color: var(--secondary-color);
+}
+
+.add-address-icon {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+.btn-accent:hover {
+    background-color: #D35400;
+    border-color: #D35400;
+    color: white;
+}
+
+.btn-outline-accent {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-outline-accent:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.modal-header {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.modal-content {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .account-container {
+        margin: 1rem auto;
+    }
+    
+    .address-card {
+        padding: 1rem;
+    }
+    
+    .address-type, .default-badge {
+        position: static;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+    }
+}

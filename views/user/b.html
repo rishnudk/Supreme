@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | Modern E-commerce</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #5540af;
+            --secondary-color: #4a96ff;
+            --light-bg: #f8f9fa;
+            --dark-bg: #212529;
+            --light-text: #f8f9fa;
+            --dark-text: #212529;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+        }
+
+        .dark-mode .card {
+            background-color: #2d3339;
+            color: var(--light-text);
+            border-color: #3a3f45;
+        }
+
+        .dark-mode .form-control, 
+        .dark-mode .btn-outline-secondary {
+            background-color: #3a3f45;
+            color: var(--light-text);
+            border-color: #4a4f55;
+        }
+
+        .dark-mode .form-control::placeholder {
+            color: #adb5bd;
+        }
+
+        .card {
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            overflow: hidden;
+        }
+
+        .product-card {
+            margin-bottom: 1.5rem;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-img {
+            height: 100px;
+            width: 100px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+        }
+
+        .btn {
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #4432a0;
+            border-color: #4432a0;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #3a87f0;
+            border-color: #3a87f0;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dark-mode .quantity-btn {
+            background-color: #3a3f45;
+            color: var(--light-text);
+        }
+
+        .quantity-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .dark-mode .quantity-btn:hover {
+            background-color: #4a4f55;
+        }
+
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dark-mode .action-btn {
+            background-color: #3a3f45;
+            color: var(--light-text);
+        }
+
+        .action-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .dark-mode .action-btn:hover {
+            background-color: #4a4f55;
+        }
+
+        .action-btn.delete:hover {
+            background-color: #ffdddd;
+            color: #ff4040;
+        }
+
+        .dark-mode .action-btn.delete:hover {
+            background-color: #5a3f45;
+            color: #ff6060;
+        }
+
+        .action-btn.wishlist:hover {
+            background-color: #ffe0e0;
+            color: #ff4081;
+        }
+
+        .dark-mode .action-btn.wishlist:hover {
+            background-color: #5a3f55;
+            color: #ff60a1;
+        }
+
+        .checkout-card {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .total-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #e0e0e0;
+        }
+
+        .dark-mode .total-price {
+            border-top-color: #4a4f55;
+        }
+
+        .subtotal-text {
+            color: #6c757d;
+        }
+
+        .dark-mode .subtotal-text {
+            color: #adb5bd;
+        }
+
+        .applied-coupon {
+            background-color: #f0f9ff;
+            border-radius: 6px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .dark-mode .applied-coupon {
+            background-color: #324055;
+        }
+
+        .coupon-text {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .remove-coupon {
+            background: none;
+            border: none;
+            color: #dc3545;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-cart-img {
+            max-width: 250px;
+            margin-bottom: 2rem;
+        }
+
+        .mode-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .mode-switch:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 767px) {
+            .product-img {
+                height: 80px;
+                width: 80px;
+            }
+            
+            .checkout-card {
+                position: static;
+                margin-top: 2rem;
+            }
+            
+            .product-card {
+                padding: 0.75rem;
+            }
+            
+            .product-actions {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="mode-switch" id="modeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container py-5">
+        <h1 class="mb-4 fw-bold">Shopping Cart <span class="text-muted fs-6">(3 items)</span></h1>
+        
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <!-- Cart Items -->
+                <div class="card product-card p-4 mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 col-3">
+                            <img src="/api/placeholder/200/200" alt="Wireless Headphones" class="product-img">
+                        </div>
+                        <div class="col-md-6 col-9">
+                            <h5 class="product-title mb-1">Premium Wireless Headphones</h5>
+                            <p class="text-muted fs-6 mb-2">Black | Noise Cancellation</p>
+                            <h6 class="mb-0 fw-bold">$199.99</h6>
+                        </div>
+                        <div class="col-md-2 col-6 mt-3 mt-md-0">
+                            <div class="quantity-control">
+                                <button class="quantity-btn">-</button>
+                                <input type="text" class="quantity-input" value="1" readonly>
+                                <button class="quantity-btn">+</button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-6 mt-3 mt-md-0">
+                            <div class="product-actions">
+                                <button class="action-btn delete" title="Remove from cart">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <button class="action-btn wishlist" title="Move to wishlist">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card product-card p-4 mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 col-3">
+                            <img src="/api/placeholder/200/200" alt="Smart Watch" class="product-img">
+                        </div>
+                        <div class="col-md-6 col-9">
+                            <h5 class="product-title mb-1">Smart Watch Series 5</h5>
+                            <p class="text-muted fs-6 mb-2">Silver | 44mm</p>
+                            <h6 class="mb-0 fw-bold">$349.99</h6>
+                        </div>
+                        <div class="col-md-2 col-6 mt-3 mt-md-0">
+                            <div class="quantity-control">
+                                <button class="quantity-btn">-</button>
+                                <input type="text" class="quantity-input" value="1" readonly>
+                                <button class="quantity-btn">+</button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-6 mt-3 mt-md-0">
+                            <div class="product-actions">
+                                <button class="action-btn delete" title="Remove from cart">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <button class="action-btn wishlist" title="Move to wishlist">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card product-card p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 col-3">
+                            <img src="/api/placeholder/200/200" alt="Wireless Earbuds" class="product-img">
+                        </div>
+                        <div class="col-md-6 col-9">
+                            <h5 class="product-title mb-1">Wireless Earbuds Pro</h5>
+                            <p class="text-muted fs-6 mb-2">White | Water Resistant</p>
+                            <h6 class="mb-0 fw-bold">$129.99</h6>
+                        </div>
+                        <div class="col-md-2 col-6 mt-3 mt-md-0">
+                            <div class="quantity-control">
+                                <button class="quantity-btn">-</button>
+                                <input type="text" class="quantity-input" value="1" readonly>
+                                <button class="quantity-btn">+</button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-6 mt-3 mt-md-0">
+                            <div class="product-actions">
+                                <button class="action-btn delete" title="Remove from cart">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <button class="action-btn wishlist" title="Move to wishlist">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left me-2"></i> Continue Shopping
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Price Details Panel -->
+                <div class="card checkout-card p-4">
+                    <h4 class="mb-4">Price Details</h4>
+                    
+                    <!-- Coupon Input -->
+                    <div class="mb-4">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Enter coupon code">
+                            <button class="btn btn-outline-secondary" type="button">Apply</button>
+                        </div>
+                        
+                        <!-- Applied Coupon (visible when a coupon is applied) -->
+                        <div class="applied-coupon">
+                            <span class="coupon-text">WELCOME25 (25% OFF)</span>
+                            <button class="remove-coupon"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    
+                    <!-- Price Breakdown -->
+                    <div class="price-row">
+                        <span class="subtotal-text">Price (3 items)</span>
+                        <span>$679.97</span>
+                    </div>
+                    
+                    <div class="price-row">
+                        <span class="subtotal-text">Discount</span>
+                        <span class="text-success">-$169.99</span>
+                    </div>
+                    
+                    <div class="price-row">
+                        <span class="subtotal-text">Shipping</span>
+                        <span>$12.99</span>
+                    </div>
+                    
+                    <div class="price-row total-price">
+                        <span>Total</span>
+                        <span>$522.97</span>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button class="btn btn-primary">
+                            Proceed to Checkout <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty Cart State (hidden by default) -->
+        <div class="card cart-empty d-none">
+            <img src="/api/placeholder/250/250" alt="Empty Cart" class="empty-cart-img mx-auto">
+            <h3 class="mb-3">Your cart is empty</h3>
+            <p class="text-muted mb-4">Looks like you haven't added anything to your cart yet.</p>
+            <div class="d-grid gap-2 col-md-6 mx-auto">
+                <button class="btn btn-primary">Start Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dark/Light Mode Toggle
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+        const icon = modeToggle.querySelector('i');
+        
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Quantity Controls
+        const minusBtns = document.querySelectorAll('.quantity-btn:first-child');
+        const plusBtns = document.querySelectorAll('.quantity-btn:last-child');
+        
+        minusBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.nextElementSibling;
+                let value = parseInt(input.value);
+                if (value > 1) {
+                    input.value = value - 1;
+                }
+            });
+        });
+        
+        plusBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                let value = parseInt(input.value);
+                input.value = value + 1;
+            });
+        });
+        
+        // Delete Buttons
+        const deleteBtns = document.querySelectorAll('.action-btn.delete');
+        
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productCard = this.closest('.product-card');
+                productCard.style.opacity = '0';
+                setTimeout(() => {
+                    productCard.style.display = 'none';
+                    
+                    // Check if there are any visible products
+                    const visibleProducts = document.querySelectorAll('.product-card[style*="display: none"]');
+                    if (visibleProducts.length === document.querySelectorAll('.product-card').length) {
+                        document.querySelector('.row.g-4').classList.add('d-none');
+                        document.querySelector('.cart-empty').classList.remove('d-none');
+                    }
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -35,9 +35,11 @@ app.use(
   session({
     secret: "yourSecretKey",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false, // ✅ Fix: Don't create sessions for unauthenticated users
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Session valid for 1 day
   })
 );
+
 
 // Passport Middleware
 app.use(passport.initialize());
@@ -72,10 +74,5 @@ app.use(authMiddleware);
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 
-// Debugging Middleware
-app.use((req, res, next) => {
-  console.log(`Received ${req.method} request at ${req.url}`);
-  next();
-});
 
 module.exports = app;

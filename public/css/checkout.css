@@ -1,0 +1,195 @@
+
+:root {
+    --primary-color: #4F6367;
+    --secondary-color: #B8D8D8;
+    --accent-color: #FE5F55;
+    --light-color: #F4F7F7;
+    --dark-color: #2D3B3E;
+    --text-color: #333333;
+}
+
+body {
+    background-color: var(--light-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.checkout-container {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.address-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.address-card.selected {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.product-summary {
+    background-color: var(--light-color);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.offer-card {
+    border: 1px dashed var(--secondary-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.payment-method {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-method.selected {
+    border-color: var(--accent-color);
+    background-color: rgba(254, 95, 85, 0.05);
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+}
+
+.btn-accent:hover {
+    background-color: #e5574e;
+    color: white;
+}
+
+
+
+
+
+.coupon-section {
+    background-color: var(--light-color);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.coupon-section .input-group {
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.coupon-section .form-control {
+    border: 1px solid var(--secondary-color);
+}
+
+.coupon-section .btn-accent {
+    border-radius: 0 25px 25px 0;
+}
+
+#coupon-feedback {
+    font-size: 0.9rem;
+}
+
+.coupon-valid {
+    color: green;
+}
+
+.coupon-invalid {
+    color: red;
+}
+
+
+/* Modern address card style */
+.modern-card {
+    padding: 15px;
+    border-radius: 12px;
+    background: #f8f9fa;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modern-card:hover {
+    background: #eef1f5;
+}
+
+/* Selected address gets a stylish border & glow effect */
+.modern-card.selected {
+    border: 2px solid #4caf50;
+    background: #eafaea;
+    box-shadow: 0px 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* Hide the radio button */
+.hidden-radio {
+    display: none;
+}
+
+
+
+
+/* Modern payment method card styling */
+.payment-method {
+    padding: 15px;
+    border-radius: 12px;
+    background: #f8f9fa;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect */
+.payment-method:hover {
+    background: #eef1f5;
+}
+
+/* Selected payment method gets a stylish border & glow */
+.payment-method.selected {
+    border: 2px solid #4caf50;
+    background: #eafaea;
+    box-shadow: 0px 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* Hide radio buttons */
+.hidden-radio {
+    display: none;
+}
+
+
+
+
+.modal-content {
+    border-radius: 12px;
+    border: none;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-body i {
+    animation: popIn 0.4s ease-in-out;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+

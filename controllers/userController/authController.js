@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 
+
 require("dotenv").config();
 
 
@@ -73,7 +74,6 @@ exports.signup = async (req, res) => {
             id: newUser._id,
             name: newUser.name,
             email: newUser.email,
-            phone: newUser.phone,
         };
 
         return res.redirect("/user/home"); 
@@ -86,29 +86,6 @@ exports.signup = async (req, res) => {
 };
 
 
-// exports.login = async (req, res) => {
-//     try {
-//       console.log(req.body);
-//         const { email, password } = req.body;
-//         const user = await User.findOne({ email });
-
-//         if (!user) {
-//             return res.render("user/userLogin", { message: "User not found" });
-//         }
-
-//         const isMatch = await bcrypt.compare(password, user.password);
-//         if (!isMatch) {
-//             return res.render("user/userLogin", { message: "Incorrect password" });
-//         }
-
-//         req.session.user = user; 
-//         res.redirect("/user/home"); 
-
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send("Server error");
-//     }
-// };
 
 
 exports.login = async (req, res) => {
@@ -285,4 +262,21 @@ exports.logout = (req, res) => {
         req.session = null;  
         res.redirect("/user/login");
     });
+};
+
+
+
+
+exports.isAuthenticated = (req, res, next) => {
+    console.log("Checking Authentication...");
+    console.log("User:", req.user);
+
+    if (req.isAuthenticated()) {
+        console.log("User is authenticated!");
+        return next();
+    }
+    
+    console.log("User is NOT authenticated! Redirecting to login...");
+    req.session.returnTo = req.originalUrl; // Save last visited page
+    res.redirect("/user/login");
 };

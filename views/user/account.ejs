@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | Supreme</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   
+    <link href="/css2/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="/css2/tiny-slider.css" rel="stylesheet">
+    <link href="/css2/style.css" rel="stylesheet">
+    <link href="/css/account.css" rel="stylesheet">
+
+  
+</head>
+
+<body>
+
+    <%- include('../partials/userNavbar') %>
+    <div class="account-container">
+        <h1 class="page-title">My Account</h1>
+        
+        <div class="row">
+            <!-- Sidebar - My Account Section -->
+            <div class="col-lg-3 col-md-4">
+                <div class="sidebar">
+                    <!-- Orders Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">My Account</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/user/account" class="active">
+                                    <i class="fas fa-box"></i> Orders
+                                </a>
+                                
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-wallet"></i> Wallet
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-user-plus"></i> Invite Friends
+                                </a>
+                                <p class="invite-subtitle">Earn 100 points for every friend</p>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-headset"></i> Customer Care
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Profile Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Profile</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/user/profile">
+                                    <i class="fas fa-user"></i> Personal Information
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/address">
+                                    <i class="fas fa-address-book"></i> Address Book
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-credit-card"></i> Payments
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content - My Orders Section -->
+            <div class="col-lg-9 col-md-8">
+                <div class="orders-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>My Orders</h2>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="orderFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Filter Orders
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="orderFilterDropdown">
+                                <li><a class="dropdown-item" href="#">All Orders</a></li>
+                                <li><a class="dropdown-item" href="#">Delivered</a></li>
+                                <li><a class="dropdown-item" href="#">Processing</a></li>
+                                <li><a class="dropdown-item" href="#">Shipped</a></li>
+                                <li><a class="dropdown-item" href="#">Cancelled</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Order 1 -->
+                        <div class="col-lg-6 col-md-12 mb-4">
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <span class="order-id">Order #FN83902</span>
+                                    <span class="order-status status-delivered">Delivered</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <img src="/api/placeholder/400/400" alt="Modu Sofa" class="order-image">
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="order-details">
+                                            <p class="order-product">Modu Sofa - 3 Seater</p>
+                                            <p>Placed on: Feb 28, 2025</p>
+                                            <p>Delivered on: Mar 2, 2025</p>
+                                            <p class="order-price">$1,299.00</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn btn-sm btn-outline-accent">Write Review</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Track Order</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Buy Again</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Order 2 -->
+                        <div class="col-lg-6 col-md-12 mb-4">
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <span class="order-id">Order #FN83756</span>
+                                    <span class="order-status status-processing">Processing</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <img src="/api/placeholder/400/400" alt="Elsa Coffee Table" class="order-image">
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="order-details">
+                                            <p class="order-product">Elsa Coffee Table - Oak</p>
+                                            <p>Placed on: Mar 1, 2025</p>
+                                            <p>Expected by: Mar 7, 2025</p>
+                                            <p class="order-price">$349.00</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn btn-sm btn-outline-secondary">Cancel Order</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Track Order</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Order 3 -->
+                        <div class="col-lg-6 col-md-12 mb-4">
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <span class="order-id">Order #FN82304</span>
+                                    <span class="order-status status-shipped">Shipped</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <img src="/api/placeholder/400/400" alt="Luna Dining Chair" class="order-image">
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="order-details">
+                                            <p class="order-product">Luna Dining Chair (Set of 4)</p>
+                                            <p>Placed on: Feb 25, 2025</p>
+                                            <p>Expected by: Mar 5, 2025</p>
+                                            <p class="order-price">$799.00</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn btn-sm btn-outline-secondary">Track Order</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Buy Again</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Order 4 -->
+                        <div class="col-lg-6 col-md-12 mb-4">
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <span class="order-id">Order #FN81546</span>
+                                    <span class="order-status status-cancelled">Cancelled</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <img src="/api/placeholder/400/400" alt="Nordic Bookshelf" class="order-image">
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="order-details">
+                                            <p class="order-product">Nordic Bookshelf - Walnut</p>
+                                            <p>Placed on: Feb 15, 2025</p>
+                                            <p>Cancelled on: Feb 16, 2025</p>
+                                            <p class="order-price">$599.00</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn btn-sm btn-outline-accent">Buy Again</button>
+                                    <button class="btn btn-sm btn-outline-secondary">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Orders pagination" class="d-flex justify-content-center mt-3">
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

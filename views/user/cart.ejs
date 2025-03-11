@@ -8,29 +8,202 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 		<link href="/css2/tiny-slider.css" rel="stylesheet">
 		<link href="/css2/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css2/styles.css"> 
+		<link href="/css/cart.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
     <%- include('../partials/userNavbar') %>
 
-    <div class="container">
-        <h1>Your Cart</h1>
-        <% if (cart && cart.length > 0) { %>
-            <div class="cart-container">
-                <% cart.forEach(item => { %>
-                    <div class="cart-item">
-                        <img src="<%= item.image %>" alt="<%= item.name %>" class="cart-item-image">
-                        <div class="cart-item-details">
-                            <h3><%= item.name %></h3>
-                            <p>Price: ₹<%= item.price %></p>
-                            <p>Quantity: <%= item.quantity %></p>
+
+      
+      <!-- Cart Content -->
+      <div class="container cart-container">
+          <div class="row mb-4">
+              <div class="col-12">
+                  <h2 class="section-title">Shopping Cart </h2>
+              </div>
+          </div>
+  
+          <div class="row">
+              <!-- Cart Items -->
+              <div class="col-lg-8 col-md-7">
+                  <!-- Item 1 -->
+
+                  <!-- <div class="product-card p-3">
+                      <div class="row align-items-center">
+                          <div class="col-md-2 col-4">
+                              <img src="/api/placeholder/200/200" alt="Modern Sofa" class="product-image">
+                          </div>
+                          <div class="col-md-5 col-8">
+                              <h5 class="mb-1">Modern Scandinavian Sofa</h5>
+                              <p class="text-muted mb-1">Color: Light Grey</p>
+                              <p class="text-muted mb-md-0">Material: Premium Fabric</p>
+                              <div class="d-md-none mt-2">
+                                  <h5 class="mb-0">$1,299.00</h5>
+                              </div>
+                          </div>
+                          <div class="col-md-2 col-6 mt-md-0 mt-3">
+                              <div class="quantity-control">
+                                  <button class="quantity-btn" onclick="decreaseQuantity(1)">-</button>
+                                  <input type="text" class="quantity-input" id="quantity-1" value="1" readonly>
+                                  <button class="quantity-btn" onclick="increaseQuantity(1)">+</button>
+                              </div>
+                          </div>
+                          <div class="col-md-2 d-none d-md-block text-center">
+                              <h5>$1,299.00</h5>
+                          </div>
+                          <div class="col-md-1 col-6 text-end mt-md-0 mt-3">
+                              <div class="action-buttons">
+                                  <button class="wishlist-btn mb-2" title="Move to Wishlist">
+                                      <i class="bi bi-heart"></i>
+                                  </button>
+                                  <button class="remove-btn" title="Remove">
+                                      <i class="bi bi-trash"></i>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  </div> -->
+  
+                  <% if (cart && cart.items.length > 0) { %>
+                    <% cart.items.forEach(item => { %>
+                        <div class="product-card p-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 col-4">
+                                    <img src="<%= item.product.images[0] %>" alt="<%= item.product.name %>" class="product-image">
+                                </div>
+                                <div class="col-md-5 col-8">
+                                    <h5 class="mb-1"><%= item.product.name %></h5>
+                                    <p class="text-muted mb-1">Color: <%= item.color || 'N/A' %></p>
+                                    <p class="text-muted mb-md-0">Material: Premium Fabric</p>
+                                    <div class="d-md-none mt-2">
+                                        <h5 class="mb-0">₹<%= item.product.price %></h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-6 mt-md-0 mt-3">
+                                    <div class="quantity-control">
+                                        <button class="quantity-btn" onclick="updateQuantity('<%= item.product._id %>', 'decrease')">-</button>
+                                        <input type="text" class="quantity-input" id="quantity-<%= item.product._id %>" value="<%= item.quantity %>" readonly>
+                                        <button class="quantity-btn" onclick="updateQuantity('<%= item.product._id %>', 'increase')">+</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 d-none d-md-block text-center">
+                                    <h5>₹<%= item.product.price * item.quantity %></h5>
+                                </div>
+                                <div class="col-md-1 col-6 text-end mt-md-0 mt-3">
+                                  <div class="action-buttons">
+                                      <button class="wishlist-btn mb-2" title="Move to Wishlist" onclick="moveToWishlist('<%= item.product._id %>')">
+                                          <i class="bi bi-heart"></i>
+                                      </button>
+                                      <button class="remove-btn" onclick="removeFromCart('<%= item.product._id %>')" title="Remove">
+                                          <i class="bi bi-trash"></i>
+                                      </button>
+                                  </div>
+                              </div>
+                            </div>
                         </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-center">Your cart is empty.</p>
+                <% } %>
+                
+
+
+                
+  
+                  <!-- Empty Cart State (Initially Hidden) -->
+                  <div class="empty-cart d-none">
+                      <i class="bi bi-cart-x"></i>
+                      <h3>Your cart is empty</h3>
+                      <p class="text-muted">Looks like you haven't added any items to your cart yet.</p>
+                      <a href="#" class="btn btn-accent mt-3">Start Shopping</a>
+                  </div>
+              </div>
+  
+              <!-- Order Summary -->
+              <div class="col-lg-4 col-md-5 mt-md-0 mt-4">
+                <div class="summary-card">
+                    <h4 class="mb-4">Order Summary</h4>
+                    <div class="price-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal-value">₹<%= subtotal ? subtotal.toFixed(2) : "0.00" %></span>
                     </div>
-                <% }) %>
-            </div>
-        <% } else { %>
-            <p>Your cart is empty.</p>
-        <% } %>
-    </div>
+                    <div class="price-row">
+                        <span>Shipping</span>
+                        <span id="shipping-value">₹<%= shippingCost ? shippingCost.toFixed(2) : "0.00" %></span>
+                    </div>
+                    <div class="price-row total-row">
+                        <span>Total</span>
+                        <span id="total-value">₹<%= total ? total.toFixed(2) : "0.00" %></span>
+                    </div>
+                </div>
+                      
+                <div class="mt-4">
+                    <form action="/user/checkout" method="GET">
+                        <button type="submit" class="btn btn-accent checkout-btn w-100 mb-3">
+                            Proceed to Checkout
+                        </button>
+                    </form>
+                
+                    <a href="/user/shop" class="continue-shopping">
+                        <i class="bi bi-arrow-left"></i> Continue Shopping
+                    </a>
+                </div>
+                
+                      
+                      <div class="mt-4 text-center">
+                          <small class="text-muted">
+                              <i class="bi bi-shield-lock me-1"></i> Secure Checkout
+                          </small>
+                          <div class="mt-2">
+                              <i class="bi bi-credit-card me-2"></i>
+                              <i class="bi bi-paypal me-2"></i>
+                              <i class="bi bi-wallet2 me-2"></i>
+                              <i class="bi bi-apple"></i>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <div class="summary-card mt-4">
+                      <h5 class="mb-3">Need Help?</h5>
+                      <div class="mb-2">
+                          <a href="#" class="text-decoration-none d-flex align-items-center">
+                              <i class="bi bi-question-circle me-2"></i>
+                              Shipping Policy
+                          </a>
+                      </div>
+                      <div class="mb-2">
+                          <a href="#" class="text-decoration-none d-flex align-items-center">
+                              <i class="bi bi-arrow-return-left me-2"></i>
+                              Returns & Exchanges
+                          </a>
+                      </div>
+                      <div>
+                          <a href="#" class="text-decoration-none d-flex align-items-center">
+                              <i class="bi bi-headset me-2"></i>
+                              Contact Customer Service
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  
+      <!-- Footer -->
+
+
+  
+      <!-- Bootstrap 5 JS -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+      <script src="/js/cart.js"></script>
+      
+      <!-- Quantity Control Script -->
+     
+  
+   
+
+
+
+    
 </body>
 </html>

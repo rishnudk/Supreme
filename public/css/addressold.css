@@ -1,0 +1,227 @@
+
+:root {
+    --primary-color: #6366f1;
+    --secondary-color: #f0f1ff;
+    --accent-color: #4f46e5;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --text-color: #1f2937;
+    --light-text: #6b7280;
+    --border-radius: 12px;
+    --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-color);
+    background-color: #f9fafb;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.address-card {
+    position: relative;
+}
+
+.address-type {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.address-type.home {
+    background-color: var(--secondary-color);
+    color: var(--accent-color);
+}
+
+.address-type.work {
+    background-color: #fff1e7;
+    color: #f97316;
+}
+
+.default-badge {
+    background-color: var(--success-color);
+    color: white;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.address-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.address-details {
+    color: var(--light-text);
+    margin-bottom: 1.5rem;
+}
+
+.address-meta {
+    display: flex;
+    align-items: center;
+    margin-top: 1.25rem;
+    color: var(--light-text);
+    font-size: 0.875rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 0.625rem 1.25rem;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 0.625rem 1.25rem;
+    font-weight: 600;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.btn-edit {
+    color: var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+.btn-edit:hover {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.btn-delete {
+    color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
+.btn-delete:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.pagination {
+    margin-top: 2rem;
+}
+
+.form-floating > .form-control {
+    padding: 1.5rem 0.75rem 0.75rem;
+    height: calc(3.5rem + 2px);
+}
+
+.form-floating > label {
+    padding: 1rem 0.75rem;
+}
+
+.modal-content {
+    border-radius: var(--border-radius);
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.section-title {
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+@media (max-width: 767.98px) {
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    .address-type {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .default-badge {
+        top: 15px;
+        left: 15px;
+    }
+    
+    .btn-add-address {
+        width: 100%;
+    }
+}

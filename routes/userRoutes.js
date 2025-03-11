@@ -2,14 +2,20 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const mongoose = require("mongoose");
+const { isAuthenticated } = require("../middlewares/authMiddleware");
 
 // Controllers
 const authController = require("../controllers/userController/authController");
 const userController = require("../controllers/userController/userController");
 const productController = require("../controllers/userController/productController");
+const addressController = require("../controllers/userController/addressController");
+const cartController = require("../controllers/userController/cartController")
+const checkoutController = require("../controllers/userController/checkoutController")
+const orderController = require("../controllers/userController/orderController")
 
 // Models
 const Category = require("../models/Category");
+const Address = require("../models/Address");
 const Product = require("../models/Product");
 
 // ===============================
@@ -64,8 +70,6 @@ router.get("/home", (req, res) => {
 });
 
 // User Profile
-router.get("/profile", userController.getProfile);
-router.post("/profile", userController.updateProfile);
 
 // ===============================
 // 🔹 Forgot Password & OTP Verification
@@ -93,14 +97,46 @@ router.get("/verifyOtp", authController.getVerifyOtp);
 // 🔹 Product & Shopping Routes
 // ===============================
 
-// Shop Page (Product Listing)
+// Shop Page (Product Listing) 
 router.get("/shop", userController.getShopPage);
 
 // Product Details Route
-router.get("/product/:id", productController.getProductByCategory);
+router.get("/product/category/:id", productController.getProductByCategory);
+router.get("/product/:id", productController.getProductById);
 
-// Cart Routes
-router.post("/cart/add", productController.addToCart);
-router.get("/cart", productController.getCart);
+router.post("/address", addressController.addAddress);
+router.get("/address", addressController.getAddressPage);
+router.put('/edit/:id', addressController.updateAddress)
+router.get('/address/:id', addressController.getAddressById);
+router.delete('/address/:id', addressController.deleteAddress);
+
+// router.post("/add", authController.isAuthenticated, addressController.addAddress);
+
+// Cart Routes 
+router.get('/cart',  cartController.getCartPage);
+router.post("/cart/add", cartController.addToCart);
+router.post('/cart/update-quantity', cartController.updateCartQuantity);
+router.post('/cart/remove', cartController.removeFromCart);
+
+
+//checkout
+router.get("/checkout", checkoutController.getCheckoutPage);
+router.post('/checkout/address/add', checkoutController.addAddress)
+router.put('/checkout/address/:id', checkoutController.updateAddress)
+router.get('/checkout/address/:id', checkoutController.getAddress)
+
+
+//order
+router.post("/place-order", orderController.placeOrder)
+
+//profile
+router.get("/account", userController.getAccount);
+
+router.get('/profile',  userController.renderUserProfile);
+router.post('/change-password',  userController.changePassword);
+
+
+
+
 
 module.exports = router;

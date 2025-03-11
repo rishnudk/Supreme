@@ -298,7 +298,7 @@
     }
   </style> -->
 
-<style>
+<!-- <style>
   /* 📌 Root Variables for 2025 Design */
 :root {
     --primary: #1e88e5; /* Vibrant blue */
@@ -705,9 +705,426 @@
         gap: 0.5rem;
     }
 }
+</style> -->
+
+
+<style>
+  /* 📌 Root Variables for 2025 Design */
+:root {
+    --primary: #1e88e5;
+    --secondary: #ff4081;
+    --background: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #212121;
+    --text-light: #757575;
+    --error: #d32f2f;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --sidebar-width-closed: 0px;
+    --sidebar-width-open: 250px;
+}
+
+/* 📌 Container Styling */
+.container {
+    margin-left: var(--sidebar-width-closed);
+    padding: 2rem;
+    min-height: 100vh;
+    width: 80%; /* Set to 80% */
+    max-width: 1200px; /* Optional cap for readability */
+    margin-right: auto;
+    margin-left: auto; /* Center the container */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Adjust container when sidebar is open */
+#admin-sidebar.show ~ .container {
+    margin-left: calc(var(--sidebar-width-open) + 10%); /* Adjust for 80% width */
+    width: calc(80% - var(--sidebar-width-open));
+}
+
+/* 📌 Header Section */
+.header {
+    display: flex;
+    justify-content: center; /* Center the h1 */
+    align-items: center;
+    margin-bottom: 2rem;
+    text-align: center; /* Ensure text aligns center */
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex-grow: 1; /* Allow h1 to take available space */
+}
+
+/* 📌 Add Category Button */
+.add-category-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.add-category-btn:hover {
+    background: #1565c0;
+}
+
+/* 📌 Search & Reset Section */
+.search-section {
+    display: flex;
+    justify-content: center; /* Center the search section */
+    gap: 1rem;
+    margin-bottom: 2rem;
+    max-width: 600px; /* Limit width for centering */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(30, 136, 229, 0.2);
+    outline: none;
+}
+
+.reset-btn {
+    padding: 0.75rem 1.5rem;
+    background: #e0e0e0;
+    color: var(--text);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.reset-btn:hover {
+    background: #bdbdbd;
+}
+
+/* 📌 Category Table */
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.category-table thead th {
+    background: var(--primary);
+    color: white;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: left;
+}
+
+.category-table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background 0.3s ease;
+}
+
+.category-table tbody tr:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.category-table td {
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+.status.active {
+    color: #1e88e5;
+    font-weight: 500;
+}
+
+.status.inactive {
+    color: var(--error);
+    font-weight: 500;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    margin-right: 0.5rem;
+}
+
+.action-btn:hover {
+    color: #1565c0;
+}
+
+.action-btn.delete-btn {
+    color: var(--error);
+}
+
+.action-btn.delete-btn:hover {
+    color: #b71c1c;
+}
+
+/* 📌 Pagination Controls */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.pagination-info {
+    font-size: 1rem;
+    color: var(--text-light);
+}
+
+.pagination-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pagination-btn {
+    padding: 0.5rem 1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.pagination-btn:hover {
+    background: #1565c0;
+}
+
+/* 📌 Modal Overlay */
+.modal-overlay {
+    display: none; /* Ensure hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 📌 Modal Content */
+.modal {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: var(--shadow);
+}
+
+.modal h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 📌 Form Group in Modal */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(30, 136, 229, 0.2);
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.error-message {
+    color: var(--error);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+/* 📌 Form Actions in Modal */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.cancel-btn {
+    padding: 0.75rem 1.5rem;
+    background: #e0e0e0;
+    color: var(--text);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #bdbdbd;
+}
+
+.save-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.save-btn:hover {
+    background: #1565c0;
+}
+
+/* 📌 Responsive Adjustments */
+@media (max-width: 768px) {
+    #admin-sidebar.show ~ .container {
+        margin-left: 250px;
+        width: calc(80% - 250px);
+    }
+
+    .container {
+        margin-left: 0;
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .search-section {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .search-input {
+        max-width: 100%;
+    }
+
+    .category-table th,
+    .category-table td {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+
+    .modal {
+        padding: 1.5rem;
+    }
+
+    .modal h2 {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #admin-sidebar.show ~ .container {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .container {
+        padding: 0.5rem;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .header h1 {
+        font-size: 1.25rem;
+    }
+
+    .add-category-btn,
+    .reset-btn,
+    .pagination-btn,
+    .cancel-btn,
+    .save-btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .category-table {
+        font-size: 0.8rem;
+    }
+
+    .category-table th,
+    .category-table td {
+        padding: 0.5rem;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
 </style>
-
-
 
 </head>
 
@@ -774,7 +1191,6 @@
 
       <!-- Pagination Controls -->
       <div class="pagination">
-        <span id="pagination-info" class="pagination-info">Showing 1 to 10 of 50 entries</span>
         <div class="pagination-buttons">
           <button id="prevPage" class="pagination-btn">Previous</button>
           <button id="nextPage" class="pagination-btn">Next</button>
@@ -813,7 +1229,10 @@
       </div>
     </div>
 
-    <script>
+
+
+
+    <!-- <script>
       const modal = document.getElementById('modal');
       const addButton = document.querySelector('.add-category-btn');
       const cancelButton = document.querySelector('.cancel-btn');
@@ -828,7 +1247,6 @@
         modal.style.display = 'none';
       });
 
-      // Close modal when clicking outside of it
       modal.addEventListener('click', (event) => {
         if (event.target === modal) {
           modal.style.display = 'none';
@@ -836,7 +1254,7 @@
       });
 
       document.getElementById("category-form").addEventListener("submit", async function (event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault(); 
 
         if (validateForm()) {
           // Get form data
@@ -912,111 +1330,6 @@
       }
 
 
-
-
-      // let currentPage = 1;
-      // const limit = 5;
-
-      // async function fetchCategories(page = 1, searchQuery = "") {
-      //   try {
-      //     const response = await fetch(`/admin/categories?page=${page}&search=${searchQuery}`);
-      //     const data = await response.json();
-
-      //     if (response.ok) {
-      //       displayCategories(data.categories);
-      //       updatePagination(data.page, data.totalPages, data.total);
-      //     } else {
-      //       console.error("Error fetching categories:", data.error);
-      //     }
-      //   } catch (error) {
-      //     console.error("Error fetching categories:", error);
-      //   }
-      // }
-
-
-
-
-
-
-
-//pagination old
-
-//       document.addEventListener("DOMContentLoaded", () => {
-//   let currentPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
-//   const limit = 5;
-//   const totalEntries = parseInt(document.getElementById("pagination-info").dataset.totalEntries) || 50;
-//   const totalPages = Math.ceil(totalEntries / limit);
-
-//   const prevButton = document.getElementById("prevPage");
-//   const nextButton = document.getElementById("nextPage");
-
-//   function updateButtons() {
-//     prevButton.disabled = currentPage === 1;
-//     nextButton.disabled = currentPage >= totalPages;
-//   }
-
-//   async function fetchCategories(page) {
-//     try {
-//       const response = await fetch(`/admin/categories?page=${page}&limit=${limit}`, {
-//         headers: { "Accept": "application/json" }
-//       });
-
-//       if (!response.ok) {
-//         throw new Error(`Failed to fetch categories: ${response.status}`);
-//       }
-
-//       const data = await response.json();
-//       console.log("Fetched Data:", data);
-//       currentPage = data.page;
-//       updateButtons();
-//     } catch (error) {
-//       console.error("Error fetching categories:", error);
-//     }
-//   }
-
-//   prevButton.addEventListener("click", () => fetchCategories(currentPage - 1));
-//   nextButton.addEventListener("click", () => fetchCategories(currentPage + 1));
-
-//   updateButtons();
-// });
-
-
-
-
-//new page
-
-
-
-// function fetchCategories(page, searchValue = "") {
-//     window.location.href = `/admin/categories?page=${page}&search=${searchValue}`;
-// }
-
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     let currentPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
-//     const totalPages = parseInt(document.getElementById("pagination-info").dataset.totalPages) || 1;
-
-//     const prevButton = document.getElementById("prevPage");
-//     const nextButton = document.getElementById("nextPage");
-
-//     function fetchPage(page) {
-//         window.location.href = `/admin/categories?page=${page}`; // ✅ Correct route
-//     }
-
-//     prevButton.addEventListener("click", function () {
-//         if (currentPage > 1) {
-//             fetchPage(currentPage - 1);
-//         }
-//     });
-
-//     nextButton.addEventListener("click", function () {
-//         if (currentPage < totalPages) {
-//             fetchPage(currentPage + 1);
-//         }
-//     });
-// });
-
-
 function fetchCategories(page, searchValue = "") {
     window.location.href = `/admin/categories?page=${page}&search=${searchValue}`;
 }
@@ -1027,7 +1340,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const prevButton = document.getElementById("prevPage");
     const nextButton = document.getElementById("nextPage");
-    const searchInput = document.getElementById("search-input"); // Optional if search is included
+    const searchInput = document.getElementById("search-input"); 
 
     prevButton.addEventListener("click", function () {
         if (currentPage > 1) {
@@ -1067,18 +1380,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("nextPage").disabled = page === totalPages;
         currentPage = page;
       }
-
-
-
-
-      // document.getElementById("prevPage").addEventListener("click", () => {
-      //   if (currentPage > 1) fetchCategories(currentPage - 1, document.getElementById("search-input").value);
-      // });
-
-      // document.getElementById("nextPage").addEventListener("click", () => {
-      //   fetchCategories(currentPage + 1, document.getElementById("search-input").value);
-      // });
-
 
 
 
@@ -1179,12 +1480,501 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     </script>
+ -->
+
+
+
+ <!-- <script>
+  // Global variables
+const modal = document.getElementById('modal');
+const addButton = document.querySelector('.add-category-btn');
+const cancelButton = document.querySelector('.cancel-btn');
+let currentPage = 1; // Define globally for consistency
+
+// Ensure modal is hidden on page load
+document.addEventListener("DOMContentLoaded", function () {
+    modal.style.display = 'none'; // Hide modal by default
+
+    currentPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
+    const totalPages = parseInt(document.getElementById("pagination-info").dataset.totalPages) || 1;
+
+    const prevButton = document.getElementById("prevPage");
+    const nextButton = document.getElementById("nextPage");
+    const searchInput = document.getElementById("search-input");
+
+    prevButton.addEventListener("click", function () {
+        if (currentPage > 1) {
+            fetchCategories(currentPage - 1, searchInput?.value || "");
+        }
+    });
+
+    nextButton.addEventListener("click", function () {
+        if (currentPage < totalPages) {
+            fetchCategories(currentPage + 1, searchInput?.value || "");
+        }
+    });
+});
+
+// Open modal
+addButton.addEventListener('click', () => {
+    modal.style.display = 'flex';
+});
+
+// Close modal on cancel button click
+cancelButton.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// Close modal when clicking outside
+modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Form submission for adding a category
+document.getElementById("category-form").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    if (validateForm()) {
+        const categoryData = {
+            name: document.getElementById("category-name").value.trim(),
+            description: document.getElementById("category-description").value.trim(),
+            status: document.getElementById("category-status").value
+        };
+
+        try {
+            const response = await fetch("/admin/category/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(categoryData),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Category added successfully! Reload the page?",
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, reload",
+                    cancelButtonText: "No, stay"
+                }).then((willReload) => {
+                    document.getElementById("category-form").reset();
+                    modal.style.display = 'none';
+                    if (willReload.isConfirmed) {
+                        window.location.reload();
+                    } else {
+                        fetchCategories(currentPage); // Refresh data without reload
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: result.error || "Category Already Exists By This Name!",
+                    icon: "error"
+                });
+            }
+        } catch (error) {
+            Swal.fire("Error submitting form: " + error.message);
+        }
+    }
+});
+
+// Validation function
+function validateForm() {
+    clearErrors();
+    let isValid = true;
+
+    const name = document.getElementById("category-name").value.trim();
+    const description = document.getElementById("category-description").value.trim();
+    const status = document.getElementById("category-status").value;
+
+    if (name === "") {
+        displayErrorMessage("category-name-error", "Please enter a category name.");
+        isValid = false;
+    } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+        displayErrorMessage("category-name-error", "Category name should contain only letters.");
+        isValid = false;
+    }
+
+    if (description === "") {
+        displayErrorMessage("category-description-error", "Please enter a description.");
+        isValid = false;
+    }
+
+    if (status === "") {
+        displayErrorMessage("category-status-error", "Please select a status.");
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+function displayErrorMessage(id, message) {
+    document.getElementById(id).innerText = message;
+    document.getElementById(id).style.color = "red";
+}
+
+function clearErrors() {
+    document.querySelectorAll(".error-message").forEach((el) => (el.innerText = ""));
+}
+
+// Fetch categories
+function fetchCategories(page, searchValue = "") {
+    window.location.href = `/admin/categories?page=${page}&search=${searchValue}`;
+}
+
+// Search and reset
+document.getElementById("search-input").addEventListener("keyup", () => {
+    fetchCategories(1, document.getElementById("search-input").value);
+});
+
+function resetSearch() {
+    document.getElementById("search-input").value = "";
+    fetchCategories(1);
+}
+
+// Edit category
+async function editCategory(id) {
+    try {
+        const response = await fetch(`/admin/category/${id}`);
+        if (!response.ok) throw new Error("Failed to fetch category");
+
+        const category = await response.json();
+        console.log(category);
+
+        document.getElementById("category-name").value = category.name || "";
+        document.getElementById("category-description").value = category.description || "";
+        document.getElementById("category-status").value = category.status || "";
+
+        modal.style.display = "flex";
+
+        const form = document.getElementById("category-form");
+        form.onsubmit = async function (event) {
+            event.preventDefault();
+
+            const updatedCategory = {
+                name: document.getElementById("category-name").value.trim(),
+                description: document.getElementById("category-description").value.trim(),
+                status: document.getElementById("category-status").value,
+            };
+
+            const updateResponse = await fetch(`/admin/category/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updatedCategory),
+            });
+
+            Swal.fire({
+                title: "Success!",
+                text: "Category updated successfully! Reload the page?",
+                icon: "success",
+                showCancelButton: true,
+                confirmButtonText: "Yes, reload",
+                cancelButtonText: "No, stay"
+            }).then((willReload) => {
+                modal.style.display = 'none';
+                if (willReload.isConfirmed) {
+                    window.location.reload();
+                } else {
+                    fetchCategories(currentPage); // Refresh data without reload
+                }
+            });
+        };
+    } catch (error) {
+        Swal.fire("Error!", "Something went wrong while fetching category details.", "error");
+        console.error("Error fetching category:", error);
+    }
+}
+
+// Delete category
+async function deleteCategory(id) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you Want To Unlist This Category!",
+        icon: "warning",
+        buttons: ["Cancel", "Yes, delete it!"],
+        dangerMode: true,
+    }).then(async (willDelete) => {
+        if (willDelete) {
+            try {
+                const response = await fetch(`/admin/category/${id}`, { method: "DELETE" });
+
+                if (response.ok) {
+                    Swal.fire("Deleted!", "The category has been unlisted successfully.", "success")
+                        .then(() => {
+                            fetchCategories(currentPage);
+                            window.location.reload();
+                        });
+                } else {
+                    Swal.fire("Error!", "Failed to delete the category.", "error");
+                }
+            } catch (error) {
+                Swal.fire("Error!", "Something went wrong.", "error");
+                console.error("Error deleting category:", error);
+            }
+        }
+    });
+}
+
+// Unused functions (kept for compatibility)
+function displayCategories(categories) {
+    const categoryList = document.getElementById("category-list");
+    categoryList.innerHTML = "";
+    if (categories.length === 0) {
+        categoryList.innerHTML = "<tr><td colspan='4'>No categories found</td></tr>";
+    }
+}
+
+function updatePagination(page, totalPages, totalEntries) {
+    document.getElementById("pagination-info").innerText =
+        `Showing ${((page - 1) * 10) + 1} to ${Math.min(page * 10, totalEntries)} of ${totalEntries} entries`;
+    document.getElementById("prevPage").disabled = page === 1;
+    document.getElementById("nextPage").disabled = page === totalPages;
+    currentPage = page;
+}
+ </script> -->
+
+
+ <script>
+  // Global variables
+const modal = document.getElementById('modal');
+const addButton = document.querySelector('.add-category-btn');
+const cancelButton = document.querySelector('.cancel-btn');
+let currentPage = 1; // Define globally for consistency
+
+// Ensure modal is hidden on page load and set up event listeners
+document.addEventListener("DOMContentLoaded", function () {
+    modal.style.display = 'none'; // Hide modal by default
+
+    currentPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
+    const totalPages = parseInt(document.getElementById("pagination-info").dataset.totalPages) || 1;
+
+    const prevButton = document.getElementById("prevPage");
+    const nextButton = document.getElementById("nextPage");
+    const searchInput = document.getElementById("search-input");
+
+    prevButton.addEventListener("click", function () {
+        if (currentPage > 1) {
+            fetchCategories(currentPage - 1, searchInput?.value || "");
+        }
+    });
+
+    nextButton.addEventListener("click", function () {
+        if (currentPage < totalPages) {
+            fetchCategories(currentPage + 1, searchInput?.value || "");
+        }
+    });
+});
+
+// Open modal
+addButton.addEventListener('click', () => {
+    modal.style.display = 'flex';
+});
+
+// Close modal on cancel button click
+cancelButton.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// Close modal when clicking outside
+modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Form submission for adding a category
+document.getElementById("category-form").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    if (validateForm()) {
+        const categoryData = {
+            name: document.getElementById("category-name").value.trim(),
+            description: document.getElementById("category-description").value.trim(),
+            status: document.getElementById("category-status").value
+        };
+
+        try {
+            const response = await fetch("/admin/category/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(categoryData),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                Swal.fire("Category added successfully!").then(() => {
+                    document.getElementById("category-form").reset();
+                    modal.style.display = 'none';
+                    window.location.reload(); // Reload page after adding
+                });
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: result.error || "Category Already Exists By This Name!",
+                    icon: "error"
+                });
+            }
+        } catch (error) {
+            Swal.fire("Error submitting form: " + error.message);
+        }
+    }
+});
+
+// Validation function
+function validateForm() {
+    clearErrors();
+    let isValid = true;
+
+    const name = document.getElementById("category-name").value.trim();
+    const description = document.getElementById("category-description").value.trim();
+    const status = document.getElementById("category-status").value;
+
+    if (name === "") {
+        displayErrorMessage("category-name-error", "Please enter a category name.");
+        isValid = false;
+    } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+        displayErrorMessage("category-name-error", "Category name should contain only letters.");
+        isValid = false;
+    }
+
+    if (description === "") {
+        displayErrorMessage("category-description-error", "Please enter a description.");
+        isValid = false;
+    }
+
+    if (status === "") {
+        displayErrorMessage("category-status-error", "Please select a status.");
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+function displayErrorMessage(id, message) {
+    document.getElementById(id).innerText = message;
+    document.getElementById(id).style.color = "red";
+}
+
+function clearErrors() {
+    document.querySelectorAll(".error-message").forEach((el) => (el.innerText = ""));
+}
+
+// Fetch categories
+function fetchCategories(page, searchValue = "") {
+    window.location.href = `/admin/categories?page=${page}&search=${searchValue}`;
+}
+
+// Search and reset
+document.getElementById("search-input").addEventListener("keyup", () => {
+    fetchCategories(1, document.getElementById("search-input").value);
+});
+
+function resetSearch() {
+    document.getElementById("search-input").value = "";
+    fetchCategories(1);
+}
+
+// Edit category
+async function editCategory(id) {
+    try {
+        const response = await fetch(`/admin/category/${id}`);
+        if (!response.ok) throw new Error("Failed to fetch category");
+
+        const category = await response.json();
+        console.log(category);
+
+        document.getElementById("category-name").value = category.name || "";
+        document.getElementById("category-description").value = category.description || "";
+        document.getElementById("category-status").value = category.status || "";
+
+        modal.style.display = "flex";
+
+        const form = document.getElementById("category-form");
+        form.onsubmit = async function (event) {
+            event.preventDefault();
+
+            const updatedCategory = {
+                name: document.getElementById("category-name").value.trim(),
+                description: document.getElementById("category-description").value.trim(),
+                status: document.getElementById("category-status").value,
+            };
+
+            const updateResponse = await fetch(`/admin/category/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updatedCategory),
+            });
+
+            Swal.fire("Category updated successfully!").then(() => {
+                modal.style.display = 'none';
+                window.location.reload(); // Reload page after updating
+            });
+        };
+    } catch (error) {
+        Swal.fire("Error!", "Something went wrong while fetching category details.", "error");
+        console.error("Error fetching category:", error);
+    }
+}
+
+// Delete category
+async function deleteCategory(id) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you Want To Unlist This Category!",
+        icon: "warning",
+        buttons: ["Cancel", "Yes, delete it!"],
+        dangerMode: true,
+    }).then(async (willDelete) => {
+        if (willDelete) {
+            try {
+                const response = await fetch(`/admin/category/${id}`, { method: "DELETE" });
+
+                if (response.ok) {
+                    Swal.fire("Deleted!", "The category has been unlisted successfully.", "success")
+                        .then(() => {
+                            fetchCategories(currentPage);
+                            window.location.reload();
+                        });
+                } else {
+                    Swal.fire("Error!", "Failed to delete the category.", "error");
+                }
+            } catch (error) {
+                Swal.fire("Error!", "Something went wrong.", "error");
+                console.error("Error deleting category:", error);
+            }
+        }
+    });
+}
+
+// Unused functions (kept for compatibility)
+function displayCategories(categories) {
+    const categoryList = document.getElementById("category-list");
+    categoryList.innerHTML = "";
+    if (categories.length === 0) {
+        categoryList.innerHTML = "<tr><td colspan='4'>No categories found</td></tr>";
+    }
+}
+
+function updatePagination(page, totalPages, totalEntries) {
+    document.getElementById("pagination-info").innerText =
+        `Showing ${((page - 1) * 10) + 1} to ${Math.min(page * 10, totalEntries)} of ${totalEntries} entries`;
+    document.getElementById("prevPage").disabled = page === 1;
+    document.getElementById("nextPage").disabled = page === totalPages;
+    currentPage = page;
+}
+ </script>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-    <style>
-      
-    </style>
 
 </body>
 

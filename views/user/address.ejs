@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Book | Furniture E-commerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   
+ <!-- Bootstrap 5.3 CSS -->
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+ <!-- Bootstrap Icons -->
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css"
+     rel="stylesheet">
+ <link rel="stylesheet" href="/css/address.css">
+</head>
+
+<body>
+
+ <%- include('../partials/userNavbar') %>
+    <div class="account-container">
+        <h1 class="page-title">My Account</h1>
+        
+        <div class="row">
+            <!-- Sidebar - My Account Section -->
+            <div class="col-lg-3 col-md-4">
+                <div class="sidebar">
+                    <!-- Orders Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">My Account</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/user/account" class="active">
+                                    <i class="fas fa-box"></i> Orders
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-wallet"></i> Wallet
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-user-plus"></i> Invite Friends
+                                </a>
+                                <p class="invite-subtitle">Earn 100 points for every friend</p>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-headset"></i> Customer Care
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Profile Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Profile</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/user/profile">
+                                    <i class="fas fa-user"></i> Personal Information
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="active">
+                                    <i class="fas fa-address-book"></i> Address Book
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-credit-card"></i> Payments
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content - Address Book Section -->
+            <div class="col-lg-9 col-md-8">
+                <div class="addresses-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Address Book</h2>
+                        <button class="btn btn-accent" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                            <i class="fas fa-plus me-2"></i> Add New Address
+                        </button>
+                    </div>
+                    
+                   
+
+
+                    <div class="row">
+                        <% addresses.forEach(address => { %>
+                            <div class="col-lg-6 col-md-12 mb-4">
+                                <div class="address-card">
+                                    <span class="address-type address-type-<%= address.addressType.toLowerCase() %>">
+                                        <%= address.addressType %>
+                                    </span>
+                                    <% if (address.isDefault) { %>
+                                        <span class="default-badge">Default</span>
+                                    <% } %>
+                                    
+                                    <h4 class="address-name"><%= address.fullName %></h4>
+                                    <p class="address-details"><%= address.phone %></p>
+                                    <p class="address-details"><%= address.address %></p>
+                                    <p class="address-details"><%= address.city %>, <%= address.state %> <%= address.pincode %></p>
+                                    <p class="address-details"><%= address.country %></p>
+                                    
+                                    <div class="address-actions">
+                                        <button class="btn btn-sm btn-outline-accent" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editAddressModal" 
+                                                onclick="loadAddressData('/user/address/<%= address._id %>')">
+                                            <i class="fas fa-edit me-1"></i> Edit
+                                        </button>
+                                       
+
+
+                                        <button class="btn btn-outline-primary btn-icon btn-delete"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteAddressModal"
+                                    onclick="$('#deleteAddressModal').data('addressId', '<%= address._id %>')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Address Modal -->
+
+
+
+    <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAddressModalLabel">Add New Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addressForm">
+                        <div class="row g-3">
+                            <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control" id="fullName" placeholder="Full Name"><label for="fullName">Full Name</label></div></div>
+                            <div class="col-md-6"><div class="form-floating"><input type="tel" class="form-control" id="phone" placeholder="Phone Number"><label for="phone">Phone Number</label></div></div>
+                            <div class="col-12"><div class="form-floating"><input type="text" class="form-control" id="address" placeholder="Address"><label for="address">Address</label></div></div>
+                            <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control" id="city" placeholder="City"><label for="city">City</label></div></div>
+                            <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control" id="state" placeholder="State/Province"><label for="state">State/Province</label></div></div>
+                            <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control" id="country" placeholder="Country"><label for="country">Country</label></div></div>
+                            <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control" id="pincode" placeholder="Postal/Zip Code"><label for="pincode">Postal/Zip Code</label></div></div>
+                            <div class="col-md-6"><div class="form-floating"><select class="form-select" id="addressType"><option value="Home" selected>Home</option><option value="Work">Work</option></select><label for="addressType">Address Type</label></div></div>
+                            <div class="col-md-6 d-flex align-items-center ps-4"><div class="form-check"><input class="form-check-input" type="checkbox" id="setDefault"><label class="form-check-label" for="setDefault">Set as default address</label></div></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveAddressBtn">Save Address</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+
+
+    <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAddressForm" autocomplete="off">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="editFullName" placeholder="Full Name" required>
+                                    <label for="editFullName">Full Name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="tel" class="form-control" id="editPhone" placeholder="Phone Number" required>
+                                    <label for="editPhone">Phone Number</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="editAddress" placeholder="Address" required>
+                                    <label for="editAddress">Address</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="editCity" placeholder="City" required>
+                                    <label for="editCity">City</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="editState" placeholder="State/Province" required>
+                                    <label for="editState">State</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="editCountry" placeholder="Country" required>
+                                    <label for="editCountry">Country</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="editPincode" placeholder="Postal/Zip Code" required>
+                                    <label for="editPincode">Pin Code</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="editAddressType" required>
+                                        <option value="Home">Home</option>
+                                        <option value="Work">Work</option>
+                                    </select>
+                                    <label for="editAddressType">Address Type</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center ps-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editSetDefault">
+                                    <label class="form-check-label" for="editSetDefault">Set as default address</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="updateAddressBtn">Update Address</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Address Modal -->
+    <div class="modal fade" id="deleteAddressModal" tabindex="-1" aria-labelledby="deleteAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteAddressModalLabel">Delete Address</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this address? This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteAddress()">Delete Address</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Set Default Address Modal -->
+    <div class="modal fade" id="setDefaultModal" tabindex="-1" aria-labelledby="setDefaultModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="setDefaultModalLabel">Set as Default Address</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to set this address as your default address?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-accent" onclick="setDefaultAddress()">Set as Default</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+     <!-- Bootstrap JS and dependencies -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <!-- Bootstrap JS if you're using modals -->
+     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> -->
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+     <script src="/js/address.js"></script>
+   
+</body>
+</html>

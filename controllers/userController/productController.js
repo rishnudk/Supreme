@@ -1,38 +1,51 @@
 const Product = require('../../models/Product');
+const User =require('../../models/User')
 
-// Get product details and related products
+
+
+
 exports.getProductByCategory = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate('category');
+        console.log("Received request for product ID:", req.params.id);
+
+        const product = await Product.findById(req.params.id).populate("category");
+
         if (!product) {
-            console.log('Product not found for ID:', req.params.id);
-            return res.status(404).send('Product not found');
+            console.log("Product not found for ID:", req.params.id);
+            return res.status(404).send("Product not found");
         }
 
+        console.log("Fetched Product Data:", product);
 
         let relatedProducts = [];
         if (product.category && product.category._id) {
             relatedProducts = await Product.find({
                 category: product.category._id,
-                _id: { $ne: product._id }
+                _id: { $ne: product._id }, 
+                status: "Active" 
             }).limit(4);
-        } else {
-            console.log('No valid category for product');
-        }
 
+            console.log("Fetched Related Products:", relatedProducts);
+        } else {
+            console.log("No valid category for product.");
+        }
 
         const user = req.session.user || null;
 
-        res.render('user/product', {
+        res.render("user/product", {
             product: product,
             relatedProducts: relatedProducts,
             user: user
         });
     } catch (error) {
-        console.error('Error in getProductByCategory:', error);
-        res.status(500).send('Server Error');
+        console.error("Error in getProductByCategory:", error);
+        res.status(500).send("Server Error");
     }
 };
+
+
+
+
 
 // Add product to cart
 exports.addToCart = async (req, res) => {
@@ -71,7 +84,7 @@ exports.addToCart = async (req, res) => {
 exports.getCart = async (req, res) => {
     try {
         const user = req.session.user || null;
-        const cart = req.session.cart || []; // Default to empty array if no cart
+        const cart = req.session.cart || []; 
 
         console.log('Rendering cart with:', { cart, user });
 
@@ -84,5 +97,48 @@ exports.getCart = async (req, res) => {
         res.status(500).send('Server Error');
     }
 };
+
+
+
+
+
+
+exports.getProductById = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id).populate("category");
+
+        if (!product) {
+            console.log("Product not found for ID:", req.params.id);
+            return res.status(404).send("Product not found");
+        }
+
+        // Fetch related products only if category exists
+        let relatedProducts = [];
+        if (product.category && product.category._id) {
+            relatedProducts = await Product.find({
+                category: product.category._id,
+                _id: { $ne: product._id }, 
+                status: "Active"
+            }).limit(4);
+        }
+
+        const user = req.session.user || null;
+
+        // 🛠 Debugging Log
+        console.log("Product:", product);
+        console.log("Related Products:", relatedProducts);
+
+        res.render("user/product", {
+            product: product,
+            relatedProducts: relatedProducts, 
+            user: user
+        });
+    } catch (error) {
+        console.error("Error in getProductById:", error);
+        res.status(500).send("Server Error");
+    }
+};
+
+
 
 module.exports = exports;

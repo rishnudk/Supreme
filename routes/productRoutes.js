@@ -14,7 +14,7 @@
 // module.exports = router;
 
 
-const express = require("express");
+const express = require("express"); 
 const router = express.Router();
 const adminProductController = require("../controllers/adminController/productController");
 const userProductController = require("../controllers/userController/productController");

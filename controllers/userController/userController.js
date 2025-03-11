@@ -1,6 +1,11 @@
 
 const Category = require("../../models/Category");
 const Product = require("../../models/Product");
+const Address = require("../../models/Address")
+const User =require('../../models/User')
+const bcrypt = require('bcrypt');
+const { default: mongoose } = require("mongoose");
+
 
 exports.getShopPage = async (req, res) => {
   try {
@@ -85,38 +90,98 @@ exports.getShopPage = async (req, res) => {
 
 // controllers/userController.js
 
-exports.getProfile = async (req, res) => {
+exports.getAccount = async (req, res) => {
     try {
       if (!req.session.user) {
         return res.redirect("/user/login");
       }
   
-      res.render("user/profile", { user: req.session.user });
+      res.render("user/account", { user: req.session.user });
     } catch (error) {
       console.error("Error fetching profile:", error);
       res.status(500).send("Server Error");
     }
   };
   
-  exports.updateProfile = async (req, res) => {
-    try {
-      if (!req.session.user) {
-        return res.redirect("/user/login");
-      }
-  
-      // Extract updated user details from request body
-      const { name, email } = req.body;
-  
-      // Update user session details (assuming database update happens elsewhere)
-      req.session.user.name = name;
-      req.session.user.email = email;
-  
-      // Redirect back to profile page
-      res.redirect("/user/profile");
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      res.status(500).send("Server Error");
-    }
-  };
-  
+ 
 
+
+  exports.renderUserProfile = async (req, res) => {
+    try {
+        // Debugging logs
+       console.log("Session Data:", req.session);
+
+        if (!req.session.user || !req.session.user._id) {
+            console.error("User is not logged in or session expired.");
+            // return res.status(401).render("errorPage", { message: "Unauthorized! Please log in." });
+        }
+
+        const userId = req.session.user._id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            console.error("User not found in database!");
+            // return res.status(404).render("errorPage", { message: "User not found" });
+        }
+
+        res.render("user/profile", { user });
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        // res.status(500).render("errorPage", { message: "Internal Server Error" });
+    }
+};
+
+exports.changePassword = async (req, res) => {
+  try {
+   
+    
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const userId = new mongoose.Types.ObjectId(req.session.user._id);
+     ; // Assuming session stores logged-in user ID
+    
+    console.log("Received request:", userId); // Debugging step 1
+    // Fetch user from database
+
+      const user = await User.findById(userId);
+      if (!user) { 
+        console.log("User not logged in!"); // Debugging step 2
+
+          return res.status(404).json({ success: false, message: "User not found!" });
+      }
+
+      // Check if current password matches
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        console.log("Incorrect current password!"); // Debugging step 4
+
+          return res.status(400).json({ success: false, message: "Incorrect current password!" });
+      }
+
+      // Validate new password
+      if (newPassword !== confirmPassword) {
+        console.log("New passwords do not match!"); // Debugging step 5
+
+          return res.status(400).json({ success: false, message: "New passwords do not match!" });
+      }
+
+      // if (!validatePassword(newPassword)) {
+      //   console.log("Password does not meet the requirements!"); // Debugging step 6
+
+      //     return res.status(400).json({ success: false, message: "Password does not meet the requirements!" });
+      // }
+
+      // Hash and update new password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      await user.save();
+
+
+      console.log("Password updated successfully!"); // Debugging step 7
+
+
+      res.status(200).json({ success: true, message: "Password updated successfully!" });
+  } catch (error) {
+      console.error("Error changing password:", error); // debug 8
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
