@@ -7,178 +7,6 @@ const fs = require("fs");
 const Category = require("../../models/Category");
 
 
-// exports.addProduct = async (req, res) => {
-//   console.log("🚀 API HIT: /add Product Route"); // Log when API is hit
-//   console.log("📥 Received form data:", req.body); // Log form data
-//   console.log("📂 Uploaded Files:", req.files); // Log uploaded images
-
-
-
-//   try {
-//     let {
-//       name,
-//       brand,
-//       price,
-//       description,
-//       category,
-//       status = "Active",
-//     } = req.body;
-
-//     let variants = req.body.variants ? JSON.parse(req.body.variants) : [];
-
-//     console.log("📦 Variants:", variants);
-
-//     // Cloudinary image URLs
-//     const imageUrls = req.files.map((file) => file.path);
-//     if (
-//       !name ||
-//       !brand ||
-//       !price ||
-//       !description ||
-//       !category ||
-//       !imageUrls ||
-//       !variants 
-//     ) {
-//       console.log("❌ Validation failed: Missing required fields.");
-//       return res.status(400).json({ error: "All fields are required" });
-//     }
-
-//     console.log("🛠 Creating Product Object...");
-//     const newProduct = new Product({
-//       name: name.trim(),
-//       brand: brand.trim(),
-//       price: parseFloat(price),
-//       description: description.trim(),
-//       category: category.trim(),
-//       images: imageUrls,
-//       variants: variants.map((v) => ({
-//         color: v.color.trim(),
-//         stock: parseInt(v.stock),
-//       })),
-//       status,
-//       createdAt: new Date(),
-//       updatedAt: new Date(),
-//     });
-
-//     console.log("🛠 Saving product to MongoDB...");
-//     const savedProduct = await newProduct.save();
-//     console.log("✅ Product saved successfully:", savedProduct);
-
-//   res.status(201).json({
-//     success: true,
-//     message: "Product added successfully",
-//     product: savedProduct,
-// });
-
-//   } catch (error) {
-//     res.status(500).json({
-//       error: "Internal Server Error",
-//       details: error.message,
-//   });
-// }  
-// };
-
-
-
-// exports.addProduct = async (req, res) => {
-//   console.log("🔍 Route Hit: Add Product");
-//   console.log("📥 Received Form Data:", req.body);
-//   console.log("📂 Uploaded Files:", req.files);
-
-//   try {
-//       const { Name, Brand, Price, Description, Category, Status } = req.body;
-//       const newImages = req.files
-//           .filter(file => file.fieldname === "images")
-//           .map(file => file.path);
-
-//       if (!Name || !Brand || !Price || !Description || !Category || !Status || newImages.length < 3) {
-//           return res.status(400).json({ error: "All fields and minimum 3 images are required", received: req.body });
-//       }
-
-//       const variants = [];
-//       const variantColors = req.body['variants[][color]'] || [];
-//       const variantStocks = req.body['variants[][stock]'] || [];
-//       for (let i = 0; i < variantColors.length; i++) {
-//           if (variantColors[i] && variantStocks[i]) {
-//               const variantImages = req.files
-//                   .filter(file => file.fieldname === `variantImages-${i}[]`)
-//                   .map(file => file.path);
-//               if (variantImages.length < 3) {
-//                   return res.status(400).json({ error: `Variant ${i + 1}: Minimum 3 images required` });
-//               }
-//               variants.push({
-//                   color: variantColors[i],
-//                   stock: Number(variantStocks[i]),
-//                   images: variantImages
-//               });
-//           }
-//       }
-
-//       const product = new Product({
-//           name: Name,
-//           brand: Brand,
-//           price: Number(Price),
-//           description: Description,
-//           category: Category,
-//           status: Status,
-//           images: newImages,
-//           variants
-//       });
-
-//       const savedProduct = await product.save();
-//       console.log("✅ Product Added:", savedProduct);
-//       res.status(201).json({ success: true, message: "Product added successfully", product: savedProduct });
-//   } catch (error) {
-//       console.error("❌ Error in addProduct:", error.stack);
-//       res.status(500).json({ error: "Internal Server Error", details: error.message });
-//   }
-// };
-
-
-
-// exports.addProduct = async (req, res) => {
-//   console.log("🔍 Route Hit: Add Product");
-//   console.log("📥 Received Form Data:", req.body);
-//   console.log("📂 Uploaded Files:", req.files);
-
-//   try {
-//       const { name, brand, price, description, category, status, variants } = req.body;
-//       const parsedVariants = JSON.parse(variants || '[]');
-
-//       const allImages = req.files.filter(file => file.fieldname === "images").map(file => file.path);
-//       const productImages = allImages.slice(0, Math.min(allImages.length, 4)); // First 4 for product
-
-//       if (!name || !brand || !price || !description || !category || !status || productImages.length < 3) {
-//           return res.status(400).json({ error: "All fields and minimum 3 product images are required", received: req.body });
-//       }
-
-//       const variantData = parsedVariants.map((v, index) => {
-//           const startIdx = 4 + index * 3; // Start after product images
-//           const images = allImages.slice(startIdx, startIdx + 3);
-//           console.log(`Variant ${index} Images:`, images);
-//           if (images.length < 3) throw new Error(`Variant ${index + 1}: Minimum 3 images required`);
-//           return { color: v.color, stock: Number(v.stock), images };
-//       });
-
-//       const product = new Product({
-//           name,
-//           brand,
-//           price: Number(price),
-//           description,
-//           category,
-//           status,
-//           images: productImages,
-//           variants: variantData
-//       });
-
-//       const savedProduct = await product.save();
-//       console.log("✅ Product Added:", savedProduct);
-//       res.status(201).json({ success: true, message: "Product added successfully", product: savedProduct });
-//   } catch (error) {
-//       console.error("❌ Error in addProduct:", error.stack);
-//       res.status(400).json({ error: error.message, received: req.body });
-//   }
-// };
 
 
 
@@ -220,17 +48,6 @@ exports.addProduct = async (req, res) => {
 
 
 
-
-// exports.GetaddProduct = async (req, res) => {
-//   try {
-//     const categories = await Category.find();
-
-//     res.render("admin/productAdd", { categories });
-//   } catch (error) {
-//     console.error("Error fetching categories:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
 
 exports.GetaddProduct = async (req, res) => {
   try {
@@ -308,6 +125,67 @@ exports.GetaddProduct = async (req, res) => {
 //   }
 // };
 
+
+
+
+//og
+
+// exports.updateProduct = async (req, res) => {
+//   console.log("🔍 Route Hit:", req.params.id);
+//   console.log("📥 Received Form Data:", req.body);
+//   console.log("📂 Uploaded Files:", req.files);
+
+//   try {
+//     const { id } = req.params;
+//     if (!id) return res.status(400).json({ error: "Product ID is required" });
+
+//     const { name, brand, price, description, category, status, color, stock } = req.body;
+//     const existingImages = Array.isArray(req.body['existingImages[]']) 
+//       ? req.body['existingImages[]'] 
+//       : (req.body['existingImages[]'] ? [req.body['existingImages[]']] : []);
+//     const newImages = req.files ? req.files.map(file => file.path) : [];
+
+//     console.log("Existing Images from Form:", existingImages);
+//     console.log("New Images from Upload:", newImages);
+
+//     if (!name || !brand || !price || !description || !category || !status || !color || !stock) {
+//       return res.status(400).json({ error: "All fields are required", received: req.body });
+//     }
+
+//     const product = await Product.findById(id);
+//     if (!product) return res.status(404).json({ error: "Product not found" });
+
+//     const updatedImages = [...existingImages, ...newImages].slice(0, 4);
+//     if (updatedImages.length !== 4) {
+//       return res.status(400).json({ error: "Exactly 4 images are required" });
+//     }
+
+//     const updatedProduct = await Product.findByIdAndUpdate(
+//       id,
+//       {
+//         name,
+//         brand,
+//         price: Number(price),
+//         description,
+//         category,
+//         status,
+//         images: updatedImages,
+//         variant: { color, stock: Number(stock) },
+//         updatedAt: new Date(),
+//       },
+//       { new: true }
+//     ).populate("category");
+
+//     console.log("✅ Product Updated:", updatedProduct);
+//     res.status(200).json({ success: true, message: "Product updated successfully", product: updatedProduct });
+//   } catch (error) {
+//     console.error("❌ Error in updateProduct:", error.stack);
+//     res.status(500).json({ error: "Internal Server Error", details: error.message });
+//   }
+// };
+
+
+
 exports.updateProduct = async (req, res) => {
   console.log("🔍 Route Hit:", req.params.id);
   console.log("📥 Received Form Data:", req.body);
@@ -318,12 +196,12 @@ exports.updateProduct = async (req, res) => {
     if (!id) return res.status(400).json({ error: "Product ID is required" });
 
     const { name, brand, price, description, category, status, color, stock } = req.body;
-    const existingImages = Array.isArray(req.body['existingImages[]']) 
+    const existingImagesFromForm = Array.isArray(req.body['existingImages[]']) 
       ? req.body['existingImages[]'] 
       : (req.body['existingImages[]'] ? [req.body['existingImages[]']] : []);
     const newImages = req.files ? req.files.map(file => file.path) : [];
 
-    console.log("Existing Images from Form:", existingImages);
+    console.log("Existing Images from Form:", existingImagesFromForm);
     console.log("New Images from Upload:", newImages);
 
     if (!name || !brand || !price || !description || !category || !status || !color || !stock) {
@@ -333,10 +211,33 @@ exports.updateProduct = async (req, res) => {
     const product = await Product.findById(id);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
-    const updatedImages = [...existingImages, ...newImages].slice(0, 4);
-    if (updatedImages.length !== 4) {
-      return res.status(400).json({ error: "Exactly 4 images are required" });
+    // Get old images from the database
+    const oldImages = product.images || [];
+    console.log("Old Images from Database:", oldImages);
+
+    // Combine images: prioritize new images, then existing from form, then old images
+    const updatedImages = [];
+    
+    // Add new images first (from uploaded files)
+    updatedImages.push(...newImages);
+    
+    // Add existing images from form (if any)
+    updatedImages.push(...existingImagesFromForm);
+    
+    // Fill remaining slots with old images from database, up to 4
+    const remainingSlots = 4 - updatedImages.length;
+    if (remainingSlots > 0 && oldImages.length > 0) {
+      updatedImages.push(...oldImages.slice(0, remainingSlots));
     }
+
+    // Ensure exactly 4 images
+    if (updatedImages.length < 4) {
+      return res.status(400).json({ error: "Exactly 4 images are required; not enough images provided" });
+    }
+    // Cap at 4 images
+    const finalImages = updatedImages.slice(0, 4);
+
+    console.log("Final Images for Update:", finalImages);
 
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
@@ -347,7 +248,7 @@ exports.updateProduct = async (req, res) => {
         description,
         category,
         status,
-        images: updatedImages,
+        images: finalImages, // Always exactly 4 images
         variant: { color, stock: Number(stock) },
         updatedAt: new Date(),
       },
@@ -361,6 +262,8 @@ exports.updateProduct = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 };
+
+
 
 
 
@@ -389,9 +292,42 @@ exports.getProductById = async (req, res) => {
 
 
 
+// exports.getProducts = async (req, res) => {
+//   try {
+//     let { page = 1, limit = 5, search = "" } = req.query;
+//     page = parseInt(page);
+//     limit = parseInt(limit);
+
+//     const query = search
+//       ? { name: { $regex: search, $options: "i" } } // Case-insensitive search
+//       : {};
+
+//     const total = await Product.countDocuments(query);
+//     const products = await Product.find(query)
+//       .populate("category")
+//       .sort({ createdAt: -1 })
+//       .skip((page - 1) * limit)
+//       .limit(limit);
+
+//     res.render("admin/productManagement", {
+//       products,
+//       page,
+//       totalPages: Math.ceil(total / limit),
+//       total,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching products:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
+
+
+
+
 exports.getProducts = async (req, res) => {
   try {
-    let { page = 1, limit = 10, search = "" } = req.query;
+    let { page = 1, limit = 5, search = "" } = req.query;
     page = parseInt(page);
     limit = parseInt(limit);
 
@@ -409,6 +345,7 @@ exports.getProducts = async (req, res) => {
     res.render("admin/productManagement", {
       products,
       page,
+      limit, // Add limit here
       totalPages: Math.ceil(total / limit),
       total,
     });
@@ -417,10 +354,6 @@ exports.getProducts = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-
-
-
 
 
 
@@ -473,6 +406,8 @@ exports.updateStock = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
+
+
 
 
 

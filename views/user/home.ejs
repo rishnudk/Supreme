@@ -1,514 +1,4578 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="author" content="Untree.co">
-  <link rel="shortcut icon" href="favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supreme - Modern Furniture</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+     
+    <!-- <link rel="stylesheet" href="/css/homepage.css"> -->
 
-  <meta name="description" content="" />
-  <meta name="keywords" content="bootstrap, bootstrap4" />
 
-		<!-- Bootstrap CSS -->
-		<link href="/css2/bootstrap.min.css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-		<link href="/css2/tiny-slider.css" rel="stylesheet">
-		<link href="/css2/style.css" rel="stylesheet">
-		<title>Supreme </title>
-	</head>
 
-	<body>
+    <style>
 
-		<!-- Start Header/Navigation -->
-		
+/* Supreme E-commerce Header Styles */
+
+:root {
+    --primary-color: #E5574E;
+    --light-gray: #F4F7F7;
+    --white: #FFFFFF;
+    --dark-text: #333333;
+    --light-text: #777777;
+    --border-color: #EEEEEE;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --transition: all 0.3s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark-text);
+    background-color: var(--white);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #d84941;
+    border-color: #d84941;
+}
+
+/* Announcement Bar */
+.announcement-bar {
+    background-color: var(--primary-color);
+    color: var(--white);
+    font-size: 0.85rem;
+}
+
+.announcement-text {
+    letter-spacing: 0.5px;
+}
+
+/* Main Header */
+.supreme-header {
+    position: relative;
+    background-color: var(--white);
+    box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.navbar {
+    padding: 0.75rem 0;
+}
+
+.logo {
+    height: 38px;
+    width: auto;
+}
+
+/* Navigation Menu */
+.navbar-nav .nav-link {
+    color: var(--dark-text);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: var(--transition);
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+    color: var(--primary-color);
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 5px 12px var(--shadow-color);
+    padding: 0.75rem 0;
+    border-radius: 0.5rem;
+}
+
+.dropdown-item {
+    font-size: 0.9rem;
+    padding: 0.5rem 1.5rem;
+    color: var(--dark-text);
+    transition: var(--transition);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--light-gray);
+    color: var(--primary-color);
+}
+
+.dropdown-divider {
+    margin: 0.5rem 0;
+    border-color: var(--border-color);
+}
+
+/* Search Form */
+.search-container {
+    position: relative;
+}
+
+.search-form {
+    position: relative;
+    width: 220px;
+}
+
+.search-input {
+    border-radius: 50px;
+    padding-right: 40px;
+    border: 1px solid var(--border-color);
+    background-color: var(--light-gray);
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    box-shadow: none;
+    border-color: var(--primary-color);
+    background-color: var(--white);
+}
+
+.search-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: transparent;
+    border: none;
+    color: var(--light-text);
+    transition: var(--transition);
+}
+
+.search-button:hover {
+    color: var(--primary-color);
+}
+
+.search-toggle {
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--dark-text);
+    transition: var(--transition);
+}
+
+.search-toggle:hover {
+    color: var(--primary-color);
+}
+
+/* User Navigation */
+.user-nav {
+    display: flex;
+    align-items: center;
+}
+
+.user-nav-item {
+    position: relative;
+    margin-left: 1rem;
+}
+
+.user-nav-link {
+    color: var(--dark-text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.user-nav-link:hover {
+    color: var(--primary-color);
+}
+
+.user-nav-link i {
+    font-size: 1.2rem;
+}
+
+.badge.cart-count,
+.badge.wishlist-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    font-size: 0.65rem;
+    padding: 0.15rem 0.35rem;
+    font-weight: 500;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cart Dropdown */
+.cart-dropdown {
+    width: 320px;
+    padding: 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    right: -10px;
+    margin-top: 1rem;
+}
+
+.cart-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+}
+
+.cart-empty {
+    color: var(--light-text);
+}
+
+.cart-empty i {
+    color: var(--border-color);
+}
+
+/* Mobile Search Overlay */
+.mobile-search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+    padding: 1rem 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.mobile-search-overlay.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-search-form {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.mobile-search-form .form-control {
+    border-radius: 50px;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--light-gray);
+    font-size: 1rem;
+}
+
+.mobile-search-form .search-button {
+    position: absolute;
+    right: 50px;
+    padding: 0 1rem;
+}
+
+.close-search {
+    background: transparent;
+    border: none;
+    color: var(--light-text);
+    transition: var(--transition);
+    padding: 0 1rem;
+}
+
+.close-search:hover {
+    color: var(--primary-color);
+}
+
+
+/* Mobile Category Navigation */
+.mobile-category-nav {
+    background-color: var(--white);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+}
+
+.mobile-category-nav::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+
+.mobile-categories-wrapper {
+    display: flex;
+    min-width: max-content;
+}
+
+.mobile-category-item {
+    flex: 0 0 auto;
+    text-align: center;
+    padding: 0 0.75rem;
+}
+
+.mobile-category-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--dark-text);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.mobile-category-link:hover {
+    color: var(--primary-color);
+}
+
+.mobile-category-link i {
+    font-size: 1.25rem;
+    margin-bottom: 0.35rem;
+}
+
+.mobile-category-link span {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+    .navbar {
+        padding: 0.5rem 0;
+    }
+    
+    .logo {
+        height: 32px;
+    }
+    
+    .navbar-collapse {
+        background-color: var(--white);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 1rem;
+        box-shadow: 0 5px 10px var(--shadow-color);
+        z-index: 999;
+    }
+    
+    .navbar-nav {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .dropdown-menu {
+        box-shadow: none;
+        padding: 0 0 0 1rem;
+        margin: 0.5rem 0;
+        border-radius: 0;
+    }
+    
+    .dropdown-item {
+        padding: 0.5rem 0;
+    }
+    
+    .user-nav-item {
+        margin-left: 0.75rem;
+    }
+    
+    .user-nav-link span {
+        display: none;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .cart-dropdown {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        max-width: 350px;
+        margin: 0;
+        border-radius: 0;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        z-index: 1050;
+    }
+    
+    .cart-dropdown.show {
+        transform: translateX(0);
+    }
+    
+    .announcement-text {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .logo {
+        height: 28px;
+    }
+    
+    .user-nav-item {
+        margin-left: 0.5rem;
+    }
+    
+    .mobile-category-item {
+        padding: 0 0.5rem;
+    }
+}
+
+/* Sticky Header Effects */
+.supreme-header.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.4s forwards;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+
+
+
+/* Hero Section Styles */
+
+.hero-section {
+    position: relative;
+    background-color: var(--light-gray);
+    overflow: hidden;
+}
+
+.carousel-inner {
+    position: relative;
+}
+
+.carousel-item {
+    padding: 3rem 0;
+}
+
+.hero-content-wrapper {
+    padding: 2rem 0;
+}
+
+.hero-content {
+    max-width: 90%;
+}
+
+.hero-subtitle {
+    display: inline-block;
+    background-color: rgba(229, 87, 78, 0.1);
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.35rem 1rem;
+    border-radius: 50px;
+    margin-bottom: 1.25rem;
+}
+
+.hero-title {
+    font-size: 2.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+    color: var(--dark-text);
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: var(--light-text);
+    margin-bottom: 2rem;
+    max-width: 500px;
+}
+
+.hero-buttons .btn {
+    padding: 0.75rem 1.75rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.hero-buttons .btn-outline-dark {
+    color: var(--dark-text);
+    border-color: #ddd;
+}
+
+.hero-buttons .btn-outline-dark:hover {
+    background-color: var(--dark-text);
+    border-color: var(--dark-text);
+    color: var(--white);
+}
+
+.hero-image-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Carousel Indicators and Controls */
+.carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    margin-bottom: 0;
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    opacity: 0.3;
+    margin: 0 5px;
+    transition: var(--transition);
+}
+
+.carousel-indicators .active {
+    background-color: var(--primary-color);
+    opacity: 1;
+    width: 10px;
+    height: 10px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--white);
+    border-radius: 50%;
+    opacity: 1;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.carousel-control-prev {
+    left: 20px;
+}
+
+.carousel-control-next {
+    right: 20px;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background-color: var(--primary-color);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+    filter: none;
+}
+
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+}
+
+.carousel-control-next-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16'%3E%3Cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+}
+
+.carousel-control-next:hover .carousel-control-next-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+}
+
+/* Animation for carousel items */
+.carousel-item.active .hero-subtitle,
+.carousel-item.active .hero-title,
+.carousel-item.active .hero-description,
+.carousel-item.active .hero-buttons {
+    animation: fadeInUp 0.8s ease forwards;
+    opacity: 0;
+}
+
+.carousel-item.active .hero-subtitle {
+    animation-delay: 0.2s;
+}
+
+.carousel-item.active .hero-title {
+    animation-delay: 0.4s;
+}
+
+.carousel-item.active .hero-description {
+    animation-delay: 0.6s;
+}
+
+.carousel-item.active .hero-buttons {
+    animation-delay: 0.8s;
+}
+
+.carousel-item.active .hero-image {
+    animation: fadeInRight 0.8s ease forwards;
+    animation-delay: 0.4s;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+    .carousel-item {
+        padding: 2rem 0;
+    }
+    
+    .hero-title {
+        font-size: 2.25rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .hero-image-wrapper {
+        margin-top: 2rem;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .carousel-item {
+        padding: 2rem 0 3rem;
+    }
+    
+    .hero-content {
+        text-align: center;
+        max-width: 100%;
+    }
+    
+    .hero-description {
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        display: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .hero-title {
+        font-size: 1.75rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+    }
+    
+    .hero-buttons .btn {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.9rem;
+    }
+    
+    .hero-buttons .btn-outline-dark {
+        margin-top: 1rem;
+        margin-left: 0 !important;
+    }
+}
+
+
+
+
+/* Hero Background Pattern Enhancement */
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.hero-image-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(229, 87, 78, 0.05);
+    border-radius: 8px;
+    z-index: -1;
+}
+
+/* Add a decorative element to highlight hero content */
+.hero-content::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: -20px;
+    width: 5px;
+    height: 60px;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .hero-content {
+        position: relative;
+    }
+    
+    .hero-content::before {
+        display: block;
+    }
+}
+
+/* Add subtle animation for background pattern */
+@media (min-width: 768px) {
+    @keyframes patternFloat {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: 20px 20px;
+        }
+    }
+    
+    .hero-section::before {
+        animation: patternFloat 20s linear infinite;
+    }
+}
+
+/* Enhanced hover effects for hero buttons */
+.hero-buttons .btn-primary {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.hero-buttons .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.5s ease;
+    z-index: -1;
+}
+
+.hero-buttons .btn-primary:hover::before {
+    left: 0;
+}
+
+
+
+
+
+
+
+
+
+/* Featured Products Section Styles */
+
+
+
+
+
+
+
+
+
+
+
+/* Featured Products Section Styles */
+
+/* Featured Products Section Styles - Fixed for EJS integration */
+#featuredProductsSection.featured-products {
+  background-color: #F4F7F7;
+  padding: 60px 0;
+}
+
+#featuredProductsSection .section-title {
+  font-size: 32px;
+  margin-bottom: 40px;
+  color: #333;
+}
+
+/* Carousel Container */
+#featuredProductsSection .carousel-container {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Product Carousel */
+#featuredProductsSection .product-carousel {
+  display: flex !important;
+  transition: transform 0.5s ease !important;
+  width: 100% !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Product Card */
+#featuredProductsSection .product-card {
+  flex: 0 0 auto !important;
+  width: 25% !important; /* Show 4 products per row on desktop */
+  padding: 0 15px !important;
+  box-sizing: border-box !important;
+  margin-bottom: 20px !important;
+  max-width: 25% !important;
+}
+
+/* Product Image Container */
+#featuredProductsSection .product-image-container {
+  position: relative !important;
+  width: 100% !important;
+  padding-top: 100% !important; /* 1:1 Aspect Ratio */
+  overflow: hidden !important;
+  background-color: #fff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Product Image */
+#featuredProductsSection .product-image {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important; /* This ensures the image covers the entire container */
+  transition: transform 0.3s ease !important;
+}
+
+#featuredProductsSection .product-image-container:hover .product-image {
+  transform: scale(1.05) !important;
+}
+
+/* Product Info */
+#featuredProductsSection .product-info {
+  padding: 15px 0 !important;
+}
+
+#featuredProductsSection .product-name {
+  font-size: 18px !important;
+  margin-bottom: 5px !important;
+  font-weight: 500 !important;
+}
+
+#featuredProductsSection .product-price {
+  margin-bottom: 5px !important;
+}
+
+#featuredProductsSection .current-price {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #E5574E !important;
+}
+
+#featuredProductsSection .original-price {
+  font-size: 16px !important;
+  color: #999 !important;
+  text-decoration: line-through !important;
+  margin-left: 10px !important;
+}
+
+#featuredProductsSection .product-rating {
+  margin-bottom: 10px !important;
+  color: #FFB900 !important;
+}
+
+#featuredProductsSection .product-rating span {
+  color: #666 !important;
+  margin-left: 5px !important;
+}
+
+/* Add to Cart Button */
+#featuredProductsSection .add-to-cart-btn {
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 0 !important;
+  background-color: #fff !important;
+  color: #E5574E !important;
+  border: 2px solid #E5574E !important;
+  border-radius: 4px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+#featuredProductsSection .add-to-cart-btn:hover {
+  background-color: #E5574E !important;
+  color: #fff !important;
+}
+
+/* Carousel Navigation Arrows */
+#featuredProductsSection .carousel-arrow {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 40px !important;
+  height: 40px !important;
+  background-color: #fff !important;
+  border: none !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 5 !important;
+  color: #333 !important;
+  font-size: 18px !important;
+}
+
+#featuredProductsSection .prev-arrow {
+  left: 0 !important;
+}
+
+#featuredProductsSection .next-arrow {
+  right: 0 !important;
+}
+
+#featuredProductsSection .carousel-arrow:hover {
+  background-color: #E5574E !important;
+  color: #fff !important;
+}
+
+/* Carousel Dots */
+#featuredProductsSection .carousel-dots {
+  display: flex !important;
+  justify-content: center !important;
+  margin-top: 20px !important;
+  flex-wrap: wrap !important;
+}
+
+#featuredProductsSection .dot {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background-color: #ccc !important;
+  margin: 0 5px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+#featuredProductsSection .dot.active {
+  background-color: #E5574E !important;
+  transform: scale(1.2) !important;
+}
+
+#featuredProductsSection .dot.ellipsis {
+  width: 20px !important;
+  height: 4px !important;
+  border-radius: 2px !important;
+  background-color: #ddd !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 1199px) {
+  #featuredProductsSection .product-card {
+    width: 33.333% !important; /* Show 3 products per row */
+    max-width: 33.333% !important;
+  }
+}
+
+@media (max-width: 991px) {
+  #featuredProductsSection .product-card {
+    width: 50% !important; /* Show 2 products per row */
+    max-width: 50% !important;
+  }
+}
+
+@media (max-width: 575px) {
+  #featuredProductsSection .product-card {
+    width: 100% !important; /* Show 1 product per row */
+    max-width: 100% !important;
+  }
+  
+  #featuredProductsSection .carousel-arrow {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 14px !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/* Featured Categories Section Styles */
+.featured-categories {
+    padding: 60px 0;
+    background-color: #FFFFFF;
+}
+
+/* Section Headers - Reusing styles from featured products */
+.featured-categories .section-title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.featured-categories .section-subtitle {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+/* Category Card */
+.category-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    height: 280px;
+    margin-bottom: 20px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Category Image */
+.category-image {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.category-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.category-card:hover .category-image img {
+    transform: scale(1.1);
+}
+
+/* Category Overlay */
+.category-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.6) 100%
+    );
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    transition: background 0.3s ease;
+}
+
+.category-card:hover .category-overlay {
+    background: linear-gradient(
+        to bottom,
+        rgba(229, 87, 78, 0.3) 0%,
+        rgba(0, 0, 0, 0.7) 100%
+    );
+}
+
+/* Category Content */
+.category-content {
+    color: #FFFFFF;
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-content {
+    transform: translateY(-10px);
+}
+
+.category-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.category-count {
+    font-size: 14px;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.category-link {
+    display: inline-block;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.category-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #E5574E;
+    transition: width 0.3s ease;
+}
+
+.category-card:hover .category-link::after {
+    width: 100%;
+}
+
+/* Responsive Styles */
+@media (max-width: 991.98px) {
+    .category-card {
+        height: 240px;
+    }
+    
+    .category-title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .featured-categories {
+        padding: 40px 0;
+    }
+    
+    .section-title {
+        font-size: 28px;
+    }
+    
+    .category-card {
+        height: 220px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .category-card {
+        height: 180px;
+    }
+    
+    .category-title {
+        font-size: 18px;
+    }
+    
+    .category-count {
+        margin-bottom: 10px;
+    }
+}
+
+
+
+
+
+
+
+
+
+/* Value Proposition Section Styles */
+.value-proposition {
+    background-color: #F4F7F7;
+    padding: 60px 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .value-prop-item {
+    padding: 20px;
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+  
+  .value-prop-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .value-icon {
+    font-size: 2.5rem;
+    color: #E5574E;
+    margin-bottom: 1rem;
+  }
+  
+  .value-icon i {
+    background-color: rgba(229, 87, 78, 0.1);
+    padding: 20px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .value-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  
+  .value-desc {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 767px) {
+    .value-prop-item {
+      margin-bottom: 30px;
+    }
+    
+    .section-title {
+      font-size: 1.75rem;
+    }
+  }
+
+
+
+
+
+
+/* Seasonal Collection Section Styles with High Specificity */
+section.seasonal-collection {
+  margin: 60px 0 !important;
+  overflow: hidden;
+  width: 100%;
+}
+
+section.seasonal-collection .seasonal-image {
+  position: relative;
+  min-height: 500px !important;
+  background-position: center;
+  background-size: cover;
+  padding: 0 !important;
+}
+
+section.seasonal-collection .seasonal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+section.seasonal-collection .seasonal-content {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF !important;
+  padding: 0 !important;
+}
+
+section.seasonal-collection .content-wrapper {
+  padding: 60px !important;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+section.seasonal-collection .season-label {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #E5574E !important;
+  margin-bottom: 1rem;
+}
+
+section.seasonal-collection .collection-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  color: #333 !important;
+}
+
+section.seasonal-collection .collection-description {
+  color: #666 !important;
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+section.seasonal-collection .collection-features {
+  list-style: none;
+  padding-left: 0 !important;
+  margin-bottom: 2rem;
+}
+
+section.seasonal-collection .collection-features li {
+  position: relative;
+  padding-left: 25px !important;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #666 !important;
+}
+
+section.seasonal-collection .collection-features li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #E5574E !important;
+  font-weight: bold;
+}
+
+section.seasonal-collection .shop-now-btn {
+  background-color: #E5574E !important;
+  border: none !important;
+  color: white !important;
+  padding: 12px 28px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 0.25rem;
+}
+
+section.seasonal-collection .shop-now-btn:hover {
+  background-color: #d44940 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(229, 87, 78, 0.3) !important;
+  color: white !important;
+}
+
+/* Responsive styles */
+@media (max-width: 991px) {
+  section.seasonal-collection .seasonal-image {
+    min-height: 350px !important;
+  }
+  
+  section.seasonal-collection .content-wrapper {
+    padding: 40px !important;
+  }
+  
+  section.seasonal-collection .collection-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 767px) {
+  section.seasonal-collection .seasonal-image {
+    min-height: 300px !important;
+  }
+  
+  section.seasonal-collection .content-wrapper {
+    padding: 30px !important;
+  }
+  
+  section.seasonal-collection .collection-title {
+    font-size: 1.75rem;
+  }
+}
+
+
+
+
+
+
+
+
+/* Best Sellers Section Styles */
+.best-sellers {
+  background-color: #F4F7F7;
+  padding: 60px 0;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Product Card Styles */
+.product-card {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* FIX: Updated image container with fixed dimensions */
+.product-image-container {
+  position: relative;
+  width: 100%;
+  height: 220px; /* Fixed height */
+  overflow: hidden;
+}
+
+/* FIX: Ensure images fill the container properly */
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  display: block;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.05);
+}
+
+/* Product Badge (New, Sale, etc.) */
+.product-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px; /* Changed from right to left to match the image */
+  color: #FFF;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.product-badge.best-seller {
+  background-color: #E5574E;
+}
+
+.product-badge.sale {
+  background-color: #E5574E;
+}
+
+.product-badge.new {
+  background-color: #FF9800;
+}
+
+/* Product Overlay (Quick actions) */
+.product-overlay {
+  position: absolute;
+  bottom: -60px;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  transition: bottom 0.3s ease;
+  z-index: 1;
+}
+
+.product-card:hover .product-overlay {
+  bottom: 0;
+}
+
+.btn-add-to-cart,
+.btn-quick-view {
+  border: none;
+  background-color: #FFF;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add-to-cart {
+  border: 1px solid #E5574E;
+  color: #E5574E;
+}
+
+.btn-add-to-cart:hover {
+  background-color: #E5574E;
+  color: #FFF;
+}
+
+.btn-quick-view {
+  border: 1px solid #333;
+}
+
+.btn-quick-view:hover {
+  background-color: #333;
+  color: #FFF;
+}
+
+/* Product Info Styles */
+.product-info {
+  padding: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-price {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.current-price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #E5574E;
+}
+
+.original-price {
+  font-size: 0.875rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* Star Rating Styles */
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: auto; /* Push ratings to bottom of info div */
+}
+
+.stars {
+  display: flex;
+}
+
+.star-filled,
+.star-half,
+.star-empty {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.star-filled {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
+}
+
+.star-half {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z' fill-opacity='.5'/%3E%3Cpath d='M12 2v15.27l6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2z'/%3E%3C/svg%3E");
+}
+
+.star-empty {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23CCCCCC'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
+}
+
+.rating-count {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* View All Button */
+.btn-view-all {
+  background-color: transparent;
+  border: 2px solid #E5574E;
+  color: #E5574E;
+  padding: 10px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.btn-view-all:hover {
+  background-color: #E5574E;
+  color: #FFF;
+}
+
+/* Animation for add to cart */
+.btn-add-to-cart.added {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  border-color: #4CAF50 !important;
+}
+
+.cart-count-bump {
+  animation: cartBump 0.3s ease-in-out;
+}
+
+@keyframes cartBump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .product-title {
+    font-size: 0.9rem;
+  }
+  
+  .current-price {
+    font-size: 1rem;
+  }
+  
+  .product-image-container {
+    height: 200px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .best-sellers {
+    padding: 40px 0;
+  }
+  
+  .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .product-image-container {
+    height: 180px;
+  }
+  
+  .product-info {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  /* Ensure small screens still have proper card layout */
+  .product-image-container {
+    height: 160px;
+  }
+  
+  .product-overlay {
+    padding: 8px;
+  }
+  
+  .btn-add-to-cart,
+  .btn-quick-view {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .current-price {
+    font-size: 0.9rem;
+  }
+  
+  .original-price {
+    font-size: 0.75rem;
+  }
+}
+
+
+
+
+
+
+
+/* Star Rating Styles */
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stars {
+  display: flex;
+}
+
+.star-filled,
+.star-half,
+.star-empty {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.star-filled {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
+}
+
+.star-half {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z' fill-opacity='.5'/%3E%3Cpath d='M12 2v15.27l6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2z'/%3E%3C/svg%3E");
+}
+
+.star-empty {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23CCCCCC'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
+}
+
+.rating-count {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* View All Button */
+.btn-view-all {
+  background-color: transparent;
+  border: 2px solid #E5574E;
+  color: #E5574E;
+  padding: 10px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.btn-view-all:hover {
+  background-color: #E5574E;
+  color: #FFF;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .product-title {
+    font-size: 0.9rem;
+  }
+  
+  .current-price {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .best-sellers {
+    padding: 40px 0;
+  }
+  
+  .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .product-image img {
+    height: 180px;
+  }
+  
+  .product-info {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .product-overlay {
+    position: static;
+    background-color: transparent;
+    padding: 8px 0 0;
+  }
+  
+  .btn-add-to-cart,
+  .btn-quick-view {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .product-image img {
+    height: 150px;
+  }
+  
+  .current-price {
+    font-size: 0.9rem;
+  }
+  
+  .original-price {
+    font-size: 0.75rem;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* Customer Reviews Section Styles */
+.customer-reviews {
+    background-color: #F4F7F7;
+    padding: 60px 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+  
+  .reviews-carousel {
+    position: relative;
+    padding: 20px 0;
+  }
+  
+  .review-container {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    margin: 0 15px;
+  }
+  
+  .review-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  
+  .review-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .review-content {
+    position: relative;
+    padding: 10px 0;
+  }
+  
+  .review-quote {
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    font-size: 2rem;
+    color: #E5574E;
+    opacity: 0.2;
+  }
+  
+  .review-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  
+  .review-rating {
+    margin-bottom: 15px;
+    color: #ffc107;
+    font-size: 1rem;
+  }
+  
+  .reviewer-info {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .reviewer-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    border: 3px solid #F4F7F7;
+  }
+  
+  .reviewer-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .reviewer-details {
+    flex: 1;
+  }
+  
+  .reviewer-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  
+  .product-purchased {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+  }
+  
+  /* Carousel Controls */
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background-color: #E5574E;
+    border-radius: 50%;
+    opacity: 0.8;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .carousel-control-prev {
+    left: -20px;
+  }
+  
+  .carousel-control-next {
+    right: -20px;
+  }
+  
+  .carousel-control-prev:hover,
+  .carousel-control-next:hover {
+    opacity: 1;
+  }
+  
+  .carousel-indicators {
+    bottom: -40px;
+  }
+  
+  .carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+    opacity: 0.5;
+  }
+  
+  .carousel-indicators .active {
+    background-color: #E5574E;
+    opacity: 1;
+  }
+  
+  .view-all-reviews-btn {
+    color: #E5574E;
+    border-color: #E5574E;
+    padding: 10px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .view-all-reviews-btn:hover {
+    background-color: #E5574E;
+    color: white;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 991px) {
+    .section-title {
+      font-size: 1.75rem;
+    }
+    
+    .review-container {
+      padding: 20px;
+    }
+    
+    .carousel-control-prev {
+      left: -10px;
+    }
+    
+    .carousel-control-next {
+      right: -10px;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .section-title {
+      font-size: 1.5rem;
+    }
+    
+    .review-container {
+      padding: 15px;
+    }
+    
+    .reviewer-image {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .review-text {
+      font-size: 0.95rem;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+      display: none;
+    }
+  }
+
+
+
+
+
+  /* Newsletter Section Styles */
+.newsletter-section {
+    background-color: #F4F7F7;
+    padding: 60px 0;
+  }
+  
+  .newsletter-section .section-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .newsletter-form .form-control {
+    padding: 12px 20px;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s ease;
+  }
+  
+  .newsletter-form .form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(229, 87, 78, 0.25);
+    border-color: #E5574E;
+  }
+  
+  .newsletter-form .btn-primary {
+    background-color: #E5574E;
+    border-color: #E5574E;
+    padding: 12px 24px;
+    font-weight: 500;
+    border-radius: 0 4px 4px 0;
+    transition: all 0.3s ease;
+  }
+  
+  .newsletter-form .btn-primary:hover,
+  .newsletter-form .btn-primary:focus {
+    background-color: #d44a41;
+    border-color: #d44a41;
+    box-shadow: 0 0 0 0.25rem rgba(229, 87, 78, 0.4);
+  }
+  
+  .newsletter-form .form-text {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+  
+  /* Footer Styles */
+  .footer {
+    background-color: #2B2B2B;
+    color: #F4F7F7;
+    padding-top: 70px;
+    padding-bottom: 30px;
+  }
+  
+  .footer h5 {
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .footer p {
+    color: #bcbcbc;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  
+  .footer .social-icons a {
+    font-size: 1.25rem;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+  }
+  
+  .footer .social-icons a:hover {
+    color: #E5574E !important;
+  }
+  
+  .footer ul li a {
+    color: #bcbcbc;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+  }
+  
+  .footer ul li a:hover {
+    color: #E5574E !important;
+    text-decoration: none;
+    padding-left: 5px;
+  }
+  
+  .footer .payment-icons img {
+    height: 30px;
+    width: auto;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .footer hr {
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 2rem 0;
+  }
+  
+  /* Mobile Footer Accordion */
+  .footer .accordion-button {
+    padding: 1rem;
+    background-color: #2B2B2B !important;
+    color: #F4F7F7 !important;
+    border: none;
+  }
+  
+  .footer .accordion-button:not(.collapsed) {
+    color: #fff !important;
+    background-color: #333 !important;
+    box-shadow: none;
+  }
+  
+  .footer .accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .footer .accordion-button::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  }
+  
+  .footer .accordion-item {
+    background-color: #2B2B2B;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 10px;
+  }
+  
+  .footer .accordion-body {
+    padding: 1rem;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 991.98px) {
+    .footer {
+      padding-top: 50px;
+    }
+    
+    .footer h5 {
+      margin-bottom: 1rem;
+    }
+    
+    /* Hide desktop footer columns on mobile */
+    .footer .col-lg-3 ul.list-unstyled {
+      display: none;
+    }
+    
+    .footer .col-lg-3 p, 
+    .footer .col-lg-3 .social-icons,
+    .footer .col-lg-3 .payment-icons {
+      display: block;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    /* Hide accordion on desktop */
+    .footer .accordion {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 767.98px) {
+    .newsletter-section {
+      padding: 40px 0;
+    }
+    
+    .newsletter-form .btn-primary {
+      width: 100%;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    
+    .newsletter-form .form-control {
+      border-radius: 4px;
+    }
+    
+    .newsletter-form .input-group {
+      display: block;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </style>
+
+
+
+
+</head>
+<body>
+
+
 		<%- include('../partials/userNavbar') %>
 
-		<!-- End Header/Navigation -->
 
-		<!-- Start Hero Section -->
-			<div class="hero">
-				<div class="container">
-					<div class="row justify-content-between">
-						<div class="col-lg-5">
-							<div class="intro-excerpt">
-								<h1>Modern Interior <span clsas="d-block">Design Studio</span></h1>
-								<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
-								<p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
-							</div>
-						</div>
-						<div class="col-lg-7">
-							<div class="hero-img-wrap">
-								<img src="/images/couch.png" class="img-fluid">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		<!-- End Hero Section -->
 
-		<!-- Start Product Section -->
-		<div class="product-section">
-			<div class="container">
-				<div class="row">
 
-					<!-- Start Column 1 -->
-					<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
-						<h2 class="mb-4 section-title">Crafted with excellent material.</h2>
-						<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. </p>
-						<p><a href="shop.html" class="btn">Explore</a></p>
-					</div> 
-					<!-- End Column 1 -->
+    
+    
+    <!-- Hero section would go here -->
 
-					<!-- Start Column 2 -->
-					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html">
-							<img src="/images/product-1.png" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Nordic Chair</h3>
-							<strong class="product-price">$50.00</strong>
 
-							<span class="icon-cross">
-								<img src="/images/cross.svg" class="img-fluid">
-							</span>
-						</a>
-					</div> 
-					<!-- End Column 2 -->
 
-					<!-- Start Column 3 -->
-					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html">
-							<img src="/images/product-2.png" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Kruzo Aero Chair</h3>
-							<strong class="product-price">$78.00</strong>
 
-							<span class="icon-cross">
-								<img src="/images/cross.svg" class="img-fluid">
-							</span>
-						</a>
-					</div>
-					<!-- End Column 3 -->
+<!-- Hero Section with Slider -->
+<section class="hero-section">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        
+        <!-- Carousel Slides -->
+        <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 hero-content-wrapper">
+                            <div class="hero-content">
+                                <span class="hero-subtitle">New Collection</span>
+                                <h1 class="hero-title">Modern Living Room Essentials</h1>
+                                <p class="hero-description">Transform your space with our curated selection of contemporary furniture designed for comfort and style.</p>
+                                <div class="hero-buttons">
+                                    <a href="#" class="btn btn-primary btn-lg">Shop Now</a>
+                                    <a href="#" class="btn btn-outline-dark btn-lg ms-3">View Catalog</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 hero-image-wrapper">
+                            <img src="/images/slide4.jpg" alt="Modern Living Room Collection" class="hero-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 hero-content-wrapper">
+                            <div class="hero-content">
+                                <span class="hero-subtitle">Limited Time Offer</span>
+                                <h1 class="hero-title">Up to 30% Off Bedroom Collections</h1>
+                                <p class="hero-description">Create your dream bedroom with our luxurious and comfortable bedroom furniture at special prices.</p>
+                                <div class="hero-buttons">
+                                    <a href="#" class="btn btn-primary btn-lg">Shop Sale</a>
+                                    <a href="#" class="btn btn-outline-dark btn-lg ms-3">Explore Designs</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 hero-image-wrapper">
+                            <img src="/images/slide1 (Custom).jpg" alt="Bedroom Furniture Sale" class="hero-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 hero-content-wrapper">
+                            <div class="hero-content">
+                                <span class="hero-subtitle">Handcrafted Quality</span>
+                                <h1 class="hero-title">Sustainable Dining Collections</h1>
+                                <p class="hero-description">Eco-friendly dining furniture made from sustainable materials for conscious living.</p>
+                                <div class="hero-buttons">
+                                    <a href="#" class="btn btn-primary btn-lg">Discover More</a>
+                                    <a href="#" class="btn btn-outline-dark btn-lg ms-3">Learn About Our Materials</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 hero-image-wrapper">
+                            <img src="/images/slide3 (Custom).jpg" alt="Sustainable Dining Collection" class="hero-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
 
-					<!-- Start Column 4 -->
-					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html">
-							<img src="/images/product-3.png" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Ergonomic Chair</h3>
-							<strong class="product-price">$43.00</strong>
 
-							<span class="icon-cross">
-								<img src="/images/cross.svg" class="img-fluid">
-							</span>
-						</a>
-					</div>
-					<!-- End Column 4 -->
 
-				</div>
-			</div>
-		</div>
-		<!-- End Product Section -->
 
-		<!-- Start Why Choose Us Section -->
-		<div class="why-choose-section">
-			<div class="container">
-				<div class="row justify-content-between">
-					<div class="col-lg-6">
-						<h2 class="section-title">Why Choose Us</h2>
-						<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+ <!-- Featured Products Section - Fixed for EJS integration -->
+<section id="featuredProductsSection" class="featured-products py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-4">Featured Products</h2>
+    
+    <div class="carousel-container position-relative">
+      <div class="product-carousel custom-carousel">
+        <!-- Product 1 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/images/fp1.jpg" alt="Minimalist Sofa" class="product-image">
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Minimalist Sofa</h3>
+            <div class="product-price">
+              <span class="current-price">$499</span>
+              <span class="original-price">$599</span>
+            </div>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span>(4.5)</span>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 2 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/images/fp2.jpg" alt="Modern Coffee Table" class="product-image">
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Modern Coffee Table</h3>
+            <div class="product-price">
+              <span class="current-price">$249</span>
+            </div>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+              <span>(4.0)</span>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 3 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/images/fp3.jpg" alt="Accent Chair" class="product-image">
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Accent Chair</h3>
+            <div class="product-price">
+              <span class="current-price">$199</span>
+              <span class="original-price">$249</span>
+            </div>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <span>(5.0)</span>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 4 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/images/fp4.jpg" alt="Dining Table Set" class="product-image">
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Dining Table Set</h3>
+            <div class="product-price">
+              <span class="current-price">$799</span>
+              <span class="original-price">$899</span>
+            </div>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+              <span>(4.2)</span>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 5 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/images/fp5.jpg" alt="Bedside Table" class="product-image">
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Bedside Table</h3>
+            <div class="product-price">
+              <span class="current-price">$129</span>
+            </div>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <i class="far fa-star"></i>
+              <span>(3.5)</span>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 6 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/images/fp6.jpg" alt="Floor Lamp" class="product-image">
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Floor Lamp</h3>
+            <div class="product-price">
+              <span class="current-price">$89</span>
+              <span class="original-price">$119</span>
+            </div>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+              <span>(4.1)</span>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Navigation Arrows -->
+      <button class="carousel-arrow prev-arrow"><i class="fas fa-chevron-left"></i></button>
+      <button class="carousel-arrow next-arrow"><i class="fas fa-chevron-right"></i></button>
+      
+      <!-- Carousel Dots -->
+      <div class="carousel-dots"></div>
+    </div>
+  </div>
+</section>
 
-						<div class="row my-5">
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="/images/truck.svg" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Fast &amp; Free Shipping</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
-								</div>
-							</div>
 
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="/images/bag.svg" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Easy to Shop</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
-								</div>
-							</div>
 
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="/images/support.svg" alt="Image" class="imf-fluid">
-									</div>
-									<h3>24/7 Support</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
-								</div>
-							</div>
+<!-- Featured Categories Section -->
+<section class="featured-categories py-5">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="section-title">Shop by Category</h2>
+                <p class="section-subtitle">Explore our curated collection of premium furniture</p>
+            </div>
+        </div>
+        
+        <!-- Categories Grid -->
+        <div class="row g-4">
+            <!-- Category Card 1: Living Room -->
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="category-card">
+                    <div class="category-image">
+                        <img src="/images/cat1.jpg" alt="Living Room Furniture" class="img-fluid">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-content">
+                            <h3 class="category-title">Living Room</h3>
+                            <p class="category-count">42 Products</p>
+                            <a href="#" class="category-link">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category Card 2: Bedroom -->
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="category-card">
+                    <div class="category-image">
+                        <img src="/images/cat2.jpg" alt="Bedroom Furniture" class="img-fluid">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-content">
+                            <h3 class="category-title">Bedroom</h3>
+                            <p class="category-count">38 Products</p>
+                            <a href="#" class="category-link">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category Card 3: Dining -->
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="category-card">
+                    <div class="category-image">
+                        <img src="/images/cat3.jpg" alt="Dining Room Furniture" class="img-fluid">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-content">
+                            <h3 class="category-title">Dining</h3>
+                            <p class="category-count">29 Products</p>
+                            <a href="#" class="category-link">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category Card 4: Office -->
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="category-card">
+                    <div class="category-image">
+                        <img src="/images/cat4.jpg" alt="Office Furniture" class="img-fluid">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-content">
+                            <h3 class="category-title">Office</h3>
+                            <p class="category-count">24 Products</p>
+                            <a href="#" class="category-link">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category Card 5: Outdoor -->
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="category-card">
+                    <div class="category-image">
+                        <img src="/images/cat5.jpg" alt="Outdoor Furniture" class="img-fluid">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-content">
+                            <h3 class="category-title">Outdoor</h3>
+                            <p class="category-count">18 Products</p>
+                            <a href="#" class="category-link">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category Card 6: Decor -->
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="category-card">
+                    <div class="category-image">
+                        <img src="/images/cat6.jpg" alt="Home Decor" class="img-fluid">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-content">
+                            <h3 class="category-title">Decor</h3>
+                            <p class="category-count">35 Products</p>
+                            <a href="#" class="category-link">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="/images/return.svg" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Hassle Free Returns</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
-								</div>
-							</div>
 
-						</div>
-					</div>
 
-					<div class="col-lg-5">
-						<div class="img-wrap">
-							<img src="/images/why-choose-us-img.jpg" alt="Image" class="img-fluid">
-						</div>
-					</div>
 
-				</div>
-			</div>
-		</div>
-		<!-- End Why Choose Us Section -->
 
-		<!-- Start We Help Section -->
-		<div class="we-help-section">
-			<div class="container">
-				<div class="row justify-content-between">
-					<div class="col-lg-7 mb-5 mb-lg-0">
-						<div class="imgs-grid">
-							<div class="grid grid-1"><img src="/images/img-grid-1.jpg" alt="Untree.co"></div>
-							<div class="grid grid-2"><img src="/images/img-grid-2.jpg" alt="Untree.co"></div>
-							<div class="grid grid-3"><img src="/images/img-grid-3.jpg" alt="Untree.co"></div>
-						</div>
-					</div>
-					<div class="col-lg-5 ps-lg-5">
-						<h2 class="section-title mb-4">We Help You Make Modern Interior Design</h2>
-						<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada</p>
 
-						<ul class="list-unstyled custom-list my-4">
-							<li>Donec vitae odio quis nisl dapibus malesuada</li>
-							<li>Donec vitae odio quis nisl dapibus malesuada</li>
-							<li>Donec vitae odio quis nisl dapibus malesuada</li>
-							<li>Donec vitae odio quis nisl dapibus malesuada</li>
-						</ul>
-						<p><a herf="#" class="btn">Explore</a></p>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End We Help Section -->
 
-		<!-- Start Popular Product -->
-		<div class="popular-product">
-			<div class="container">
-				<div class="row">
+<!-- Value Proposition Section -->
+<section class="value-proposition py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center mb-4">
+          <h2 class="section-title">Why Choose Supreme</h2>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Value Proposition Item 1 -->
+        <div class="col-md-4 mb-4 mb-md-0">
+          <div class="value-prop-item text-center">
+            <div class="value-icon mb-3">
+              <i class="fas fa-truck"></i>
+            </div>
+            <h3 class="value-title">Free Delivery</h3>
+            <p class="value-desc">Enjoy free shipping on all orders over $500. We deliver to your doorstep with care.</p>
+          </div>
+        </div>
+        
+        <!-- Value Proposition Item 2 -->
+        <div class="col-md-4 mb-4 mb-md-0">
+          <div class="value-prop-item text-center">
+            <div class="value-icon mb-3">
+              <i class="fas fa-undo"></i>
+            </div>
+            <h3 class="value-title">30-Day Returns</h3>
+            <p class="value-desc">Not satisfied? Return any item within 30 days for a full refund, no questions asked.</p>
+          </div>
+        </div>
+        
+        <!-- Value Proposition Item 3 -->
+        <div class="col-md-4">
+          <div class="value-prop-item text-center">
+            <div class="value-icon mb-3">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <h3 class="value-title">Sustainable Materials</h3>
+            <p class="value-desc">Our furniture is crafted from responsibly sourced, eco-friendly materials.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="/images/product-1.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Nordic Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
-							</div>
-						</div>
-					</div>
 
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="/images/product-2.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Kruzo Aero Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
-							</div>
-						</div>
-					</div>
 
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="/images/product-3.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Ergonomic Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
-							</div>
-						</div>
-					</div>
 
-				</div>
-			</div>
-		</div>
-		<!-- End Popular Product -->
 
-		<!-- Start Testimonial Slider -->
-		<div class="testimonial-section">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-7 mx-auto text-center">
-						<h2 class="section-title">Testimonials</h2>
-					</div>
-				</div>
 
-				<div class="row justify-content-center">
-					<div class="col-lg-12">
-						<div class="testimonial-slider-wrap text-center">
-
-							<div id="testimonial-nav">
-								<span class="prev" data-controls="prev"><span class="fa fa-chevron-left"></span></span>
-								<span class="next" data-controls="next"><span class="fa fa-chevron-right"></span></span>
-							</div>
-
-							<div class="testimonial-slider">
-								
-								<div style="background-color: black;" class="item">
-									<div class="row justify-content-center">
-										<div class="col-lg-8 mx-auto">
-
-											<div class="testimonial-block text-center">
-												<blockquote class="mb-5">
-													<p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis volutpat dui quis scelerisque.&rdquo;</p>
-												</blockquote>
-
-												<div class="author-info">
-													<div class="author-pic">
-														<img src="/images/person-1.png" alt="Maria Jones" class="img-fluid">
-													</div>
-													<h3 class="font-weight-bold">Maria Jones</h3>
-													<span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
-												</div>
-											</div>
-
-										</div>
-									</div>
-								</div> 
-								<!-- END item -->
-
-								<div class="item">
-									<div class="row justify-content-center">
-										<div class="col-lg-8 mx-auto">
-
-											<div class="testimonial-block text-center">
-												<blockquote class="mb-5">
-													<p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis volutpat dui quis scelerisque.&rdquo;</p>
-												</blockquote>
-
-												<div class="author-info">
-													<div class="author-pic">
-														<img src="/images/person-1.png" alt="Maria Jones" class="img-fluid">
-													</div>
-													<h3 class="font-weight-bold">Maria Jones</h3>
-													<span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
-												</div>
-											</div>
-
-										</div>
-									</div>
-								</div> 
-								<!-- END item -->
-
-								<div class="item">
-									<div class="row justify-content-center">
-										<div class="col-lg-8 mx-auto">
-
-											<div class="testimonial-block text-center">
-												<blockquote class="mb-5">
-													<p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis volutpat dui quis scelerisque.&rdquo;</p>
-												</blockquote>
-
-												<div class="author-info">
-													<div class="author-pic">
-														<img src="/images/person-1.png" alt="Maria Jones" class="img-fluid">
-													</div>
-													<h3 class="font-weight-bold">Maria Jones</h3>
-													<span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
-												</div>
-											</div>
-
-										</div>
-									</div>
-								</div> 
-								<!-- END item -->
-
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Testimonial Slider -->
-
-		<!-- Start Blog Section -->
-		<div class="blog-section">
-			<div class="container">
-				<div class="row mb-5">
-					<div class="col-md-6">
-						<h2 class="section-title">Recent Blog</h2>
-					</div>
-					<div class="col-md-6 text-start text-md-end">
-						<a href="#" class="more">View All Posts</a>
-					</div>
-				</div>
-
-				<div class="row">
-
-					<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="/images/post-1.jpg" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">First Time Home Owner Ideas</a></h3>
-								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 19, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="/images/post-2.jpg" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">How To Keep Your Furniture Clean</a></h3>
-								<div class="meta">
-									<span>by <a href="#">Robert Fox</a></span> <span>on <a href="#">Dec 15, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="/images/post-3.jpg" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">Small Space Furniture Apartment Ideas</a></h3>
-								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 12, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-		<!-- End Blog Section -->	
-
-		<!-- Start Footer Section -->
-		<footer class="footer-section">
-			<div class="container relative">
-
-				<div class="sofa-img">
-					<img src="images/sofa.png" alt="Image" class="img-fluid">
-				</div>
-
-				<div class="row">
-					<div class="col-lg-8">
-						<div class="subscription-form">
-							<h3 class="d-flex align-items-center"><span class="me-1"><img src="/images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
-
-							<form action="#" class="row g-3">
-								<div class="col-auto">
-									<input type="text" class="form-control" placeholder="Enter your name">
-								</div>
-								<div class="col-auto">
-									<input type="email" class="form-control" placeholder="Enter your email">
-								</div>
-								<div class="col-auto">
-									<button class="btn btn-primary">
-										<span class="fa fa-paper-plane"></span>
-									</button>
-								</div>
-							</form>
-
-						</div>
-					</div>
-				</div>
-
-				<div class="row g-5 mb-5">
-					<div class="col-lg-4">
-						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Furni<span>.</span></a></div>
-						<p class="mb-4">Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant</p>
-
-						<ul class="list-unstyled custom-social">
-							<li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>
-							<li><a href="#"><span class="fa fa-brands fa-twitter"></span></a></li>
-							<li><a href="#"><span class="fa fa-brands fa-instagram"></span></a></li>
-							<li><a href="#"><span class="fa fa-brands fa-linkedin"></span></a></li>
-						</ul>
-					</div>
-
-					<div class="col-lg-8">
-						<div class="row links-wrap">
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">About us</a></li>
-									<li><a href="#">Services</a></li>
-									<li><a href="#">Blog</a></li>
-									<li><a href="#">Contact us</a></li>
-								</ul>
-							</div>
-
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">Support</a></li>
-									<li><a href="#">Knowledge base</a></li>
-									<li><a href="#">Live chat</a></li>
-								</ul>
-							</div>
-
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">Jobs</a></li>
-									<li><a href="#">Our team</a></li>
-									<li><a href="#">Leadership</a></li>
-									<li><a href="#">Privacy Policy</a></li>
-								</ul>
-							</div>
-
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">Nordic Chair</a></li>
-									<li><a href="#">Kruzo Aero</a></li>
-									<li><a href="#">Ergonomic Chair</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="border-top copyright">
-					<div class="row pt-4">
-						<div class="col-lg-6">
-							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a>  <!-- License information: https://untree.co/license/ -->
+  <!-- Seasonal Collection Section -->
+<section class="seasonal-collection">
+    <div class="container-fluid p-0">
+      <div class="row g-0">
+        <!-- Image Column -->
+        <div class="col-lg-6 seasonal-image">
+          <img src="/images/spring.jpg" alt="Spring Collection 2025" class="img-fluid">
+        </div>
+        
+        <!-- Content Column -->
+        <div class="col-lg-6 seasonal-content">
+          <div class="content-wrapper">
+            <span class="season-label">Spring Collection</span>
+            <h2 class="collection-title">Bring Nature Indoors</h2>
+            <p class="collection-description">
+              Discover our latest spring collection featuring light oak finishes, natural fabrics, and
+              earth-toned accessories. Perfect for refreshing your home with the essence of spring.
             </p>
-						</div>
+            <ul class="collection-features">
+              <li>Sustainable materials</li>
+              <li>Nature-inspired designs</li>
+              <li>Exclusive pieces</li>
+            </ul>
+            <a href="#" class="btn btn-primary shop-now-btn">Shop Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-						<div class="col-lg-6 text-center text-lg-end">
-							<ul class="list-unstyled d-inline-flex ms-auto">
-								<li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-							</ul>
-						</div>
 
-					</div>
-				</div>
 
-			</div>
-		</footer>
-		<!-- End Footer Section -->	
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-		<script src="/public/js/tiny-slider.js"></script>
-		<script src="/public/js/custom.js"></script>
-	</body>
 
+  <!-- Best Sellers Section -->
+   
+<!-- Best Sellers Section -->
+<section class="best-sellers py-5">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <h2 class="section-title">Best Sellers</h2>
+          <p class="section-subtitle">Our most popular furniture pieces loved by customers</p>
+        </div>
+      </div>
+      
+      <div class="row best-sellers-grid">
+        <!-- Product Card 1 -->
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+          <div class="product-card">
+            <!-- Fixed image container -->
+            <div class="product-image-container">
+              <div class="product-badge best-seller">BEST</div>
+              <img src="/images/b1.jpg" alt="Modern Sofa" class="product-img">
+              <div class="product-overlay">
+                <button class="btn-add-to-cart">Add to Cart</button>
+                <button class="btn-quick-view">Quick View</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">Modern Sofa</h3>
+              <div class="product-price">
+                <span class="current-price">₹1,299</span>
+                <span class="original-price">₹1,599</span>
+              </div>
+              <div class="product-rating">
+                <div class="stars">
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-half"></i>
+                </div>
+                <span class="rating-count">(42)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Card 2 -->
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+          <div class="product-card">
+            <div class="product-image-container">
+              <img src="/images/b2.jpg" alt="Dining Table" class="product-img">
+              <div class="product-overlay">
+                <button class="btn-add-to-cart">Add to Cart</button>
+                <button class="btn-quick-view">Quick View</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">Oak Dining Table</h3>
+              <div class="product-price">
+                <span class="current-price">₹899</span>
+              </div>
+              <div class="product-rating">
+                <div class="stars">
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                </div>
+                <span class="rating-count">(37)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Card 3 -->
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+          <div class="product-card">
+            <div class="product-image-container">
+              <div class="product-badge sale">SALE</div>
+              <img src="/images/b3.jpg" alt="Accent Chair" class="product-img">
+              <div class="product-overlay">
+                <button class="btn-add-to-cart">Add to Cart</button>
+                <button class="btn-quick-view">Quick View</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">Accent Chair</h3>
+              <div class="product-price">
+                <span class="current-price">₹499</span>
+                <span class="original-price">₹649</span>
+              </div>
+              <div class="product-rating">
+                <div class="stars">
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-empty"></i>
+                </div>
+                <span class="rating-count">(28)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Card 4 -->
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+          <div class="product-card">
+            <div class="product-image-container">
+              <img src="/images/b4.jpg" alt="Coffee Table" class="product-img">
+              <div class="product-overlay">
+                <button class="btn-add-to-cart">Add to Cart</button>
+                <button class="btn-quick-view">Quick View</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">Coffee Table</h3>
+              <div class="product-price">
+                <span class="current-price">₹349</span>
+              </div>
+              <div class="product-rating">
+                <div class="stars">
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-half"></i>
+                </div>
+                <span class="rating-count">(51)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Card 5 -->
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+          <div class="product-card">
+            <div class="product-image-container">
+              <img src="/images/b5.jpg" alt="Bookshelf" class="product-img">
+              <div class="product-overlay">
+                <button class="btn-add-to-cart">Add to Cart</button>
+                <button class="btn-quick-view">Quick View</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">Modern Bookshelf</h3>
+              <div class="product-price">
+                <span class="current-price">₹599</span>
+              </div>
+              <div class="product-rating">
+                <div class="stars">
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-half"></i>
+                  <i class="star-empty"></i>
+                </div>
+                <span class="rating-count">(19)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Card 6 -->
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+          <div class="product-card">
+            <div class="product-image-container">
+              <div class="product-badge new">NEW</div>
+              <img src="/images/b6.jpg" alt="Bed Frame" class="product-img">
+              <div class="product-overlay">
+                <button class="btn-add-to-cart">Add to Cart</button>
+                <button class="btn-quick-view">Quick View</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">Queen Bed Frame</h3>
+              <div class="product-price">
+                <span class="current-price">₹1,099</span>
+              </div>
+              <div class="product-rating">
+                <div class="stars">
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-empty"></i>
+                </div>
+                <span class="rating-count">(12)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Card 7 -->
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+          <div class="product-card">
+            <div class="product-image-container">
+              <img src="/images/b7.jpg" alt="Desk" class="product-img">
+              <div class="product-overlay">
+                <button class="btn-add-to-cart">Add to Cart</button>
+                <button class="btn-quick-view">Quick View</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">Home Office Desk</h3>
+              <div class="product-price">
+                <span class="current-price">₹449</span>
+                <span class="original-price">₹499</span>
+              </div>
+              <div class="product-rating">
+                <div class="stars">
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-empty"></i>
+                </div>
+                <span class="rating-count">(24)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Card 8 -->
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+          <div class="product-card">
+            <div class="product-image-container">
+              <img src="/images/b8.jpg" alt="Floor Lamp" class="product-img">
+              <div class="product-overlay">
+                <button class="btn-add-to-cart">Add to Cart</button>
+                <button class="btn-quick-view">Quick View</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">Modern Floor Lamp</h3>
+              <div class="product-price">
+                <span class="current-price">₹199</span>
+              </div>
+              <div class="product-rating">
+                <div class="stars">
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-filled"></i>
+                  <i class="star-empty"></i>
+                </div>
+                <span class="rating-count">(32)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-12 text-center">
+          <a href="#" class="btn btn-view-all">View All Best Sellers</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+<!-- Customer Reviews Section -->
+<section class="customer-reviews py-5">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <h2 class="section-title">What Our Customers Say</h2>
+          <p class="section-subtitle">Honest reviews from people who love our furniture</p>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-12">
+          <div class="reviews-carousel">
+            <!-- Carousel indicators -->
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Review 1"></button>
+              <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="1" aria-label="Review 2"></button>
+              <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="2" aria-label="Review 3"></button>
+            </div>
+            
+            <!-- Carousel wrapper -->
+            <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="hover">
+              <div class="carousel-inner">
+                <!-- Review 1 -->
+                <div class="carousel-item active">
+                  <div class="review-container">
+                    <div class="row align-items-center">
+                      <div class="col-md-4 mb-4 mb-md-0">
+                        <div class="review-image">
+                          <img src="/images/slide4.jpg" alt="Modern Living Room" class="img-fluid rounded">
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="review-content">
+                          <div class="review-quote">
+                            <i class="fas fa-quote-left"></i>
+                          </div>
+                          <p class="review-text">The Modern Lounge Chair exceeded all my expectations. The quality is superb, and it fits perfectly in my living room. The customer service was also outstanding - they helped me choose the perfect fabric color. I'll definitely be shopping at Supreme again!</p>
+                          <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="reviewer-info">
+                            <div class="reviewer-image">
+                              <img src="/images/review1.jpg" alt="Sarah Johnson" class="img-fluid rounded-circle">
+                            </div>
+                            <div class="reviewer-details">
+                              <h4 class="reviewer-name">Dulquer salmaan </h4>
+                              <p class="product-purchased">Purchased: Modern Lounge Chair</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Review 2 -->
+                <div class="carousel-item">
+                  <div class="review-container">
+                    <div class="row align-items-center">
+                      <div class="col-md-4 mb-4 mb-md-0">
+                        <div class="review-image">
+                          <img src="/images/b8.jpg" alt="Dining Room Set" class="img-fluid rounded">
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="review-content">
+                          <div class="review-quote">
+                            <i class="fas fa-quote-left"></i>
+                          </div>
+                          <p class="review-text">We bought the Oak Dining Table and matching chairs for our home renovation project. The craftsmanship is excellent, and the sustainable materials used align perfectly with our values. The delivery was prompt, and the assembly instructions were clear. Highly recommend!</p>
+                          <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                          </div>
+                          <div class="reviewer-info">
+                            <div class="reviewer-image">
+                              <img src="/images/review2.jpg" alt="David Miller" class="img-fluid rounded-circle">
+                            </div>
+                            <div class="reviewer-details">
+                              <h4 class="reviewer-name">Fahad Fasil </h4>
+                              <p class="product-purchased">Purchased: Oak Dining Table & Chairs</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Review 3 -->
+                <div class="carousel-item">
+                  <div class="review-container">
+                    <div class="row align-items-center">
+                      <div class="col-md-4 mb-4 mb-md-0">
+                        <div class="review-image">
+                          <img src="/images/slide3.jpg" alt="Bedroom Set" class="img-fluid rounded">
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="review-content">
+                          <div class="review-quote">
+                            <i class="fas fa-quote-left"></i>
+                          </div>
+                          <p class="review-text">I was hesitant to buy furniture online, but Supreme made the process so easy. The Minimalist Bookshelf arrived well-packaged and was easy to assemble. The quality is exceptional for the price, and it looks even better in person than in the photos. The 30-day return policy gave me peace of mind, but I'm definitely keeping this beautiful piece!</p>
+                          <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="reviewer-info">
+                            <div class="reviewer-image">
+                              <img src="/images/review3.jpg" alt="Emily Chen" class="img-fluid rounded-circle">
+                            </div>
+                            <div class="reviewer-details">
+                              <h4 class="reviewer-name">Basil Joseph</h4>
+                              <p class="product-purchased">Purchased: Minimalist Bookshelf</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Carousel controls -->
+              <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+          <a href="#" class="btn btn-outline-primary view-all-reviews-btn">Read All Reviews</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+  <!-- Newsletter Subscription Section -->
+<section class="newsletter-section py-5 bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 text-center">
+          <h2 class="section-title mb-3">Stay Updated</h2>
+          <p class="mb-4">Subscribe to our newsletter for exclusive offers, design tips, and new collection alerts.</p>
+          
+          <form class="newsletter-form">
+            <div class="input-group mb-3">
+              <input type="email" class="form-control" placeholder="Your email address" aria-label="Email address" required>
+              <button class="btn btn-primary" type="submit" style="background-color: #E5574E; border-color: #E5574E;">Subscribe</button>
+            </div>
+            <div class="form-text text-muted">
+              <small>We respect your privacy and will never share your information. You can unsubscribe at any time.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+  <!-- Footer Section -->
+<footer class="footer bg-dark text-light py-5">
+    <div class="container">
+      <div class="row">
+        <!-- Company Information Column -->
+        <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+          <h5 class="text-uppercase mb-4">Supreme</h5>
+          <p class="mb-4">Quality furniture for modern living. Designed with care, built to last.</p>
+          <div class="social-icons">
+            <a href="#" class="me-2 text-light"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="me-2 text-light"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="me-2 text-light"><i class="bi bi-pinterest"></i></a>
+            <a href="#" class="me-2 text-light"><i class="bi bi-twitter"></i></a>
+          </div>
+        </div>
+        
+        <!-- Customer Service Column -->
+        <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+          <h5 class="mb-4">Customer Service</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Contact Us</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">FAQs</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Shipping & Delivery</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Returns & Refunds</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Product Care</a></li>
+          </ul>
+        </div>
+        
+        <!-- Account & Ordering Column -->
+        <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+          <h5 class="mb-4">Account & Ordering</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">My Account</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Track My Order</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Order History</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Wishlist</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Gift Cards</a></li>
+          </ul>
+        </div>
+        
+        <!-- Payment & Security Column -->
+        <div class="col-lg-3 col-md-6">
+          <h5 class="mb-4">Payment & Security</h5>
+          <p class="mb-3">Secure payment options:</p>
+          <div class="payment-icons mb-4">
+            <img src="/api/pelaceholder/30/20" alt="Visa" class="me-2">
+            <img src="/api/pelaceholder/30/20" alt="Mastercard" class="me-2">
+            <img src="/api/pelaceholder/30/20" alt="PayPal" class="me-2">
+            <img src="/api/pelaceholder/30/20" alt="Apple Pay" class="me-2">
+          </div>
+          <p class="mb-2">
+            <i class="bi bi-shield-lock me-2"></i> Your data is secure with us
+          </p>
+        </div>
+      </div>
+      
+      <!-- Mobile Accordion Version (will be hidden on desktop) -->
+      <div class="d-lg-none accordion mt-3" id="footerAccordion">
+        <div class="accordion-item bg-dark">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#customerServiceCollapse">
+              Customer Service
+            </button>
+          </h2>
+          <div id="customerServiceCollapse" class="accordion-collapse collapse" data-bs-parent="#footerAccordion">
+            <div class="accordion-body">
+              <ul class="list-unstyled">
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Contact Us</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">FAQs</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Shipping & Delivery</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Returns & Refunds</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Product Care</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-item bg-dark">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#accountCollapse">
+              Account & Ordering
+            </button>
+          </h2>
+          <div id="accountCollapse" class="accordion-collapse collapse" data-bs-parent="#footerAccordion">
+            <div class="accordion-body">
+              <ul class="list-unstyled">
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">My Account</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Track My Order</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Order History</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Wishlist</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">Gift Cards</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-item bg-dark">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#paymentCollapse">
+              Payment & Security
+            </button>
+          </h2>
+          <div id="paymentCollapse" class="accordion-collapse collapse" data-bs-parent="#footerAccordion">
+            <div class="accordion-body">
+              <div class="payment-icons mb-4">
+                <img src="/api/placeholderrr/300/20" alt="Visa" class="me-2">
+                <img src="/api/placeholderrr/300/20" alt="Mastercard" class="me-2">
+                <img src="/api/placeholderrr/300/20" alt="PayPal" class="me-2">
+                <img src="/api/placeholderrr/300/20" alt="Apple Pay" class="me-2">
+              </div>
+              <p class="mb-2">
+                <i class="bi bi-shield-lock me-2"></i> Your data is secure with us
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <hr class="my-4">
+      
+      <!-- Bottom footer with copyright -->
+      <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+          <p class="mb-0">&copy; 2025 Supreme Furniture. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <ul class="list-inline mb-0">
+            <li class="list-inline-item"><a href="#" class="text-decoration-none text-secondary">Privacy Policy</a></li>
+            <li class="list-inline-item"><span class="text-secondary">|</span></li>
+            <li class="list-inline-item"><a href="#" class="text-decoration-none text-secondary">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <button class="back-to-top-btn" aria-label="Back to top" style="display: block;">
+<i class="bi bi-arrow-up"></i>
+  </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <!-- Bootstrap and custom JavaScript (at the end of body) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mobile search toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchToggle = document.querySelector('.search-toggle');
+            const mobileSearchOverlay = document.querySelector('.mobile-search-overlay');
+            const closeSearch = document.querySelector('.close-search');
+            
+            if (searchToggle && mobileSearchOverlay && closeSearch) {
+                searchToggle.addEventListener('click', function() {
+                    mobileSearchOverlay.classList.add('active');
+                });
+                
+                closeSearch.addEventListener('click', function() {
+                    mobileSearchOverlay.classList.remove('active');
+                });
+            }
+        });
+
+
+/* Additional JavaScript to handle sticky header */
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('.supreme-header');
+    const headerOffset = header.offsetTop;
+    
+    function handleSticky() {
+        if (window.pageYOffset > headerOffset) {
+            header.classList.add('sticky');
+        } else {
+            header.classList.remove('sticky');
+        }
+    }
+    
+    window.addEventListener('scroll', handleSticky);
+});
+
+
+
+
+// Supreme E-commerce Header JavaScript
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile search toggle
+    const searchToggle = document.querySelector('.search-toggle');
+    const mobileSearchOverlay = document.querySelector('.mobile-search-overlay');
+    const closeSearch = document.querySelector('.close-search');
+    
+    if (searchToggle && mobileSearchOverlay && closeSearch) {
+        searchToggle.addEventListener('click', function() {
+            mobileSearchOverlay.classList.add('active');
+            setTimeout(() => {
+                mobileSearchOverlay.querySelector('input').focus();
+            }, 300);
+        });
+        
+        closeSearch.addEventListener('click', function() {
+            mobileSearchOverlay.classList.remove('active');
+        });
+    }
+    
+    // Sticky header
+    const header = document.querySelector('.supreme-header');
+    let headerOffset = header.offsetTop;
+    
+    // Recalculate header offset on window resize
+    window.addEventListener('resize', function() {
+        headerOffset = header.offsetTop;
+    });
+    
+    function handleSticky() {
+        if (window.pageYOffset > headerOffset) {
+            header.classList.add('sticky');
+            document.body.style.paddingTop = header.offsetHeight + 'px';
+        } else {
+            header.classList.remove('sticky');
+            document.body.style.paddingTop = 0;
+        }
+    }
+    
+    window.addEventListener('scroll', handleSticky);
+    
+    // Cart dropdown positioning on mobile
+    const cartDropdown = document.querySelector('.cart-dropdown');
+    const cartToggle = document.querySelector('#cartDropdown');
+    
+    if (cartDropdown && cartToggle && window.innerWidth < 768) {
+        cartToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            cartDropdown.classList.toggle('show');
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function closeCart(e) {
+                if (!cartDropdown.contains(e.target) && !cartToggle.contains(e.target)) {
+                    cartDropdown.classList.remove('show');
+                    document.removeEventListener('click', closeCart);
+                }
+            });
+        });
+    }
+    
+    // Dropdown hover on desktop
+    const dropdowns = document.querySelectorAll('.dropdown');
+    
+    function handleDropdownHover() {
+        if (window.innerWidth >= 992) {
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.querySelector('.dropdown-toggle').click();
+                });
+                
+                dropdown.addEventListener('mouseleave', function() {
+                    this.querySelector('.dropdown-toggle').click();
+                });
+            });
+        }
+    }
+    
+    // Initialize dropdown hover
+    handleDropdownHover();
+    
+    // Reset dropdown behavior on window resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(handleDropdownHover, 250);
+    });
+
+
+
+
+// Initialize the Bootstrap carousel
+const carousel = new bootstrap.Carousel(heroCarousel, {
+            interval: 6000,
+            pause: 'hover',
+            wrap: true,
+            keyboard: true
+        });
+        
+        // Reset animations when slide changes
+        heroCarousel.addEventListener('slide.bs.carousel', function(event) {
+            const nextSlide = event.relatedTarget;
+            const elements = nextSlide.querySelectorAll('.hero-subtitle, .hero-title, .hero-description, .hero-buttons, .hero-image');
+            
+            elements.forEach(element => {
+                element.style.opacity = '0';
+            });
+        });
+        
+        // Add active class to trigger animations
+        heroCarousel.addEventListener('slid.bs.carousel', function(event) {
+            const currentSlide = event.relatedTarget;
+            const elements = currentSlide.querySelectorAll('.hero-subtitle, .hero-title, .hero-description, .hero-buttons, .hero-image');
+            
+            elements.forEach(element => {
+                element.style.opacity = '';
+            });
+        });
+        
+        // Pause carousel on video play if videos are added in the future
+        const carouselVideos = heroCarousel.querySelectorAll('video');
+        
+        if (carouselVideos.length > 0) {
+            carouselVideos.forEach(video => {
+                video.addEventListener('play', function() {
+                    carousel.pause();
+                });
+                
+                video.addEventListener('pause', function() {
+                    carousel.cycle();
+                });
+                
+                video.addEventListener('ended', function() {
+                    carousel.cycle();
+                });
+            });
+        }
+        
+        // Swipe functionality for touch devices
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        heroCarousel.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        heroCarousel.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                // Swipe left, go to next slide
+                carousel.next();
+            }
+            
+            if (touchEndX > touchStartX + 50) {
+                // Swipe right, go to previous slide
+                carousel.prev();
+            }
+        }
+        
+        // Auto-pause carousel when out of viewport to improve performance
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+        
+        function handleVisibility() {
+            if (isElementInViewport(heroCarousel)) {
+                carousel.cycle();
+            } else {
+                carousel.pause();
+            }
+        }
+        
+        // Check visibility on scroll
+        window.addEventListener('scroll', handleVisibility, { passive: true });
+        // Check on load
+        handleVisibility();
+    
+    });
+
+
+
+
+
+//     // Featured Products Carousel functionality
+// document.addEventListener('DOMContentLoaded', function() {
+//     // Elements
+//     const productSlider = document.querySelector('.products-slider');
+//     const prevButton = document.getElementById('prevProduct');
+//     const nextButton = document.getElementById('nextProduct');
+//     const dots = document.querySelectorAll('.carousel-dots .dot');
+    
+//     // Variables
+//     const productCards = document.querySelectorAll('.product-card');
+//     const cardWidth = productCards[0].offsetWidth + 20; // card width + gap
+//     const visibleCards = getVisibleCardsCount();
+//     const totalSlides = Math.ceil(productCards.length / visibleCards);
+//     let currentSlide = 0;
+    
+//     // Get number of visible cards based on screen width
+//     function getVisibleCardsCount() {
+//         if (window.innerWidth >= 1200) return 4;
+//         if (window.innerWidth >= 992) return 3;
+//         if (window.innerWidth >= 576) return 2;
+//         return 1;
+//     }
+    
+//     // Initialize dots based on total slides
+//     function initDots() {
+//         const dotsContainer = document.querySelector('.carousel-dots');
+//         dotsContainer.innerHTML = '';
+        
+//         for (let i = 0; i < totalSlides; i++) {
+//             const dot = document.createElement('span');
+//             dot.classList.add('dot');
+//             if (i === 0) dot.classList.add('active');
+//             dot.dataset.slide = i;
+            
+//             dot.addEventListener('click', function() {
+//                 goToSlide(parseInt(this.dataset.slide));
+//             });
+            
+//             dotsContainer.appendChild(dot);
+//         }
+//     }
+    
+//     // Go to specific slide
+//     function goToSlide(slideIndex) {
+//         currentSlide = slideIndex;
+//         const scrollPos = currentSlide * (visibleCards * cardWidth);
+//         productSlider.scrollTo({
+//             left: scrollPos,
+//             behavior: 'smooth'
+//         });
+        
+//         // Update dots
+//         updateDots();
+//     }
+    
+//     // Update active dot
+//     function updateDots() {
+//         const dots = document.querySelectorAll('.carousel-dots .dot');
+//         dots.forEach((dot, index) => {
+//             if (index === currentSlide) {
+//                 dot.classList.add('active');
+//             } else {
+//                 dot.classList.remove('active');
+//             }
+//         });
+//     }
+    
+//     // Next slide
+//     function nextSlide() {
+//         if (currentSlide < totalSlides - 1) {
+//             currentSlide++;
+//         } else {
+//             currentSlide = 0; // Loop back to first slide
+//         }
+//         goToSlide(currentSlide);
+//     }
+    
+//     // Previous slide
+//     function prevSlide() {
+//         if (currentSlide > 0) {
+//             currentSlide--;
+//         } else {
+//             currentSlide = totalSlides - 1; // Loop to last slide
+//         }
+//         goToSlide(currentSlide);
+//     }
+    
+//     // Event listeners
+//     if (prevButton) prevButton.addEventListener('click', prevSlide);
+//     if (nextButton) nextButton.addEventListener('click', nextSlide);
+    
+//     // Handle window resize
+//     window.addEventListener('resize', function() {
+//         // Update visible cards count
+//         const newVisibleCards = getVisibleCardsCount();
+//         if (newVisibleCards !== visibleCards) {
+//             // Reset and recalculate
+//             currentSlide = 0;
+//             initDots();
+//             goToSlide(0);
+//         }
+//     });
+    
+//     // Touch swipe functionality for mobile
+//     let touchStartX = 0;
+//     let touchEndX = 0;
+    
+//     productSlider.addEventListener('touchstart', function(e) {
+//         touchStartX = e.changedTouches[0].screenX;
+//     }, false);
+    
+//     productSlider.addEventListener('touchend', function(e) {
+//         touchEndX = e.changedTouches[0].screenX;
+//         handleSwipe();
+//     }, false);
+    
+//     function handleSwipe() {
+//         // Detect swipe direction
+//         if (touchEndX < touchStartX - 50) {
+//             nextSlide(); // Swipe left
+//         } else if (touchEndX > touchStartX + 50) {
+//             prevSlide(); // Swipe right
+//         }
+//     }
+    
+//     // Add to cart hover effects
+//     productCards.forEach(card => {
+//         const addToCartBtn = card.querySelector('.btn-add-to-cart');
+        
+//         addToCartBtn.addEventListener('mouseenter', function() {
+//             this.innerText = 'Add to Cart';
+//         });
+        
+//         addToCartBtn.addEventListener('click', function(e) {
+//             e.preventDefault();
+//             // Add animation
+//             this.innerHTML = '<i class="fas fa-check"></i> Added';
+//             this.style.backgroundColor = '#4CAF50';
+            
+//             // Reset after delay
+//             setTimeout(() => {
+//                 this.innerText = 'Add to Cart';
+//                 this.style.backgroundColor = '';
+//             }, 2000);
+            
+//             // Here you would add actual cart functionality
+//         });
+//     });
+    
+//     // Initialize dots on load
+//     initDots();
+// });
+
+
+
+
+
+//     // Featured Products Carousel - Improved version
+//     document.addEventListener('DOMContentLoaded', function() {
+//   // Elements
+//   const carousel = document.querySelector('.product-carousel');
+//   const prevArrow = document.querySelector('.prev-arrow');
+//   const nextArrow = document.querySelector('.next-arrow');
+//   const dotsContainer = document.querySelector('.carousel-dots');
+  
+//   // Variables
+//   const productCards = document.querySelectorAll('.product-card');
+//   let currentIndex = 0;
+//   let productsPerView = 4; // Default for desktop
+//   let scrollAmount = 1; // Scroll one product at a time
+  
+//   // Set initial state
+//   function initCarousel() {
+//     // Determine products per view based on screen width
+//     if (window.innerWidth > 1199) {
+//       productsPerView = 4; // Desktop
+//     } else if (window.innerWidth > 991) {
+//       productsPerView = 3; // Large tablets
+//     } else if (window.innerWidth > 575) {
+//       productsPerView = 2; // Small tablets
+//     } else {
+//       productsPerView = 1; // Mobile
+//     }
+    
+//     // Calculate total possible positions
+//     // This ensures we stop scrolling when the last set of products is visible
+//     const totalPositions = Math.max(0, productCards.length - productsPerView);
+    
+//     // Create dots - one for each product
+//     dotsContainer.innerHTML = '';
+//     for (let i = 0; i <= totalPositions; i++) {
+//       const dot = document.createElement('div');
+//       dot.classList.add('dot');
+//       if (i === 0) dot.classList.add('active');
+//       dot.dataset.index = i;
+//       dot.addEventListener('click', function() {
+//         goToPosition(parseInt(this.dataset.index));
+//       });
+//       dotsContainer.appendChild(dot);
+//     }
+    
+//     // Set initial position
+//     updateCarousel();
+//   }
+  
+//   // Update carousel position
+//   function updateCarousel() {
+//     // Calculate width of each product card relative to the container
+//     const cardWidth = 100 / productsPerView;
+    
+//     // Translate the carousel to show the current position
+//     const offset = -currentIndex * cardWidth;
+//     carousel.style.transform = `translateX(${offset}%)`;
+    
+//     // Update dots
+//     document.querySelectorAll('.dot').forEach((dot, index) => {
+//       if (index === currentIndex) {
+//         dot.classList.add('active');
+//       } else {
+//         dot.classList.remove('active');
+//       }
+//     });
+    
+//     // Update arrow visibility
+//     if (currentIndex === 0) {
+//       prevArrow.style.opacity = '0.5';
+//       prevArrow.style.pointerEvents = 'none';
+//     } else {
+//       prevArrow.style.opacity = '1';
+//       prevArrow.style.pointerEvents = 'auto';
+//     }
+    
+//     if (currentIndex >= productCards.length - productsPerView) {
+//       nextArrow.style.opacity = '0.5';
+//       nextArrow.style.pointerEvents = 'none';
+//     } else {
+//       nextArrow.style.opacity = '1';
+//       nextArrow.style.pointerEvents = 'auto';
+//     }
+//   }
+  
+//   // Go to specific position
+//   function goToPosition(index) {
+//     const maxIndex = productCards.length - productsPerView;
+    
+//     if (index < 0) {
+//       currentIndex = 0;
+//     } else if (index > maxIndex) {
+//       currentIndex = maxIndex;
+//     } else {
+//       currentIndex = index;
+//     }
+    
+//     updateCarousel();
+//   }
+  
+//   // Group the dots for cleaner UI when there are many products
+//   function groupDots() {
+//     // If there are more than 8 dots, group them
+//     const dots = document.querySelectorAll('.dot');
+//     if (dots.length > 8) {
+//       // Only show dots for: first position, current position-1, current position, 
+//       // current position+1, and last position
+//       dots.forEach((dot, index) => {
+//         const dotIndex = parseInt(dot.dataset.index);
+//         if (dotIndex === 0 || dotIndex === dots.length - 1 || 
+//             dotIndex === currentIndex || 
+//             dotIndex === currentIndex - 1 || 
+//             dotIndex === currentIndex + 1) {
+//           dot.style.display = 'block';
+//         } else if ((dotIndex === currentIndex - 2 || dotIndex === currentIndex + 2) && 
+//                    dots.length > 10) {
+//           // Show ellipsis dots
+//           dot.style.display = 'block';
+//           dot.classList.add('ellipsis');
+//         } else {
+//           dot.style.display = 'none';
+//         }
+//       });
+//     }
+//   }
+  
+//   // Event listeners
+//   prevArrow.addEventListener('click', function() {
+//     goToPosition(currentIndex - scrollAmount);
+//   });
+  
+//   nextArrow.addEventListener('click', function() {
+//     goToPosition(currentIndex + scrollAmount);
+//   });
+  
+//   // Handle touch events for swiping on mobile
+//   let touchStartX = 0;
+//   let touchEndX = 0;
+  
+//   carousel.addEventListener('touchstart', function(e) {
+//     touchStartX = e.touches[0].clientX;
+//   });
+  
+//   carousel.addEventListener('touchend', function(e) {
+//     touchEndX = e.changedTouches[0].clientX;
+//     handleSwipe();
+//   });
+  
+//   function handleSwipe() {
+//     const SWIPE_THRESHOLD = 50;
+//     if (touchStartX - touchEndX > SWIPE_THRESHOLD) {
+//       // Swipe left
+//       goToPosition(currentIndex + scrollAmount);
+//     } else if (touchEndX - touchStartX > SWIPE_THRESHOLD) {
+//       // Swipe right
+//       goToPosition(currentIndex - scrollAmount);
+//     }
+//   }
+  
+//   // Add keyboard navigation
+//   document.addEventListener('keydown', function(e) {
+//     if (e.key === 'ArrowLeft') {
+//       goToPosition(currentIndex - scrollAmount);
+//     } else if (e.key === 'ArrowRight') {
+//       goToPosition(currentIndex + scrollAmount);
+//     }
+//   });
+  
+//   // Handle window resize
+//   window.addEventListener('resize', function() {
+//     // Remember which products were visible
+//     const firstVisibleProductIndex = currentIndex;
+    
+//     // Reinitialize carousel
+//     initCarousel();
+    
+//     // Try to keep the same products visible
+//     goToPosition(firstVisibleProductIndex);
+//   });
+  
+//   // Initialize carousel
+//   initCarousel();
+// });
+
+
+
+// Featured Products Carousel - Fixed for EJS integration
+// Add this script at the end of your EJS file
+document.addEventListener('DOMContentLoaded', function() {
+  // Only initialize if the section exists
+  if (!document.getElementById('featuredProductsSection')) return;
+  
+  // Elements with specific ID selectors
+  const carousel = document.querySelector('#featuredProductsSection .product-carousel');
+  const prevArrow = document.querySelector('#featuredProductsSection .prev-arrow');
+  const nextArrow = document.querySelector('#featuredProductsSection .next-arrow');
+  const dotsContainer = document.querySelector('#featuredProductsSection .carousel-dots');
+  
+  // Check if elements exist before proceeding
+  if (!carousel || !prevArrow || !nextArrow || !dotsContainer) {
+    console.error('Featured Products carousel elements not found');
+    return;
+  }
+  
+  // Variables
+  const productCards = document.querySelectorAll('#featuredProductsSection .product-card');
+  let currentIndex = 0;
+  let productsPerView = 4; // Default for desktop
+  let scrollAmount = 1; // Scroll one product at a time
+  
+  // Set initial state
+  function initCarousel() {
+    // Determine products per view based on screen width
+    if (window.innerWidth > 1199) {
+      productsPerView = 4; // Desktop
+    } else if (window.innerWidth > 991) {
+      productsPerView = 3; // Large tablets
+    } else if (window.innerWidth > 575) {
+      productsPerView = 2; // Small tablets
+    } else {
+      productsPerView = 1; // Mobile
+    }
+    
+    // Calculate total possible positions
+    // This ensures we stop scrolling when the last set of products is visible
+    const totalPositions = Math.max(0, productCards.length - productsPerView);
+    
+    // Create dots - one for each position
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i <= totalPositions; i++) {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      if (i === 0) dot.classList.add('active');
+      dot.dataset.index = i;
+      dot.addEventListener('click', function() {
+        goToPosition(parseInt(this.dataset.index));
+      });
+      dotsContainer.appendChild(dot);
+    }
+    
+    // Set initial position
+    updateCarousel();
+  }
+  
+  // Update carousel position
+  function updateCarousel() {
+    // Calculate width of each product card relative to the container
+    const cardWidth = 100 / productsPerView;
+    
+    // Translate the carousel to show the current position
+    const offset = -currentIndex * cardWidth;
+    carousel.style.transform = `translateX(${offset}%)`;
+    
+    // Update dots
+    document.querySelectorAll('#featuredProductsSection .dot').forEach((dot, index) => {
+      if (index === currentIndex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+    
+    // Update arrow visibility
+    if (currentIndex === 0) {
+      prevArrow.style.opacity = '0.5';
+      prevArrow.style.pointerEvents = 'none';
+    } else {
+      prevArrow.style.opacity = '1';
+      prevArrow.style.pointerEvents = 'auto';
+    }
+    
+    if (currentIndex >= productCards.length - productsPerView) {
+      nextArrow.style.opacity = '0.5';
+      nextArrow.style.pointerEvents = 'none';
+    } else {
+      nextArrow.style.opacity = '1';
+      nextArrow.style.pointerEvents = 'auto';
+    }
+  }
+  
+  // Go to specific position
+  function goToPosition(index) {
+    const maxIndex = productCards.length - productsPerView;
+    
+    if (index < 0) {
+      currentIndex = 0;
+    } else if (index > maxIndex) {
+      currentIndex = maxIndex;
+    } else {
+      currentIndex = index;
+    }
+    
+    updateCarousel();
+  }
+  
+  // Event listeners
+  prevArrow.addEventListener('click', function() {
+    goToPosition(currentIndex - scrollAmount);
+  });
+  
+  nextArrow.addEventListener('click', function() {
+    goToPosition(currentIndex + scrollAmount);
+  });
+  
+  // Handle touch events for swiping on mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  carousel.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+  });
+  
+  carousel.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].clientX;
+    handleSwipe();
+  });
+  
+  function handleSwipe() {
+    const SWIPE_THRESHOLD = 50;
+    if (touchStartX - touchEndX > SWIPE_THRESHOLD) {
+      // Swipe left
+      goToPosition(currentIndex + scrollAmount);
+    } else if (touchEndX - touchStartX > SWIPE_THRESHOLD) {
+      // Swipe right
+      goToPosition(currentIndex - scrollAmount);
+    }
+  }
+  
+  // Handle window resize
+  window.addEventListener('resize', function() {
+    // Remember which products were visible
+    const firstVisibleProductIndex = currentIndex;
+    
+    // Reinitialize carousel
+    initCarousel();
+    
+    // Try to keep the same products visible
+    goToPosition(firstVisibleProductIndex);
+  });
+  
+  // Initialize carousel
+  initCarousel();
+});
+
+
+
+
+
+// Featured Categories Animation
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all category cards
+    const categoryCards = document.querySelectorAll('.category-card');
+    
+    // Add intersection observer to animate categories as they come into view
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+    
+    // Observe each category card
+    categoryCards.forEach(card => {
+        // Add fade-in class for animation
+        card.classList.add('fade-in-ready');
+        observer.observe(card);
+        
+        // Optional: Add click handler
+        card.addEventListener('click', function(e) {
+            // If it's not the actual link that was clicked
+            if (!e.target.classList.contains('category-link')) {
+                // Find the link within this card and redirect
+                const link = this.querySelector('.category-link');
+                if (link) {
+                    e.preventDefault();
+                    window.location.href = link.getAttribute('href');
+                }
+            }
+        });
+    });
+    
+    // Add additional CSS for animations
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .fade-in-ready {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .category-card {
+            cursor: pointer;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .fade-in-ready, .fade-in {
+                transition: none;
+                opacity: 1;
+                transform: none;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+});
+
+
+
+
+
+
+
+// Initialize the carousel with custom options
+document.addEventListener('DOMContentLoaded', function() {
+  var reviewsCarousel = new bootstrap.Carousel(document.getElementById('reviewsCarousel'), {
+    interval: 5000,
+    wrap: true,
+    keyboard: true,
+    pause: 'hover'
+  });
+  
+  // Pause carousel on mouse enter
+  document.querySelector('#reviewsCarousel').addEventListener('mouseenter', function() {
+    reviewsCarousel.pause();
+  });
+  
+  // Resume carousel on mouse leave
+  document.querySelector('#reviewsCarousel').addEventListener('mouseleave', function() {
+    reviewsCarousel.cycle();
+  });
+});
+
+
+
+
+
+
+// JavaScript for Newsletter and Footer functionality
+
+// Newsletter Form Submission
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the newsletter form if it exists
+  const newsletterForm = document.querySelector('.newsletter-form');
+  
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      // Get the email input value
+      const emailInput = this.querySelector('input[type="email"]');
+      const email = emailInput.value.trim();
+      
+      if (email) {
+        // Show loading state
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.innerHTML = 'Subscribing...';
+        submitButton.disabled = true;
+        
+        // Simulate API call - in production, replace with actual API call
+        setTimeout(function() {
+          // Reset form
+          emailInput.value = '';
+          
+          // Show success message
+          const formGroup = emailInput.closest('.input-group');
+          const successMessage = document.createElement('div');
+          successMessage.className = 'alert alert-success mt-3';
+          successMessage.innerHTML = 'Thank you for subscribing!';
+          formGroup.parentNode.insertBefore(successMessage, formGroup.nextSibling);
+          
+          // Reset button
+          submitButton.innerHTML = originalButtonText;
+          submitButton.disabled = false;
+          
+          // Remove success message after 3 seconds
+          setTimeout(function() {
+            successMessage.remove();
+          }, 3000);
+        }, 1000);
+      }
+    });
+  }
+  
+  // Footer accordion functionality for mobile
+  // Bootstrap takes care of most accordion functionality, but we can add some custom behavior
+  const footerAccordion = document.getElementById('footerAccordion');
+  
+  if (footerAccordion) {
+    // Auto-close other accordion items when one is opened
+    const accordionItems = footerAccordion.querySelectorAll('.accordion-collapse');
+    
+    accordionItems.forEach(collapse => {
+      collapse.addEventListener('show.bs.collapse', function() {
+        // Close all other items
+        accordionItems.forEach(otherCollapse => {
+          if (otherCollapse !== collapse && otherCollapse.classList.contains('show')) {
+            bootstrap.Collapse.getInstance(otherCollapse).hide();
+          }
+        });
+      });
+    });
+  }
+
+
+
+  
+  // Back to top functionality - Optional but commonly included with footers
+  const createBackToTopButton = () => {
+    const backToTopBtn = document.createElement('button');
+    backToTopBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';
+    backToTopBtn.className = 'back-to-top-btn';
+    backToTopBtn.setAttribute('aria-label', 'Back to top');
+    document.body.appendChild(backToTopBtn);
+    
+    const scrollFunction = () => {
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        backToTopBtn.style.display = 'block';
+      } else {
+        backToTopBtn.style.display = 'none';
+      }
+    };
+    
+    window.addEventListener('scroll', scrollFunction);
+    
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Add CSS styles for the button
+    const style = document.createElement('style');
+    style.textContent = `
+      .back-to-top-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 99;
+        border: none;
+        outline: none;
+        background-color: #E5574E;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 50%;
+        font-size: 18px;
+        width: 50px;
+        height: 50px;
+        display: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      }
+      
+      .back-to-top-btn:hover {
+        background-color: #d44a41;
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      }
+    `;
+    document.head.appendChild(style);
+  };
+  
+  // Create back to top button
+  createBackToTopButton();
+});
+
+
+
+
+
+
+
+// Best Sellers Section JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize product card functionality
+  initProductCards();
+
+  // Function to initialize product card interactions
+  function initProductCards() {
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+      // Add to cart button functionality
+      const addToCartBtn = card.querySelector('.btn-add-to-cart');
+      if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Get product information
+          const productTitle = card.querySelector('.product-title').textContent;
+          const productPrice = card.querySelector('.current-price').textContent;
+          
+          // Show add to cart animation
+          const originalText = addToCartBtn.textContent;
+          addToCartBtn.textContent = 'Added!';
+          addToCartBtn.classList.add('added');
+          
+          // Reset button after animation
+          setTimeout(() => {
+            addToCartBtn.textContent = originalText;
+            addToCartBtn.classList.remove('added');
+          }, 1500);
+          
+          // Here you would typically add the item to cart via AJAX
+          console.log(`Added to cart: ${productTitle} - ${productPrice}`);
+          
+          // Trigger cart count update animation (assuming there's a cart counter in the header)
+          updateCartCount();
+        });
+      }
+      
+      // Quick view button functionality
+      const quickViewBtn = card.querySelector('.btn-quick-view');
+      if (quickViewBtn) {
+        quickViewBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Get product information for quick view modal
+          const productTitle = card.querySelector('.product-title').textContent;
+          const productImage = card.querySelector('.product-image img').src;
+          const productPrice = card.querySelector('.current-price').textContent;
+          
+          // Here you would typically open a quick view modal with the product details
+          console.log(`Quick view: ${productTitle}`);
+          // Example implementation would include opening a modal with these details
+          // openQuickViewModal(productTitle, productImage, productPrice);
+        });
+      }
+    });
+  }
+  
+  // Function to update cart count animation
+  function updateCartCount() {
+    // This is a placeholder for the cart count update animation
+    const cartCounter = document.querySelector('.cart-count');
+    if (cartCounter) {
+      // Add "bump" animation class
+      cartCounter.classList.add('cart-count-bump');
+      
+      // Increment the count (for demo purposes)
+      const currentCount = parseInt(cartCounter.textContent);
+      cartCounter.textContent = currentCount + 1;
+      
+      // Remove animation class after animation completes
+      setTimeout(() => {
+        cartCounter.classList.remove('cart-count-bump');
+      }, 300);
+    }
+  }
+  
+  // Handle lazy loading for product images
+  if ('IntersectionObserver' in window) {
+    const productImages = document.querySelectorAll('.product-image img');
+    
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const dataSrc = img.getAttribute('data-src');
+          
+          if (dataSrc) {
+            img.src = dataSrc;
+            img.removeAttribute('data-src');
+          }
+          
+          imageObserver.unobserve(img);
+        }
+      });
+    });
+    
+    productImages.forEach(img => {
+      if (img.getAttribute('data-src')) {
+        imageObserver.observe(img);
+      }
+    });
+  }
+  
+  // Add functionality for "View All" button animation
+  const viewAllBtn = document.querySelector('.btn-view-all');
+  if (viewAllBtn) {
+    viewAllBtn.addEventListener('mouseenter', function() {
+      this.style.transition = 'all 0.3s ease';
+    });
+  }
+});
+
+// Additional CSS for JavaScript animations
+document.head.insertAdjacentHTML('beforeend', `
+  <style>
+    .btn-add-to-cart.added {
+      background-color: #4CAF50 !important;
+      color: white !important;
+      border-color: #4CAF50 !important;
+    }
+    
+    .cart-count-bump {
+      animation: cartBump 0.3s ease-in-out;
+    }
+    
+    @keyframes cartBump {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+  </style>
+`);
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
 </html>

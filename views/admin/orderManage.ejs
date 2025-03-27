@@ -17,10 +17,7 @@
         <header class="header d-flex justify-content-between align-items-center mb-4">
             <h1>Order Management</h1>
             <div class="search-section">
-                <input type="text" id="search-input" class="form-control search-input" placeholder="Search by Order ID...">
-                <button class="btn reset-btn" onclick="resetSearch()">
-                    <i class="fas fa-sync-alt"></i> Reset
-                </button>
+                
             </div>
         </header>
 
@@ -42,14 +39,13 @@
                 </thead>
                 <tbody>
                     <% orders.forEach(order => { %>
-                        <tr>
+                        <tr data-order-id="<%= order._id %>">
                             <td><%= order.orderID %></td>
                             <td><%= order.user.name %></td>
                             <td><%= order.orderStatus %></td>
                             <td>₹<%= order.totalAmount %></td>
                             <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
                             <td>
-                                <!-- Show Details Button -->
                                 <button class="btn btn-primary view-details" data-order='<%- JSON.stringify(order) %>'>
                                     View Details
                                 </button>
@@ -72,7 +68,10 @@
             
             <!-- Modal -->
             <!-- Order Details Modal -->
-            <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+
+
+            
+            <!-- <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -85,8 +84,7 @@
                             <p><strong>Total Amount:</strong> ₹<span id="modalTotalAmount"></span></p>
             
                             <h6>Products:</h6>
-                            <ul id="modalProducts" class="list-group">
-                                <!-- Product details will be dynamically inserted here -->
+                            <ul id="modalProducts" class="list-group">  
                             </ul>
             
                             <h6 class="mt-3">Shipping Details:</h6>
@@ -109,7 +107,233 @@
                 </div>
             </div>
             
+             -->
+
+
+<!-- 
+             <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+                            <p><strong>Date:</strong> <span id="modalOrderDate"></span></p>
+                            <p><strong>Total Amount:</strong> ₹<span id="modalTotalAmount"></span></p>
             
+                            <h6>Products:</h6>
+                            <ul id="modalProducts" class="list-group">
+                            </ul>
+            
+                            <h6 class="mt-3">Shipping Details:</h6>
+                            <p id="modalShipping"></p>
+            
+                            <h6 class="mt-3">Order Status:</h6>
+                            <select id="modalOrderStatus" class="form-select">
+                                <option value="Pending">Pending</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="Returned">Returned</option>
+                            </select>
+            
+                            <button id="saveStatusBtn" class="btn btn-primary mt-3">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+
+
+            <!-- <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+                                    <p><strong>Order Date:</strong> <span id="modalOrderDate"></span></p>
+                                    <p><strong>Created At:</strong> <span id="modalCreatedAt"></span></p>
+                                    <p><strong>Last Updated:</strong> <span id="modalUpdatedAt"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Original Amount:</strong> ₹<span id="modalOriginalAmount"></span></p>
+                                    <p><strong>Total Offer Discount:</strong> ₹<span id="modalOfferDiscount"></span></p>
+                                    <p><strong>Coupon Discount:</strong> ₹<span id="modalCouponDiscount"></span> (<span id="modalCouponCode"></span>)</p>
+                                    <p><strong>Total Amount:</strong> ₹<span id="modalTotalAmount"></span></p>
+                                    <p><strong>Payment Method:</strong> <span id="modalPaymentMethod"></span></p>
+                                    <p><strong>Payment Status:</strong> <span id="modalPaymentStatus"></span></p>
+                                    <p><strong>Transaction ID:</strong> <span id="modalTransactionId"></span></p>
+                                </div>
+                            </div>
+            
+                            <h6 class="mt-3">Products:</h6>
+                            <ul id="modalProducts" class="list-group mb-3">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <img id="modalProductImage" class="img-fluid" alt="Product Image">
+                                        </div>
+                                        <div class="col-md-10">
+                                            <p><strong>Name:</strong> <span id="modalProductName"></span></p>
+                                            <p><strong>Price:</strong> ₹<span id="modalProductPrice"></span></p>
+                                            <p><strong>Quantity:</strong> <span id="modalProductQuantity"></span></p>
+                                            <p><strong>Discount Applied:</strong> ₹<span id="modalProductDiscount"></span></p>
+                                            <p><strong>Status:</strong> <span id="modalProductStatus"></span></p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="mt-3">Shipping Details:</h6>
+                                    <p id="modalShipping">
+                                        <strong>Name:</strong> <span id="modalShippingName"></span><br>
+                                        <strong>Phone:</strong> <span id="modalShippingPhone"></span><br>
+                                        <strong>Address:</strong> <span id="modalShippingAddress"></span><br>
+                                        <strong>City:</strong> <span id="modalShippingCity"></span><br>
+                                        <strong>State:</strong> <span id="modalShippingState"></span><br>
+                                        <strong>Country:</strong> <span id="modalShippingCountry"></span><br>
+                                        <strong>Pincode:</strong> <span id="modalShippingPincode"></span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="mt-3">Return Status:</h6>
+                                    <p>
+                                        <strong>Requested:</strong> <span id="modalReturnRequested"></span><br>
+                                        <strong>Approved:</strong> <span id="modalReturnApproved"></span><br>
+                                        <strong>Refund Status:</strong> <span id="modalRefundStatus"></span>
+                                    </p>
+                                </div>
+                            </div>
+            
+                            <h6 class="mt-3">Order Status:</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <select id="modalOrderStatus" class="form-select">
+                                        <option value="Pending">Pending</option>
+                                        <option value="Processing">Processing</option>
+                                        <option value="Shipped">Shipped</option>
+                                        <option value="Delivered">Delivered</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                        <option value="Cancellation Requested">Cancellation Requested</option>
+                                        <option value="Return Requested">Return Requested</option>
+                                        <option value="Returned">Returned</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Delivery Status:</strong> <span id="modalIsDelivered"></span></p>
+                                </div>
+                            </div>
+            
+                            <button id="saveStatusBtn" class="btn btn-primary mt-3">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ -->
+
+
+
+
+
+
+
+
+
+ <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+                        <p><strong>Order Date:</strong> <span id="modalOrderDate"></span></p>
+                        <p><strong>Created At:</strong> <span id="modalCreatedAt"></span></p>
+                        <p><strong>Last Updated:</strong> <span id="modalUpdatedAt"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Original Amount:</strong> ₹<span id="modalOriginalAmount"></span></p>
+                        <p><strong>Total Offer Discount:</strong> ₹<span id="modalOfferDiscount"></span></p>
+                        <p><strong>Coupon Discount:</strong> ₹<span id="modalCouponDiscount"></span> (<span id="modalCouponCode"></span>)</p>
+                        <p><strong>Total Amount:</strong> ₹<span id="modalTotalAmount"></span></p>
+                        <p><strong>Payment Method:</strong> <span id="modalPaymentMethod"></span></p>
+                        <p><strong>Payment Status:</strong> <span id="modalPaymentStatus"></span></p>
+                        <p><strong>Transaction ID:</strong> <span id="modalTransactionId"></span></p>
+                    </div>
+                </div>
+
+                <h6 class="mt-3">Products:</h6>
+                <ul id="modalProducts" class="list-group mb-3">
+                    <!-- Products will be dynamically inserted here -->
+                </ul>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="mt-3">Shipping Details:</h6>
+                        <p id="modalShipping">
+                            <strong>Name:</strong> <span id="modalShippingName"></span><br>
+                            <strong>Phone:</strong> <span id="modalShippingPhone"></span><br>
+                            <strong>Address:</strong> <span id="modalShippingAddress"></span><br>
+                            <strong>City:</strong> <span id="modalShippingCity"></span><br>
+                            <strong>State:</strong> <span id="modalShippingState"></span><br>
+                            <strong>Country:</strong> <span id="modalShippingCountry"></span><br>
+                            <strong>Pincode:</strong> <span id="modalShippingPincode"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="mt-3">Return Status:</h6>
+                        <p>
+                            <strong>Requested:</strong> <span id="modalReturnRequested"></span><br>
+                            <strong>Approved:</strong> <span id="modalReturnApproved"></span><br>
+                            <strong>Refund Status:</strong> <span id="modalRefundStatus"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <h6 class="mt-3">Order Status:</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <select id="modalOrderStatus" class="form-select">
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                            <option value="Cancellation Requested">Cancellation Requested</option>
+                            <option value="Return Requested">Return Requested</option>
+                            <option value="Returned">Returned</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Delivery Status:</strong> <span id="modalIsDelivered"></span></p>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button id="saveStatusBtn" class="btn btn-primary me-2">Save Order Status</button>
+                    <button id="updateProductStatusBtn" class="btn btn-success">Update Product Status</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
 
             </div>
@@ -119,203 +343,993 @@
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".view-details").forEach(button => {
-            button.addEventListener("click", function () {
-                let order = JSON.parse(this.getAttribute("data-order"));
-
-                document.getElementById("modalOrderID").textContent = order.orderID;
-                document.getElementById("modalUser").textContent = order.user.name;
-                document.getElementById("modalStatus").textContent = order.orderStatus;
-                document.getElementById("modalTotal").textContent = order.totalAmount;
-                document.getElementById("modalDate").textContent = new Date(order.orderDate).toLocaleDateString();
-
-                // Shipping details
-                let shipping = order.shippingAddress;
-                document.getElementById("modalShipping").innerHTML = `
-                    ${shipping.fullName}, ${shipping.address}, ${shipping.city}, ${shipping.state}, ${shipping.country} - ${shipping.pincode}
-                `;
-
-                // Products list
-                let productList = document.getElementById("modalProducts");
-                productList.innerHTML = "";
-                order.products.forEach(product => {
-                    let li = document.createElement("li");
-                    li.textContent = `${product.name} - ₹${product.price} x ${product.quantity} (${product.productStatus})`;
-                    productList.appendChild(li);
-                });
-
-                // Show modal
-                let orderModal = new bootstrap.Modal(document.getElementById("orderModal"));
-                orderModal.show();
-            });
-        });
-    });
-
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    let selectedOrderId = null;
-  
-    // Open Modal with Order Details
-    document.querySelectorAll(".view-order-btn").forEach(button => {
-        button.addEventListener("click", function () {
-            selectedOrderId = this.dataset.orderId; // Get order ID from button
-            fetch(`/admin/order/${selectedOrderId}`)
-                .then(response => response.json())
-                .then(order => {
-                    document.getElementById("modalOrderId").textContent = order._id;
-                    document.getElementById("modalOrderDate").textContent = new Date(order.orderDate).toLocaleDateString();
-                    document.getElementById("modalTotalAmount").textContent = order.totalAmount;
-                    document.getElementById("modalShipping").textContent = `${order.shippingAddress.fullName}, ${order.shippingAddress.address}, ${order.shippingAddress.city}`;
-                    
-                    let productsList = document.getElementById("modalProducts");
-                    productsList.innerHTML = "";
-                    
-                    order.products.forEach(product => {
-                        let listItem = document.createElement("li");
-                        listItem.classList.add("list-group-item");
-
-                        listItem.innerHTML = `
-                            <strong>${product.name}</strong> - $${product.price} (Qty: ${product.quantity}) 
-                            <select class="form-select status-dropdown" data-product-id="${product.product}">
-                                <option value="Pending" ${product.productStatus === "Pending" ? "selected" : ""}>Pending</option>
-                                <option value="Processing" ${product.productStatus === "Processing" ? "selected" : ""}>Processing</option>
-                                <option value="Shipped" ${product.productStatus === "Shipped" ? "selected" : ""}>Shipped</option>
-                                <option value="Delivered" ${product.productStatus === "Delivered" ? "selected" : ""}>Delivered</option>
-                                <option value="Cancelled" ${product.productStatus === "Cancelled" ? "selected" : ""}>Cancelled</option>
-                            </select>
-                        `;
-                        productsList.appendChild(listItem);
-                    });
-
-                    // Show the Modal
-                    new bootstrap.Modal(document.getElementById("orderDetailsModal")).show();
-                })
-                .catch(error => console.error("Error fetching order details:", error));
-        });
-    });
-
-    // Save Status Updates
-    document.getElementById("saveStatusBtn").addEventListener("click", function () {
-        let updatedStatuses = [];
-        document.querySelectorAll(".status-dropdown").forEach(select => {
-            updatedStatuses.push({
-                productId: select.dataset.productId,
-                newStatus: select.value
-            });
-        });
-
-        fetch(`/admin/order/update-status`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ orderId: selectedOrderId, products: updatedStatuses })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message); // Show confirmation message
-            window.location.reload(); // Reload the page to update UI
-        })
-        .catch(error => console.error("Error updating status:", error));
-    });
-});
-</script>
-
-    -->
 
 
  <script>
     
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".view-details").forEach(button => {
-    button.addEventListener("click", function () {
-        try {
-            let order = JSON.parse(this.getAttribute("data-order"));
 
 
-            document.getElementById("modalOrderId").textContent = order._id || "N/A";
+
+// document.addEventListener("DOMContentLoaded", function () {
+//     const modal = document.getElementById('orderDetailsModal');
+//     const modalOrderId = document.getElementById('modalOrderId');
+//     const modalOrderDate = document.getElementById('modalOrderDate');
+//     const modalTotalAmount = document.getElementById('modalTotalAmount');
+//     const modalProducts = document.getElementById('modalProducts');
+//     const modalShipping = document.getElementById('modalShipping');
+//     const modalOrderStatus = document.getElementById('modalOrderStatus');
+//     const saveStatusBtn = document.getElementById('saveStatusBtn');
+
+//     // Function to restrict status changes based on current status
 
 
-            let orderDate = order.orderDate?.$date ? new Date(order.orderDate.$date) : null;
-            document.getElementById("modalOrderDate").textContent = orderDate ? orderDate.toLocaleDateString("en-IN") : "N/A";
-
-            document.getElementById("modalTotalAmount").textContent = order.totalAmount || "0";
 
 
-            let shipping = order.shippingAddress || {};
-            document.getElementById("modalShipping").textContent = 
-                `${shipping.fullName || "N/A"}, ${shipping.address || "N/A"}, ${shipping.city || "N/A"}, ${shipping.state || "N/A"}, ${shipping.country || "N/A"}, ${shipping.pincode || "N/A"}`;
 
-          
-            let productList = document.getElementById("modalProducts");
-            productList.innerHTML = "";
 
-            if (Array.isArray(order.products)) {
-                order.products.forEach(product => {
-                    let listItem = document.createElement("li");
-                    listItem.classList.add("list-group-item", "d-flex", "align-items-center");
+//     const restrictStatusChanges = (currentStatus) => {
+//     const options = modalOrderStatus.options;
+//     for (let i = 0; i < options.length; i++) {
+//         const value = options[i].value;
+//         options[i].disabled = false;
 
-                    listItem.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}" class="me-3 rounded" style="width: 60px; height: 60px; object-fit: cover;">
-                        <div>
-                            <strong>${product.name}</strong> - ₹${product.price} (Qty: ${product.quantity}) <br>
-                            <span class="badge bg-${getBadgeClass(product.productStatus)}">${product.productStatus}</span>
-                            ${product.productStatus === "Cancelled" ? `<br><small class="text-danger">Reason: ${product.productCancelreason}</small>` : ""}
-                        </div>
-                    `;
-                    productList.appendChild(listItem);
+//         // Final states: no changes allowed
+//         if (currentStatus === 'Returned' || currentStatus === 'Cancelled' || currentStatus === 'Delivered') {
+//             options[i].disabled = true;
+//         }
+//         // Intermediate states with restrictions
+//         else if (currentStatus === 'Shipped') {
+//             if (value === 'Processing' || value === 'Pending') {
+//                 options[i].disabled = true; // Can't revert to earlier states
+//             }
+//         }
+//         else if (currentStatus === 'Processing') {
+//             if (value === 'Pending') {
+//                 options[i].disabled = true; // Can't revert to Pending
+//             }
+//         }
+//         else if (currentStatus === 'Cancellation Requested') {
+//             if (value !== 'Cancelled' && value !== 'Cancellation Requested' && value !== 'Processing') {
+//                 options[i].disabled = true; // Can only confirm cancellation or revert to Processing
+//             }
+//         }
+//         else if (currentStatus === 'Return Requested') {
+//             if (value !== 'Returned' && value !== 'Return Requested' && value !== 'Shipped') {
+//                 options[i].disabled = true; // Can only approve return or revert to Shipped
+//             }
+//         }
+//     }
+
+//     // Set current status and ensure it’s selectable
+//     modalOrderStatus.value = currentStatus;
+//     for (let i = 0; i < options.length; i++) {
+//         if (options[i].value === currentStatus) {
+//             options[i].disabled = false;
+//         }
+//     }
+// };
+
+
+
+
+
+
+//     // Function to get badge class based on status
+//     function getBadgeClass(status) {
+//         switch (status) {
+//             case "Pending": return "warning";
+//             case "Processing": return "primary";
+//             case "Shipped": return "info";
+//             case "Delivered": return "success";
+//             case "Cancelled": return "danger";
+//             case "Return Requested": return "warning";
+//             default: return "secondary";
+//         }
+//     }
+
+
+
+
+
+//     function populateModal(order) {
+//     // Basic order details
+//     modalOrderId.textContent = order.orderID || order._id || "N/A";
+    
+//     // Handle both string and $date formats for dates
+//     const orderDate = order.orderDate?.$date || order.orderDate;
+//     modalOrderDate.textContent = orderDate ? new Date(orderDate).toLocaleDateString("en-IN") : "N/A";
+    
+//     const createdAt = order.createdAt?.$date || order.createdAt;
+//     document.getElementById('modalCreatedAt').textContent = createdAt ? new Date(createdAt).toLocaleDateString("en-IN") : "N/A";
+    
+//     const updatedAt = order.updatedAt?.$date || order.updatedAt;
+//     document.getElementById('modalUpdatedAt').textContent = updatedAt ? new Date(updatedAt).toLocaleDateString("en-IN") : "N/A";
+
+//     // Additional financial details
+//     document.getElementById('modalOriginalAmount').textContent = order.originalAmount || "0";
+//     document.getElementById('modalOfferDiscount').textContent = order.totalOfferDiscount || "0";
+//     document.getElementById('modalCouponDiscount').textContent = order.appliedCoupon?.discountAmount || "0";
+//     document.getElementById('modalCouponCode').textContent = order.appliedCoupon?.code || "None";
+//     document.getElementById('modalPaymentMethod').textContent = order.paymentMethod || "N/A";
+//     document.getElementById('modalPaymentStatus').textContent = order.paymentStatus || "N/A";
+//     document.getElementById('modalTransactionId').textContent = order.transactionId || "N/A";
+
+//     // Shipping details
+//     const shipping = order.shippingAddress || {};
+//     document.getElementById('modalShippingName').textContent = shipping.fullName || "N/A";
+//     document.getElementById('modalShippingPhone').textContent = shipping.phone || "N/A";
+//     document.getElementById('modalShippingAddress').textContent = shipping.address || "N/A";
+//     document.getElementById('modalShippingCity').textContent = shipping.city || "N/A";
+//     document.getElementById('modalShippingState').textContent = shipping.state || "N/A";
+//     document.getElementById('modalShippingCountry').textContent = shipping.country || "N/A";
+//     document.getElementById('modalShippingPincode').textContent = shipping.pincode || "N/A";
+
+//     // Products
+//     modalProducts.innerHTML = "";
+//     (order.products || []).forEach(product => {
+//         const li = document.createElement("li");
+//         li.className = "list-group-item";
+//         li.innerHTML = `
+//             <div class="row">
+//                 <div class="col-md-2">
+//                     <img src="${product.image || ''}" class="img-fluid" alt="${product.name || 'Product'}">
+//                 </div>
+//                 <div class="col-md-10">
+//                     <p><strong>Name:</strong> ${product.name || "N/A"}</p>
+//                     <p><strong>Price:</strong> ₹${product.price || "0"}</p>
+//                     <p><strong>Quantity:</strong> ${product.quantity || 0}</p>
+//                     <p><strong>Discount Applied:</strong> ₹${product.appliedOffer?.discountAmount || "0"}</p>
+//                     <p><strong>Status:</strong> <span class="badge bg-${getBadgeClass(product.productStatus)}">${product.productStatus || "N/A"}</span></p>
+//                     ${product.productStatus === "Return Requested" ? 
+//                         `<button class="btn btn-success btn-sm accept-return-btn" 
+//                                  data-order-id="${order._id}" 
+//                                  data-product-id="${product.product}">Accept Return</button>` 
+//                         : ""}
+//                 </div>
+//             </div>
+//         `;
+//         modalProducts.appendChild(li);
+//     });
+
+//     // Return status
+//     document.getElementById('modalReturnRequested').textContent = order.return?.requested ? "Yes" : "No";
+//     document.getElementById('modalReturnApproved').textContent = order.return?.approved ? "Yes" : "No";
+//     document.getElementById('modalRefundStatus').textContent = order.refundStatus || "N/A";
+
+//     // Order status
+//     modalOrderStatus.value = order.orderStatus || "Pending";
+//     document.getElementById('modalIsDelivered').textContent = order.isDelivered ? "Yes" : "No";
+//     restrictStatusChanges(order.orderStatus);
+// }
+
+
+
+
+//     // Update view-details click handler
+//     document.querySelectorAll(".view-details").forEach(button => {
+//         button.addEventListener("click", async function () {
+//             try {
+//                 let order = JSON.parse(this.getAttribute("data-order"));
+//                 populateModal(order);
+
+               
+
+//                 let orderModal = new bootstrap.Modal(modal);
+//                 orderModal.show();
+//             } catch (error) {
+//                 console.error("Error loading order details:", error);
+//                 Swal.fire({
+//                     title: "Error",
+//                     text: "Failed to load order details.",
+//                     icon: "error",
+//                     timer: 1500,
+//                     showConfirmButton: false
+//                 });
+//             }
+//         });
+//     });
+    
+
+
+
+    
+//     // Accept Return Button (delegate event) - unchanged
+//     modal.addEventListener('click', async function(e) {
+//         if (e.target.classList.contains('accept-return-btn')) {
+//             const orderId = e.target.getAttribute('data-order-id');
+//             const productId = e.target.getAttribute('data-product-id');
+
+//             const confirmation = await Swal.fire({
+//                 title: 'Are you sure?',
+//                 text: 'This will refund the user and lock the status.',
+//                 icon: 'warning',
+//                 showCancelButton: true,
+//                 confirmButtonText: 'Yes, Accept Return',
+//                 cancelButtonText: 'No, Cancel'
+//             });
+
+//             if (confirmation.isConfirmed) {
+//                 try {
+//                     const response = await fetch('/admin/orders/accept-return', {
+//                         method: 'POST',
+//                         headers: { 'Content-Type': 'application/json' },
+//                         body: JSON.stringify({ orderId, productId })
+//                     });
+//                     const result = await response.json();
+//                     if (result.success) {
+//                         Swal.fire({
+//                             title: 'Success',
+//                             text: 'Return accepted and refund processed successfully.',
+//                             icon: 'success',
+//                             timer: 1500,
+//                             showConfirmButton: false
+//                         }).then(() => {
+//                             location.reload();
+//                         });
+//                     } else {
+//                         Swal.fire({
+//                             title: 'Error',
+//                             text: result.message || 'An error occurred while accepting the return.',
+//                             icon: 'error',
+//                             timer: 1500,
+//                             showConfirmButton: false
+//                         });
+//                     }
+//                 } catch (error) {
+//                     console.error('Error accepting return:', error);
+//                     Swal.fire({
+//                         title: 'Error',
+//                         text: 'An error occurred while accepting the return: ' + error.message,
+//                         icon: 'error',
+//                         timer: 1500,
+//                         showConfirmButton: false
+//                     });
+//                 }
+//             }
+//         }
+//     });
+
+
+
+//     // Save Status Button - unchanged
+//     saveStatusBtn.addEventListener('click', function () {
+//         const orderId = modalOrderId.textContent;
+//         const newStatus = modalOrderStatus.value;
+
+//         console.log('Sending update request:', { orderId, newStatus });
+
+//         fetch('/admin/order/update-status', {
+//             method: 'PATCH',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ orderId, newStatus })
+//         })
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error(`HTTP error! Status: ${response.status}`);
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             if (data.success) {
+//                 Swal.fire({
+//                     title: 'Success',
+//                     text: data.message,
+//                     icon: 'success',
+//                     timer: 1500,
+//                     showConfirmButton: false
+//                 }).then(() => {
+//                     window.location.reload();
+//                 });
+//             } else {
+//                 Swal.fire({
+//                     title: 'Error',
+//                     text: data.message || 'An error occurred while updating the order status',
+//                     icon: 'error',
+//                     timer: 1500,
+//                     showConfirmButton: false
+//                 });
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error updating order status:', error);
+//             Swal.fire({
+//                 title: 'Error',
+//                 text: 'Failed to update order status: ' + error.message,
+//                 icon: 'error',
+//                 timer: 1500,
+//                 showConfirmButton: false
+//             });
+//         });
+//     });
+// });
+
+
+
+
+
+
+
+
+
+
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     console.log('DOM fully loaded and parsed');
+
+//     // Check modal existence
+//     const orderDetailsModal = document.getElementById('orderDetailsModal');
+//     if (!orderDetailsModal) {
+//         console.error('Order Details Modal not found in DOM');
+//         return;
+//     }
+//     console.log('Modal element found:', orderDetailsModal);
+
+//     // Check buttons
+//     const saveStatusBtn = document.getElementById('saveStatusBtn');
+//     const updateProductStatusBtn = document.getElementById('updateProductStatusBtn');
+//     if (!saveStatusBtn) console.error('Save Status button not found');
+//     if (!updateProductStatusBtn) console.error('Update Product Status button not found');
+//     console.log('Buttons initialized:', { saveStatusBtn: !!saveStatusBtn, updateProductStatusBtn: !!updateProductStatusBtn });
+
+//     // Function to populate modal
+//     function populateOrderModal(order) {
+//         console.log('Populating modal with order data:', order);
+//         try {
+//             const modalOrderId = document.getElementById('modalOrderId');
+//             modalOrderId.textContent = order.orderID;
+//             modalOrderId.dataset.orderId = order._id; // Store MongoDB _id for accurate requests
+//             console.log('Order ID set:', { textContent: order.orderID, datasetId: order._id });
+
+//             document.getElementById('modalOrderDate').textContent = new Date(order.orderDate).toLocaleString();
+//             document.getElementById('modalCreatedAt').textContent = new Date(order.createdAt).toLocaleString();
+//             document.getElementById('modalUpdatedAt').textContent = new Date(order.updatedAt).toLocaleString();
+//             document.getElementById('modalOriginalAmount').textContent = order.originalAmount.toFixed(2);
+//             document.getElementById('modalOfferDiscount').textContent = order.totalOfferDiscount.toFixed(2);
+//             document.getElementById('modalCouponDiscount').textContent = order.appliedCoupon.discountAmount.toFixed(2);
+//             document.getElementById('modalCouponCode').textContent = order.appliedCoupon.code || 'None';
+//             document.getElementById('modalTotalAmount').textContent = order.totalAmount.toFixed(2);
+//             document.getElementById('modalPaymentMethod').textContent = order.paymentMethod;
+//             document.getElementById('modalPaymentStatus').textContent = order.paymentStatus;
+//             document.getElementById('modalTransactionId').textContent = order.transactionId || 'N/A';
+
+//             document.getElementById('modalShippingName').textContent = order.shippingAddress.fullName;
+//             document.getElementById('modalShippingPhone').textContent = order.shippingAddress.phone;
+//             document.getElementById('modalShippingAddress').textContent = order.shippingAddress.address;
+//             document.getElementById('modalShippingCity').textContent = order.shippingAddress.city;
+//             document.getElementById('modalShippingState').textContent = order.shippingAddress.state;
+//             document.getElementById('modalShippingCountry').textContent = order.shippingAddress.country;
+//             document.getElementById('modalShippingPincode').textContent = order.shippingAddress.pincode;
+
+//             document.getElementById('modalReturnRequested').textContent = order.return.requested ? 'Yes' : 'No';
+//             document.getElementById('modalReturnApproved').textContent = order.return.approved ? 'Yes' : 'No';
+//             document.getElementById('modalRefundStatus').textContent = order.refundStatus;
+
+//             document.getElementById('modalOrderStatus').value = order.orderStatus;
+//             document.getElementById('modalIsDelivered').textContent = order.isDelivered ? 'Yes' : 'No';
+
+//             const productList = document.getElementById('modalProducts');
+//             if (!productList) {
+//                 console.error('Product list element not found');
+//                 return;
+//             }
+//             productList.innerHTML = '';
+//             console.log('Populating products:', order.products.length, 'items');
+//             order.products.forEach((product, index) => {
+//                 const li = document.createElement('li');
+//                 li.className = 'list-group-item';
+//                 li.innerHTML = `
+//                     <div class="row">
+//                         <div class="col-md-2">
+//                             <img src="${product.image}" class="img-fluid" alt="${product.name}">
+//                         </div>
+//                         <div class="col-md-10">
+//                             <p><strong>Name:</strong> ${product.name}</p>
+//                             <p><strong>Price:</strong> ₹${product.price.toFixed(2)}</p>
+//                             <p><strong>Quantity:</strong> ${product.quantity}</p>
+//                             <p><strong>Discount Applied:</strong> ₹${(product.appliedOffer?.discountAmount || 0).toFixed(2)}</p>
+//                             <p><strong>Status:</strong>
+//                                 <select class="form-select product-status" data-product-id="${product._id}">
+//                                     <option value="Pending" ${product.productStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+//                                     <option value="Processing" ${product.productStatus === 'Processing' ? 'selected' : ''}>Processing</option>
+//                                     <option value="Shipped" ${product.productStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
+//                                     <option value="Delivered" ${product.productStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
+//                                     <option value="Cancelled" ${product.productStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+//                                     <option value="Cancellation Requested" ${product.productStatus === 'Cancellation Requested' ? 'selected' : ''}>Cancellation Requested</option>
+//                                     <option value="Return Requested" ${product.productStatus === 'Return Requested' ? 'selected' : ''}>Return Requested</option>
+//                                     <option value="Returned" ${product.productStatus === 'Returned' ? 'selected' : ''}>Returned</option>
+//                                 </select>
+//                             </p>
+//                         </div>
+//                     </div>
+//                 `;
+//                 productList.appendChild(li);
+//                 console.log(`Added product ${index + 1}:`, { id: product._id, name: product.name, status: product.productStatus });
+//             });
+//         } catch (error) {
+//             console.error('Error in populateOrderModal:', error);
+//         }
+//     }
+
+//     // Check view-details buttons
+//     const viewButtons = document.querySelectorAll('.view-details');
+//     console.log('Found view-details buttons:', viewButtons.length);
+//     if (viewButtons.length === 0) {
+//         console.warn('No .view-details buttons found. Check if they are loaded dynamically.');
+//     }
+
+//     viewButtons.forEach((btn, index) => {
+//         console.log(`Registering click listener for button ${index}:`, btn);
+//         btn.addEventListener('click', function() {
+//             console.log('View Details clicked:', this.dataset.order);
+//             try {
+//                 const order = JSON.parse(this.dataset.order);
+//                 console.log('Parsed order:', order);
+//                 populateOrderModal(order);
+//                 const modal = new bootstrap.Modal(orderDetailsModal);
+//                 console.log('Showing modal');
+//                 modal.show();
+//             } catch (error) {
+//                 console.error('Error parsing order data or showing modal:', error);
+//             }
+//         });
+//     });
+
+//     // Save Order Status
+//     if (saveStatusBtn) {
+
+
+//         saveStatusBtn.addEventListener('click', async function() {
+//     console.log('Save Order Status clicked');
+//     const orderId = document.getElementById('modalOrderId').dataset.orderId; // MongoDB _id
+//     const newStatus = document.getElementById('modalOrderStatus').value; // Renamed for clarity
+//     console.log('Order ID for request:', orderId, 'New status:', newStatus);
+
+//     try {
+//         console.log('Sending PATCH request to:', `/admin/order/update-status`);
+//         const response = await fetch(`/admin/order/update-status`, {
+//             method: 'PATCH',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ orderId, newStatus }) // Send orderId as _id
+//         });
+//         console.log('Response received:', response.status, response.statusText);
+//         if (!response.ok) {
+//             const errorData = await response.json();
+//             console.error('Failed response:', { status: response.status, statusText: response.statusText, data: errorData });
+//             throw new Error('Failed to update order status');
+//         }
+//         const result = await response.json();
+//         console.log('Order status updated successfully:', result);
+//         bootstrap.Modal.getInstance(orderDetailsModal).hide();
+//     } catch (error) {
+//         console.error('Error saving order status:', error.message, error.stack);
+//         alert('Failed to save order status');
+//     }
+// });
+   
+//     }
+
+//     // Update Product Status
+//     if (updateProductStatusBtn) {
+
+
+
+        
+//         updateProductStatusBtn.addEventListener('click', async function() {
+//             console.log('Update Product Status clicked');
+//             const orderId = document.getElementById('modalOrderId').dataset.orderId || document.getElementById('modalOrderId').textContent;
+//             const productStatuses = Array.from(document.querySelectorAll('.product-status')).map(select => ({
+//                 productId: select.dataset.productId,
+//                 status: select.value
+//             }));
+//             console.log('Order ID for request:', orderId, 'Product statuses:', productStatuses);
+
+//             try {
+//                 console.log('Sending PUT request to:', `/admin/${orderId}/update-product-status`);
+//                 const response = await fetch(`/admin/${orderId}/update-product-status`, {
+//                     method: 'PUT',
+//                     headers: { 'Content-Type': 'application/json' },
+//                     body: JSON.stringify({ productStatuses })
+//                 });
+//                 console.log('Response received:', response.status, response.statusText);
+//                 if (!response.ok) {
+//                     const errorData = await response.json();
+//                     console.error('Failed response:', { status: response.status, statusText: response.statusText, data: errorData });
+//                     throw new Error('Failed to update product status');
+//                 }
+//                 const result = await response.json();
+//                 console.log('Product statuses updated successfully:', result);
+//                 bootstrap.Modal.getInstance(orderDetailsModal).hide();
+//             } catch (error) {
+//                 console.error('Error saving product status:', error.message, error.stack);
+//                 alert('Failed to save product status');
+//             }
+//         });
+    
+    
+    
+//     }
+// });
+
+
+
+
+
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     console.log('DOM fully loaded and parsed');
+
+//     // Check modal existence
+//     const orderDetailsModal = document.getElementById('orderDetailsModal');
+//     if (!orderDetailsModal) {
+//         console.error('Order Details Modal not found in DOM');
+//         return;
+//     }
+//     console.log('Modal element found:', orderDetailsModal);
+
+//     // Check buttons
+//     const saveStatusBtn = document.getElementById('saveStatusBtn');
+//     const updateProductStatusBtn = document.getElementById('updateProductStatusBtn');
+//     if (!saveStatusBtn) console.error('Save Status button not found');
+//     if (!updateProductStatusBtn) console.error('Update Product Status button not found');
+//     console.log('Buttons initialized:', { saveStatusBtn: !!saveStatusBtn, updateProductStatusBtn: !!updateProductStatusBtn });
+
+//     // Function to populate modal
+//     function populateOrderModal(order) {
+//         console.log('Populating modal with order data:', order);
+//         try {
+//             const modalOrderId = document.getElementById('modalOrderId');
+//             modalOrderId.textContent = order.orderID;
+//             modalOrderId.dataset.orderId = order._id; // Store MongoDB _id for accurate requests
+//             console.log('Order ID set:', { textContent: order.orderID, datasetId: order._id });
+
+//             document.getElementById('modalOrderDate').textContent = new Date(order.orderDate).toLocaleString();
+//             document.getElementById('modalCreatedAt').textContent = new Date(order.createdAt).toLocaleString();
+//             document.getElementById('modalUpdatedAt').textContent = new Date(order.updatedAt).toLocaleString();
+//             document.getElementById('modalOriginalAmount').textContent = order.originalAmount.toFixed(2);
+//             document.getElementById('modalOfferDiscount').textContent = order.totalOfferDiscount.toFixed(2);
+//             document.getElementById('modalCouponDiscount').textContent = order.appliedCoupon.discountAmount.toFixed(2);
+//             document.getElementById('modalCouponCode').textContent = order.appliedCoupon.code || 'None';
+//             document.getElementById('modalTotalAmount').textContent = order.totalAmount.toFixed(2);
+//             document.getElementById('modalPaymentMethod').textContent = order.paymentMethod;
+//             document.getElementById('modalPaymentStatus').textContent = order.paymentStatus;
+//             document.getElementById('modalTransactionId').textContent = order.transactionId || 'N/A';
+
+//             document.getElementById('modalShippingName').textContent = order.shippingAddress.fullName;
+//             document.getElementById('modalShippingPhone').textContent = order.shippingAddress.phone;
+//             document.getElementById('modalShippingAddress').textContent = order.shippingAddress.address;
+//             document.getElementById('modalShippingCity').textContent = order.shippingAddress.city;
+//             document.getElementById('modalShippingState').textContent = order.shippingAddress.state;
+//             document.getElementById('modalShippingCountry').textContent = order.shippingAddress.country;
+//             document.getElementById('modalShippingPincode').textContent = order.shippingAddress.pincode;
+
+//             document.getElementById('modalReturnRequested').textContent = order.return.requested ? 'Yes' : 'No';
+//             document.getElementById('modalReturnApproved').textContent = order.return.approved ? 'Yes' : 'No';
+//             document.getElementById('modalRefundStatus').textContent = order.refundStatus;
+
+//             document.getElementById('modalOrderStatus').value = order.orderStatus;
+//             document.getElementById('modalIsDelivered').textContent = order.isDelivered ? 'Yes' : 'No';
+
+//             const productList = document.getElementById('modalProducts');
+//             if (!productList) {
+//                 console.error('Product list element not found');
+//                 return;
+//             }
+//             productList.innerHTML = '';
+//             console.log('Populating products:', order.products.length, 'items');
+//             order.products.forEach((product, index) => {
+//                 const li = document.createElement('li');
+//                 li.className = 'list-group-item';
+//                 li.innerHTML = `
+//                     <div class="row">
+//                         <div class="col-md-2">
+//                             <img src="${product.image}" class="img-fluid" alt="${product.name}">
+//                         </div>
+//                         <div class="col-md-10">
+//                             <p><strong>Name:</strong> ${product.name}</p>
+//                             <p><strong>Price:</strong> ₹${product.price.toFixed(2)}</p>
+//                             <p><strong>Quantity:</strong> ${product.quantity}</p>
+//                             <p><strong>Discount Applied:</strong> ₹${(product.appliedOffer?.discountAmount || 0).toFixed(2)}</p>
+//                             <p><strong>Status:</strong>
+//                                 <select class="form-select product-status" data-product-id="${product._id}">
+//                                     <option value="Pending" ${product.productStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+//                                     <option value="Processing" ${product.productStatus === 'Processing' ? 'selected' : ''}>Processing</option>
+//                                     <option value="Shipped" ${product.productStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
+//                                     <option value="Delivered" ${product.productStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
+//                                     <option value="Cancelled" ${product.productStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+//                                     <option value="Cancellation Requested" ${product.productStatus === 'Cancellation Requested' ? 'selected' : ''}>Cancellation Requested</option>
+//                                     <option value="Return Requested" ${product.productStatus === 'Return Requested' ? 'selected' : ''}>Return Requested</option>
+//                                     <option value="Returned" ${product.productStatus === 'Returned' ? 'selected' : ''}>Returned</option>
+//                                 </select>
+//                             </p>
+//                         </div>
+//                     </div>
+//                 `;
+//                 productList.appendChild(li);
+//                 console.log(`Added product ${index + 1}:`, { id: product._id, name: product.name, status: product.productStatus });
+//             });
+//         } catch (error) {
+//             console.error('Error in populateOrderModal:', error);
+//         }
+//     }
+
+//     // Check view-details buttons
+//     const viewButtons = document.querySelectorAll('.view-details');
+//     console.log('Found view-details buttons:', viewButtons.length);
+//     if (viewButtons.length === 0) {
+//         console.warn('No .view-details buttons found. Check if they are loaded dynamically.');
+//     }
+
+//     viewButtons.forEach((btn, index) => {
+//         console.log(`Registering click listener for button ${index}:`, btn);
+//         btn.addEventListener('click', function() {
+//             console.log('View Details clicked:', this.dataset.order);
+//             try {
+//                 const order = JSON.parse(this.dataset.order);
+//                 console.log('Parsed order:', order);
+//                 populateOrderModal(order);
+//                 const modal = new bootstrap.Modal(orderDetailsModal);
+//                 console.log('Showing modal');
+//                 modal.show();
+//             } catch (error) {
+//                 console.error('Error parsing order data or showing modal:', error);
+//                 Swal.fire({
+//                     icon: 'error',
+//                     title: 'Error',
+//                     text: 'Failed to load order details. Please try again.',
+//                 });
+//             }
+//         });
+//     });
+
+//     // Save Order Status
+//     if (saveStatusBtn) {
+//         saveStatusBtn.addEventListener('click', async function() {
+//             console.log('Save Order Status clicked');
+//             const orderId = document.getElementById('modalOrderId').dataset.orderId; // MongoDB _id
+//             const newStatus = document.getElementById('modalOrderStatus').value;
+//             console.log('Order ID for request:', orderId, 'New status:', newStatus);
+
+//             try {
+//                 console.log('Sending PATCH request to:', `/admin/order/update-status`);
+//                 const response = await fetch(`/admin/order/update-status`, {
+//                     method: 'PATCH',
+//                     headers: { 'Content-Type': 'application/json' },
+//                     body: JSON.stringify({ orderId, newStatus })
+//                 });
+//                 console.log('Response received:', response.status, response.statusText);
+
+//                 const result = await response.json();
+//                 if (!response.ok) {
+//                     console.error('Failed response:', { status: response.status, statusText: response.statusText, data: result });
+//                     Swal.fire({
+//                         icon: 'error',
+//                         title: 'Error',
+//                         text: result.message || 'Failed to update order status. Please try again.',
+//                     });
+//                     return;
+//                 }
+
+//                 console.log('Order status updated successfully:', result);
+//                 Swal.fire({
+//                     icon: 'success',
+//                     title: 'Success',
+//                     text: result.message || 'Order status updated successfully!',
+//                     timer: 1500,
+//                     showConfirmButton: false
+//                 }).then(() => {
+//                     bootstrap.Modal.getInstance(orderDetailsModal).hide();
+//                 });
+//             } catch (error) {
+//                 console.error('Error saving order status:', error.message, error.stack);
+//                 Swal.fire({
+//                     icon: 'error',
+//                     title: 'Error',
+//                     text: 'An unexpected error occurred while saving order status.',
+//                 });
+//             }
+//         });
+//     }
+
+//     // Update Product Status
+//     if (updateProductStatusBtn) {
+//         updateProductStatusBtn.addEventListener('click', async function() {
+//             console.log('Update Product Status clicked');
+//             const orderId = document.getElementById('modalOrderId').dataset.orderId || document.getElementById('modalOrderId').textContent;
+//             const productStatuses = Array.from(document.querySelectorAll('.product-status')).map(select => ({
+//                 productId: select.dataset.productId,
+//                 status: select.value
+//             }));
+//             console.log('Order ID for request:', orderId, 'Product statuses:', productStatuses);
+
+//             try {
+//                 console.log('Sending PUT request to:', `/admin/${orderId}/update-product-status`);
+//                 const response = await fetch(`/admin/${orderId}/update-product-status`, {
+//                     method: 'PUT',
+//                     headers: { 'Content-Type': 'application/json' },
+//                     body: JSON.stringify({ productStatuses })
+//                 });
+//                 console.log('Response received:', response.status, response.statusText);
+
+//                 const result = await response.json();
+//                 if (!response.ok) {
+//                     console.error('Failed response:', { status: response.status, statusText: response.statusText, data: result });
+//                     Swal.fire({
+//                         icon: 'error',
+//                         title: 'Error',
+//                         text: result.message || 'Failed to update product statuses. Please try again.',
+//                     });
+//                     return;
+//                 }
+
+//                 console.log('Product statuses updated successfully:', result);
+//                 Swal.fire({
+//                     icon: 'success',
+//                     title: 'Success',
+//                     text: result.message || 'Product statuses updated successfully!',
+//                     timer: 1500,
+//                     showConfirmButton: false
+//                 }).then(() => {
+//                     bootstrap.Modal.getInstance(orderDetailsModal).hide();
+//                 });
+//             } catch (error) {
+//                 console.error('Error saving product status:', error.message, error.stack);
+//                 Swal.fire({
+//                     icon: 'error',
+//                     title: 'Error',
+//                     text: 'An unexpected error occurred while saving product statuses.',
+//                 });
+//             }
+//         });
+//     }
+// });
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded and parsed');
+
+    const orderDetailsModal = document.getElementById('orderDetailsModal');
+    if (!orderDetailsModal) {
+        console.error('Order Details Modal not found in DOM');
+        return;
+    }
+    console.log('Modal element found:', orderDetailsModal);
+
+    const saveStatusBtn = document.getElementById('saveStatusBtn');
+    const updateProductStatusBtn = document.getElementById('updateProductStatusBtn');
+    if (!saveStatusBtn) console.error('Save Status button not found');
+    if (!updateProductStatusBtn) console.error('Update Product Status button not found');
+    console.log('Buttons initialized:', { saveStatusBtn: !!saveStatusBtn, updateProductStatusBtn: !!updateProductStatusBtn });
+
+    // Function to populate modal
+    function populateOrderModal(order) {
+        console.log('Populating modal with order data:', order);
+        const modalOrderId = document.getElementById('modalOrderId');
+        modalOrderId.textContent = order.orderID;
+        modalOrderId.dataset.orderId = order._id;
+
+        document.getElementById('modalOrderDate').textContent = new Date(order.orderDate).toLocaleString();
+        document.getElementById('modalCreatedAt').textContent = new Date(order.createdAt).toLocaleString();
+        document.getElementById('modalUpdatedAt').textContent = new Date(order.updatedAt).toLocaleString();
+        document.getElementById('modalOriginalAmount').textContent = order.originalAmount.toFixed(2);
+        document.getElementById('modalOfferDiscount').textContent = order.totalOfferDiscount.toFixed(2);
+        document.getElementById('modalCouponDiscount').textContent = order.appliedCoupon.discountAmount.toFixed(2);
+        document.getElementById('modalCouponCode').textContent = order.appliedCoupon.code || 'None';
+        document.getElementById('modalTotalAmount').textContent = order.totalAmount.toFixed(2);
+        document.getElementById('modalPaymentMethod').textContent = order.paymentMethod;
+        document.getElementById('modalPaymentStatus').textContent = order.paymentStatus;
+        document.getElementById('modalTransactionId').textContent = order.transactionId || 'N/A';
+
+        document.getElementById('modalShippingName').textContent = order.shippingAddress.fullName;
+        document.getElementById('modalShippingPhone').textContent = order.shippingAddress.phone;
+        document.getElementById('modalShippingAddress').textContent = order.shippingAddress.address;
+        document.getElementById('modalShippingCity').textContent = order.shippingAddress.city;
+        document.getElementById('modalShippingState').textContent = order.shippingAddress.state;
+        document.getElementById('modalShippingCountry').textContent = order.shippingAddress.country;
+        document.getElementById('modalShippingPincode').textContent = order.shippingAddress.pincode;
+
+        document.getElementById('modalReturnRequested').textContent = order.return.requested ? 'Yes' : 'No';
+        document.getElementById('modalReturnApproved').textContent = order.return.approved ? 'Yes' : 'No';
+        document.getElementById('modalRefundStatus').textContent = order.refundStatus;
+
+        document.getElementById('modalOrderStatus').value = order.orderStatus;
+        document.getElementById('modalIsDelivered').textContent = order.isDelivered ? 'Yes' : 'No';
+
+        const productList = document.getElementById('modalProducts');
+        productList.innerHTML = '';
+        console.log('Populating products:', order.products.length, 'items');
+        order.products.forEach((product, index) => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.innerHTML = `
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="${product.image}" class="img-fluid" alt="${product.name}">
+                    </div>
+                    <div class="col-md-10">
+                        <p><strong>Name:</strong> ${product.name}</p>
+                        <p><strong>Price:</strong> ₹${product.price.toFixed(2)}</p>
+                        <p><strong>Quantity:</strong> ${product.quantity}</p>
+                        <p><strong>Discount Applied:</strong> ₹${(product.appliedOffer?.discountAmount || 0).toFixed(2)}</p>
+                        <p><strong>Status:</strong>
+                            <select class="form-select product-status" data-product-id="${product._id}">
+                                <option value="Pending" ${product.productStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option value="Processing" ${product.productStatus === 'Processing' ? 'selected' : ''}>Processing</option>
+                                <option value="Shipped" ${product.productStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                <option value="Delivered" ${product.productStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="Cancelled" ${product.productStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                <option value="Cancellation Requested" ${product.productStatus === 'Cancellation Requested' ? 'selected' : ''}>Cancellation Requested</option>
+                                <option value="Return Requested" ${product.productStatus === 'Return Requested' ? 'selected' : ''}>Return Requested</option>
+                                <option value="Returned" ${product.productStatus === 'Returned' ? 'selected' : ''}>Returned</option>
+                            </select>
+                        </p>
+                    </div>
+                </div>
+            `;
+            productList.appendChild(li);
+            console.log(`Added product ${index + 1}:`, { id: product._id, name: product.name, status: product.productStatus });
+        });
+    }
+
+    // Function to update table row
+    function updateTableRow(order) {
+        // Find row by order._id (we’ll add data-order-id to <tr>)
+        const row = document.querySelector(`tr[data-order-id="${order._id}"]`);
+        if (row) {
+            console.log('Updating table row for order:', order._id);
+            row.cells[2].textContent = order.orderStatus; // Status column (index 2)
+            row.cells[3].textContent = `₹${order.totalAmount.toFixed(2)}`; // Price column (index 3)
+            // Update the View Details button’s data-order
+            const viewBtn = row.querySelector('.view-details');
+            if (viewBtn) {
+                viewBtn.dataset.order = JSON.stringify(order);
+            }
+        } else {
+            console.warn(`Table row for order ${order._id} not found`);
+        }
+    }
+
+    // View Details buttons
+    const viewButtons = document.querySelectorAll('.view-details');
+    console.log('Found view-details buttons:', viewButtons.length);
+    viewButtons.forEach((btn, index) => {
+        console.log(`Registering click listener for button ${index}:`, btn);
+        btn.addEventListener('click', function() {
+            console.log('View Details clicked:', this.dataset.order);
+            const order = JSON.parse(this.dataset.order);
+            populateOrderModal(order);
+            const modal = new bootstrap.Modal(orderDetailsModal);
+            console.log('Showing modal');
+            modal.show();
+        });
+    });
+
+    // Save Order Status
+    if (saveStatusBtn) {
+        saveStatusBtn.addEventListener('click', async function() {
+            console.log('Save Order Status clicked');
+            const orderId = document.getElementById('modalOrderId').dataset.orderId;
+            const newStatus = document.getElementById('modalOrderStatus').value;
+            console.log('Order ID for request:', orderId, 'New status:', newStatus);
+
+            try {
+                console.log('Sending PATCH request to:', `/admin/order/update-status`);
+                const response = await fetch(`/admin/order/update-status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId, newStatus })
+                });
+                console.log('Response received:', response.status, response.statusText);
+
+                const result = await response.json();
+                if (!response.ok) {
+                    console.error('Failed response:', { status: response.status, statusText: response.statusText, data: result });
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.message || 'Failed to update order status.',
+                    });
+                    return;
+                }
+
+                // Fetch updated order data
+                const updatedOrderResponse = await fetch(`/admin/order/${orderId}`);
+                const updatedOrderData = await updatedOrderResponse.json();
+                if (!updatedOrderResponse.ok) {
+                    throw new Error('Failed to fetch updated order');
+                }
+
+                console.log('Order status updated successfully:', result);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: result.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    const updatedOrder = updatedOrderData.order;
+                    populateOrderModal(updatedOrder); // Update modal
+                    updateTableRow(updatedOrder); // Update table
+                    bootstrap.Modal.getInstance(orderDetailsModal).hide();
+                });
+            } catch (error) {
+                console.error('Error saving order status:', error.message, error.stack);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An unexpected error occurred.',
                 });
             }
-
-
-            let statusDropdown = document.getElementById("modalOrderStatus");
-            statusDropdown.value = order.orderStatus || "Pending"; 
-
-     
-            let orderModal = new bootstrap.Modal(document.getElementById("orderDetailsModal"));
-            orderModal.show();
-
-        } catch (error) {
-            console.error("Error parsing order details:", error);
-            alert("Failed to load order details.");
-        }
-    });
-});
-
-
-function getBadgeClass(status) {
-    switch (status) {
-        case "Pending": return "warning";
-        case "Processing": return "primary";
-        case "Shipped": return "info";
-        case "Delivered": return "success";
-        case "Cancelled": return "danger";
-        default: return "secondary";
+        });
     }
-}
 
+    // Update Product Status
+    if (updateProductStatusBtn) {
+        updateProductStatusBtn.addEventListener('click', async function() {
+            console.log('Update Product Status clicked');
+            const orderId = document.getElementById('modalOrderId').dataset.orderId;
+            const productStatuses = Array.from(document.querySelectorAll('.product-status')).map(select => ({
+                productId: select.dataset.productId,
+                status: select.value
+            }));
+            console.log('Order ID for request:', orderId, 'Product statuses:', productStatuses);
 
+            try {
+                console.log('Sending PUT request to:', `/admin/${orderId}/update-product-status`);
+                const response = await fetch(`/admin/${orderId}/update-product-status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productStatuses })
+                });
+                console.log('Response received:', response.status, response.statusText);
 
-    document.getElementById("saveStatusBtn").addEventListener("click", function () {
-        let selectedOrderId = document.getElementById("modalOrderId").textContent;
-        let newStatus = document.getElementById("modalOrderStatus").value; 
+                const result = await response.json();
+                if (!response.ok) {
+                    console.error('Failed response:', { status: response.status, statusText: response.statusText, data: result });
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.message || 'Failed to update product statuses.',
+                    });
+                    return;
+                }
 
-        fetch(`/admin/order/update-status`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ orderId: selectedOrderId, newStatus: newStatus }) 
-        })
-        .then(response => response.json())
-        .then(data => {
-            Swal.fire("Success", data.message, "success").then(() => {
-                window.location.reload();
-            });
-        })
-        .catch(error => console.error("Error updating order status:", error));
-    });
+                // Fetch updated order data
+                const updatedOrderResponse = await fetch(`/admin/order/${orderId}`);
+                const updatedOrderData = await updatedOrderResponse.json();
+                if (!updatedOrderResponse.ok) {
+                    throw new Error('Failed to fetch updated order');
+                }
+
+                console.log('Product statuses updated successfully:', result);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: result.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    const updatedOrder = updatedOrderData.order;
+                    populateOrderModal(updatedOrder); // Update modal
+                    updateTableRow(updatedOrder); // Update table
+                    bootstrap.Modal.getInstance(orderDetailsModal).hide();
+                });
+            } catch (error) {
+                console.error('Error saving product status:', error.message, error.stack);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An unexpected error occurred.',
+                });
+            }
+        });
+    }
 });
+
 
 
  </script>

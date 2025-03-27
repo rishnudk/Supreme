@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Success</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .illustration { max-width: 300px; margin: 20px auto; }
+    </style>
+</head>
+<body>
+
+
+    <%- include('../partials/userNavbar') %>
+
+
+    <div class="container text-center py-5">
+        <!-- Dynamic SVG generation instead of using image file -->
+        <div id="success-icon" class="mb-4" style="height: 120px; display: flex; justify-content: center; align-items: center;">
+            <!-- Dynamic SVG will be inserted here -->
+        </div>
+        
+        <h2 class="text-success">Order Placed Successfully!</h2>
+        <p class="text-muted">Your order #<%= order.orderID %> has been confirmed. You'll receive an update soon.</p>
+        <div class="mt-4">
+            <a href="/user/shop" class="btn btn-primary me-3">Continue Shopping</a>
+            <a href="/user/order-details/<%= order._id %>" class="btn btn-outline-secondary">View Order Details</a>
+        </div>
+    </div>
+
+    <%- include('../partials/userFooter') %>    
+
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Generate order success SVG icon dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const successIcon = document.getElementById('success-icon');
+            
+            // Create SVG element dynamically
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(svgNS, "svg");
+            svg.setAttribute("width", "120");
+            svg.setAttribute("height", "120");
+            svg.setAttribute("viewBox", "0 0 120 120");
+            
+            // Create circle background
+            const circle = document.createElementNS(svgNS, "circle");
+            circle.setAttribute("cx", "60");
+            circle.setAttribute("cy", "60");
+            circle.setAttribute("r", "54");
+            circle.setAttribute("fill", "#d4edda");
+            circle.setAttribute("stroke", "#28a745");
+            circle.setAttribute("stroke-width", "2");
+            
+            // Create check mark
+            const checkGroup = document.createElementNS(svgNS, "g");
+            checkGroup.setAttribute("stroke", "#28a745");
+            checkGroup.setAttribute("stroke-width", "8");
+            checkGroup.setAttribute("stroke-linecap", "round");
+            checkGroup.setAttribute("stroke-linejoin", "round");
+            checkGroup.setAttribute("fill", "none");
+            
+            const check = document.createElementNS(svgNS, "path");
+            check.setAttribute("d", "M35,60 L50,75 L85,40");
+            
+            // Add elements to SVG
+            checkGroup.appendChild(check);
+            svg.appendChild(circle);
+            svg.appendChild(checkGroup);
+            
+            // Add SVG to container
+            successIcon.appendChild(svg);
+        });
+    </script>
+</body>
+</html>

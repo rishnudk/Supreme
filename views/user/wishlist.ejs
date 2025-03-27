@@ -6,6 +6,8 @@
     <title>Wishlist - Furniture Store</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    
     <style>
         :root {
             --primary-color: #4F6367;
@@ -155,6 +157,78 @@
             color: var(--accent-color);
             cursor: pointer;
         }
+
+
+        .swal-custom {
+    border-radius: 12px;
+    background: #F4F7F7; /* Light gray */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.swal-title-custom {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #E5574E; /* Coral-red */
+    margin-bottom: 10px;
+}
+
+.swal-text-custom {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #333333; /* Dark gray for readability */
+}
+
+.swal-confirm-custom {
+    background-color: #E5574E; /* Coral-red */
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFFFFF; /* White */
+    transition: background-color 0.3s ease;
+}
+
+.swal-confirm-custom:hover {
+    background-color: #F87168; /* Lighter coral-red */
+}
+
+.swal-cancel-custom {
+    background-color: #FFFFFF; /* White */
+    border: 1px solid #E5574E; /* Coral-red border */
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #E5574E; /* Coral-red */
+    transition: background-color 0.3s ease;
+}
+
+.swal-cancel-custom:hover {
+    background-color: #F4F7F7; /* Light gray */
+}
+
+.swal2-timer-progress-bar {
+    background: #E5574E; /* Coral-red */
+}
+
+/* Wishlist-specific styles */
+.remove-item {
+    background: none;
+    border: none;
+    color: #E5574E; /* Coral-red */
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.remove-item:hover {
+    color: #F87168; /* Lighter coral-red */
+}
     </style>
 </head>
 <body>
@@ -166,376 +240,697 @@
 
     <div class="container wishlist-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>My Wishlist (4)</h2>
-            <div>
-                <button class="btn btn-outline-accent me-2">
-                    <i class="bi bi-share"></i> Share Wishlist
-                </button>
-                <button class="btn btn-accent">
-                    <i class="bi bi-bag"></i> Add All to Cart
-                </button>
-            </div>
+            <h2>My Wishlist</h2>
+          
         </div>
 
         <!-- Wishlist Items -->
         <div class="wishlist-items">
-            <!-- Item 1 -->
-            <div class="wishlist-item">
-                <div class="row align-items-center">
-                    <div class="col-md-2">
-                        <img src="/api/placeholder/150/150" alt="Modern Sofa" class="img-fluid" style="border-radius: 8px;">
-                    </div>
-                    <div class="col-md-5">
-                        <h5>Modern Scandinavian Sofa</h5>
-                        <p class="text-muted mb-1">3-seater | Light Grey</p>
-                        <div class="stock-status in-stock">
-                            <i class="bi bi-check-circle"></i> In Stock
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <span class="old-price">₹1,599.00</span>
-                        <span class="price-tag">₹1,299.00</span>
-                        <span class="discount-badge">-19%</span>
-                    </div>
-                    <div class="col-md-3 text-end">
-                        <button class="btn btn-accent mb-2">
-                            <i class="bi bi-bag-plus"></i> Add to Cart
-                        </button>
-                        <div>
-                            <button class="share-btn me-2" title="Share">
-                                <i class="bi bi-share"></i>
-                            </button>
-                            <span class="remove-item" title="Remove" onclick="removeItem(1)">
-                                <i class="bi bi-trash"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <% if (wishlist.length > 0) { %>
+                <div class="wishlist-items">
+                    <% wishlist.forEach(item => { %>
+                        <div class="wishlist-item" data-product-id="<%= item.product._id %>">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img src="<%= item.product.images[0] %>" alt="<%= item.product.name %>" class="img-fluid" style="border-radius: 8px;">
+                                </div>
+                                <div class="col-md-5">
+                                    <h5><%= item.product.name %></h5>
+                                    <p class="text-muted mb-1"><%= item.product.description %></p>
+                    
+                                    <!-- Stock check -->
+                                    <div class="stock-status <%= item.product.variant && item.product.variant.stock > 0 ? 'in-stock' : 'out-of-stock' %>">
+                                        <i class="bi bi-check-circle"></i> 
+                                        <%= item.product.variant && item.product.variant.stock > 0 ? 'In Stock' : 'Out of Stock' %>
+                                    </div>
+                                </div>
 
-            <!-- Item 2 -->
-            <div class="wishlist-item">
-                <div class="row align-items-center">
-                    <div class="col-md-2">
-                        <img src="/api/placeholder/150/150" alt="Coffee Table" class="img-fluid" style="border-radius: 8px;">
-                    </div>
-                    <div class="col-md-5">
-                        <h5>Minimalist Coffee Table</h5>
-                        <p class="text-muted mb-1">Walnut Finish | 120x60 cm</p>
-                        <div class="stock-status low-stock">
-                            <i class="bi bi-exclamation-triangle"></i> Only 2 Left
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <span class="price-tag">₹599.00</span>
-                    </div>
-                    <div class="col-md-3 text-end">
-                        <button class="btn btn-accent mb-2">
-                            <i class="bi bi-bag-plus"></i> Add to Cart
-                        </button>
-                        <div>
-                            <button class="share-btn me-2" title="Share">
-                                <i class="bi bi-share"></i>
-                            </button>
-                            <span class="remove-item" title="Remove" onclick="removeItem(2)">
-                                <i class="bi bi-trash"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                <div class="col-md-2">
+                                    <% if (item.discount) { %>
+                                        <s>₹<%= item.originalPrice.toFixed(2) %></s>
+                                        <h5 class="mb-0 text-success">₹<%= item.discountedPrice.toFixed(2) %> (<%= item.offerPercentage %>% off)</h5>
+                                    <% } else { %>
+                                        <h5 class="mb-0">₹<%= item.originalPrice.toFixed(2) %></h5>
+                                    <% } %>
+                                </div>
 
-            <!-- Item 3 -->
-            <div class="wishlist-item">
-                <div class="row align-items-center">
-                    <div class="col-md-2">
-                        <img src="/api/placeholder/150/150" alt="Dining Table" class="img-fluid" style="border-radius: 8px;">
-                    </div>
-                    <div class="col-md-5">
-                        <h5>Scandinavian Dining Table Set</h5>
-                        <p class="text-muted mb-1">6 Seater | Oak Wood</p>
-                        <div class="stock-status out-stock">
-                            <i class="bi bi-x-circle"></i> Out of Stock
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <span class="old-price">₹2,999.00</span>
-                        <span class="price-tag">₹2,499.00</span>
-                        <span class="discount-badge">-17%</span>
-                    </div>
-                    <div class="col-md-3 text-end">
-                        <button class="btn btn-outline-accent mb-2">
-                            <i class="bi bi-bell"></i> Notify When Available
-                        </button>
-                        <div>
-                            <button class="share-btn me-2" title="Share">
-                                <i class="bi bi-share"></i>
-                            </button>
-                            <span class="remove-item" title="Remove" onclick="removeItem(3)">
-                                <i class="bi bi-trash"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Item 4 -->
-            <div class="wishlist-item">
-                <div class="row align-items-center">
-                    <div class="col-md-2">
-                        <img src="/api/placeholder/150/150" alt="Bookshelf" class="img-fluid" style="border-radius: 8px;">
-                    </div>
-                    <div class="col-md-5">
-                        <h5>Modern Bookshelf</h5>
-                        <p class="text-muted mb-1">5 Shelves | White</p>
-                        <div class="stock-status in-stock">
-                            <i class="bi bi-check-circle"></i> In Stock
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <span class="price-tag">₹899.00</span>
-                    </div>
-                    <div class="col-md-3 text-end">
-                        <button class="btn btn-accent mb-2">
-                            <i class="bi bi-bag-plus"></i> Add to Cart
-                        </button>
-                        <div>
-                            <button class="share-btn me-2" title="Share">
-                                <i class="bi bi-share"></i>
-                            </button>
-                            <span class="remove-item" title="Remove" onclick="removeItem(4)">
-                                <i class="bi bi-trash"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recommendations Section -->
-        <div class="mt-5">
-            <h4 class="mb-3">You Might Also Like</h4>
-            <div class="row">
-                <!-- Recommendation 1 -->
-                <div class="col-md-3 mb-4">
-                    <div class="recommendation-card">
-                        <div class="position-relative">
-                            <img src="/api/placeholder/250/200" alt="Side Table" class="img-fluid w-100">
-                            <button class="position-absolute top-0 end-0 m-2 bg-white rounded-circle p-1" title="Add to wishlist">
-                                <i class="bi bi-heart"></i>
-                            </button>
-                        </div>
-                        <div class="p-3">
-                            <h6 class="recommendation-title">Nordic Side Table</h6>
-                            <div class="d-flex align-items-center">
-                                <span class="price-tag">₹399.00</span>
-                            </div>
-                            <button class="btn btn-sm btn-outline-accent w-100 mt-2">
+                                
+                                <div class="col-md-3 text-end">
+                                   <% if (item.product.variant && item.product.variant.stock > 0) { %>
+                            <button class="btn btn-accent mb-2 add-to-cart" onclick="addToCart('<%= item.product._id %>')">
                                 <i class="bi bi-bag-plus"></i> Add to Cart
                             </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Recommendation 2 -->
-                <div class="col-md-3 mb-4">
-                    <div class="recommendation-card">
-                        <div class="position-relative">
-                            <img src="/api/placeholder/250/200" alt="Desk Lamp" class="img-fluid w-100">
-                            <button class="position-absolute top-0 end-0 m-2 bg-white rounded-circle p-1" title="Add to wishlist">
-                                <i class="bi bi-heart"></i>
-                            </button>
-                        </div>
-                        <div class="p-3">
-                            <h6 class="recommendation-title">Minimalist Desk Lamp</h6>
-                            <div class="d-flex align-items-center">
-                                <span class="old-price">₹249.00</span>
-                                <span class="price-tag">₹199.00</span>
-                                <span class="discount-badge">-20%</span>
+                        <% } %>
+                    
+                                    <div>
+                                        <button class="remove-item btn" title="Remove" onclick="removeFromWishlist('<%= item.product._id %>')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <button class="btn btn-sm btn-outline-accent w-100 mt-2">
-                                <i class="bi bi-bag-plus"></i> Add to Cart
-                            </button>
                         </div>
-                    </div>
+                    <% }); %>
                 </div>
-                
-                <!-- Recommendation 3 -->
-                <div class="col-md-3 mb-4">
-                    <div class="recommendation-card">
-                        <div class="position-relative">
-                            <img src="/api/placeholder/250/200" alt="Accent Chair" class="img-fluid w-100">
-                            <button class="position-absolute top-0 end-0 m-2 bg-white rounded-circle p-1" title="Add to wishlist">
-                                <i class="bi bi-heart"></i>
-                            </button>
-                        </div>
-                        <div class="p-3">
-                            <h6 class="recommendation-title">Modern Accent Chair</h6>
-                            <div class="d-flex align-items-center">
-                                <span class="price-tag">₹699.00</span>
-                            </div>
-                            <button class="btn btn-sm btn-outline-accent w-100 mt-2">
-                                <i class="bi bi-bag-plus"></i> Add to Cart
-                            </button>
-                        </div>
-                    </div>
+            <% } else { %>
+                <!-- Show Empty Wishlist -->
+                <div class="empty-wishlist text-center">
+                    <i class="bi bi-heart display-4"></i>
+                    <h4 class="mt-2">Your Wishlist is Empty</h4>
+                    <p class="text-muted">Browse our collection and save your favorite items for later.</p>
+                    <button class="btn btn-accent mt-3 continue-shopping">
+                        <i class="bi bi-shop"></i> Continue Shopping
+                    </button>
                 </div>
-                
-                <!-- Recommendation 4 -->
-                <div class="col-md-3 mb-4">
-                    <div class="recommendation-card">
-                        <div class="position-relative">
-                            <img src="/api/placeholder/250/200" alt="Wall Shelf" class="img-fluid w-100">
-                            <button class="position-absolute top-0 end-0 m-2 bg-white rounded-circle p-1" title="Add to wishlist">
-                                <i class="bi bi-heart"></i>
-                            </button>
-                        </div>
-                        <div class="p-3">
-                            <h6 class="recommendation-title">Floating Wall Shelf Set</h6>
-                            <div class="d-flex align-items-center">
-                                <span class="price-tag">₹349.00</span>
-                            </div>
-                            <button class="btn btn-sm btn-outline-accent w-100 mt-2">
-                                <i class="bi bi-bag-plus"></i> Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Empty Wishlist State (Hidden by default) -->
-        <div class="empty-wishlist" style="display: none;">
-            <i class="bi bi-heart"></i>
-            <h4>Your Wishlist is Empty</h4>
-            <p class="text-muted">Browse our collection and save your favorite items for later.</p>
-            <button class="btn btn-accent mt-3">
-                <i class="bi bi-shop"></i> Continue Shopping
-            </button>
+            <% } %>
         </div>
     </div>
+    
+        
 
-    <!-- Share Modal -->
-    <div class="modal fade" id="shareModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Share Your Wishlist</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Share your wishlist with friends and family</p>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" value="https://yourfurniturestore.com/wishlist/johndoe" readonly>
-                        <button class="btn btn-outline-secondary" type="button" onclick="copyWishlistLink()">
-                            <i class="bi bi-clipboard"></i>
-                        </button>
-                    </div>
-                    <div class="d-flex justify-content-center gap-3 mt-4">
-                        <button class="btn btn-outline-primary"><i class="bi bi-facebook"></i></button>
-                        <button class="btn btn-outline-info"><i class="bi bi-twitter"></i></button>
-                        <button class="btn btn-outline-danger"><i class="bi bi-pinterest"></i></button>
-                        <button class="btn btn-outline-success"><i class="bi bi-whatsapp"></i></button>
-                        <button class="btn btn-outline-secondary"><i class="bi bi-envelope"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        
 
+       
+    
+            <%- include('../partials/userFooter') %>
+
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Share wishlist
-        document.querySelector('.btn-outline-accent').addEventListener('click', function() {
-            var shareModal = new bootstrap.Modal(document.getElementById('shareModal'));
-            shareModal.show();
+
+
+
+
+
+
+// document.addEventListener("DOMContentLoaded", function () {
+//     // Add to Cart functionality
+//     document.querySelectorAll(".add-to-cart").forEach(button => {
+//         button.addEventListener("click", async function () {
+//             const productId = this.getAttribute("data-product-id");
+
+//             try {
+//                 const response = await fetch("/user/cart/add", {
+//                     method: "POST",
+//                     headers: { "Content-Type": "application/json" },
+//                     body: JSON.stringify({ productId, quantity: 1, color: "Default", fromWishlist: true })
+//                 });
+
+//                 const data = await response.json();
+//                 if (data.success) {
+//                     this.closest(".wishlist-item").remove(); // Remove item from UI
+
+//                     Swal.fire({
+//                         icon: "success",
+//                         title: "Added to Cart!",
+//                         text: "Product has been added to your cart.",
+//                         toast: true,
+//                         position: "top-end",
+//                         showConfirmButton: false,
+//                         timer: 3000
+//                     });
+
+//                     // Check if wishlist is now empty
+//                     const remainingItems = document.querySelectorAll(".wishlist-item").length;
+//                     if (remainingItems === 0) {
+//                         const wishlistContainer = document.querySelector(".wishlist-items")?.parentElement;
+//                         if (wishlistContainer) {
+//                             wishlistContainer.innerHTML = `
+//                                 <div class="empty-wishlist text-center">
+//                                     <i class="bi bi-heart display-4"></i>
+//                                     <h4 class="mt-2">Your Wishlist is Empty</h4>
+//                                     <p class="text-muted">Browse our collection and save your favorite items for later.</p>
+//                                     <button class="btn btn-accent mt-3 continue-shopping">
+//                                         <i class="bi bi-shop"></i> Continue Shopping
+//                                     </button>
+//                                 </div>
+//                             `;
+//                             // Re-attach event listener to the new "Continue Shopping" button
+//                             document.querySelector(".continue-shopping").addEventListener("click", function () {
+//                                 window.location.href = "/user/shop";
+//                             });
+//                         }
+//                     }
+//                 } else {
+//                     Swal.fire({
+//                         icon: "error",
+//                         title: "Failed to Add",
+//                         text: "Could not add product to cart.",
+//                         toast: true,
+//                         position: "top-end",
+//                         showConfirmButton: false,
+//                         timer: 3000
+//                     });
+//                 }
+//             } catch (error) {
+//                 console.error("Add to cart error:", error);
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Error!",
+//                     text: "An error occurred. Please try again.",
+//                     toast: true,
+//                     position: "top-end",
+//                     showConfirmButton: false,
+//                     timer: 3000
+//                 });
+//             }
+//         });
+//     });
+
+//     // Remove from Wishlist functionality
+//     document.querySelectorAll(".remove-item").forEach(button => {
+//         button.addEventListener("click", async function () {
+//             const productId = this.getAttribute("data-product-id");
+
+//             try {
+//                 const response = await fetch("/user/wishlist/remove", {
+//                     method: "POST",
+//                     headers: { "Content-Type": "application/json" },
+//                     body: JSON.stringify({ productId })
+//                 });
+
+//                 const result = await response.json();
+
+//                 if (response.ok) {
+//                     this.closest(".wishlist-item").remove(); // Remove item from UI
+
+//                     Swal.fire({
+//                         icon: "success",
+//                         title: "Removed!",
+//                         text: "Product has been removed from your wishlist.",
+//                         toast: true,
+//                         position: "top-end",
+//                         showConfirmButton: false,
+//                         timer: 3000
+//                     });
+
+//                     // Check if wishlist is now empty
+//                     const remainingItems = document.querySelectorAll(".wishlist-item").length;
+//                     if (remainingItems === 0) {
+//                         const wishlistContainer = document.querySelector(".wishlist-items")?.parentElement;
+//                         if (wishlistContainer) {
+//                             wishlistContainer.innerHTML = `
+//                                 <div class="empty-wishlist text-center">
+//                                     <i class="bi bi-heart display-4"></i>
+//                                     <h4 class="mt-2">Your Wishlist is Empty</h4>
+//                                     <p class="text-muted">Browse our collection and save your favorite items for later.</p>
+//                                     <button class="btn btn-accent mt-3 continue-shopping">
+//                                         <i class="bi bi-shop"></i> Continue Shopping
+//                                     </button>
+//                                 </div>
+//                             `;
+//                             // Re-attach event listener to the new "Continue Shopping" button
+//                             document.querySelector(".continue-shopping").addEventListener("click", function () {
+//                                 window.location.href = "/user/shop";
+//                             });
+//                         }
+//                     }
+//                 } else {
+//                     Swal.fire({
+//                         icon: "error",
+//                         title: "Failed!",
+//                         text: result.error || "Could not remove product from wishlist.",
+//                         toast: true,
+//                         position: "top-end",
+//                         showConfirmButton: false,
+//                         timer: 3000
+//                     });
+//                 }
+//             } catch (error) {
+//                 console.error("Error removing from wishlist:", error);
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Error!",
+//                     text: "An error occurred. Please try again.",
+//                     toast: true,
+//                     position: "top-end",
+//                     showConfirmButton: false,
+//                     timer: 3000
+//                 });
+//             }
+//         });
+//     });
+
+//     // Redirect user when clicking 'Continue Shopping' (for initial page load)
+//     const continueShoppingBtn = document.querySelector(".continue-shopping");
+//     if (continueShoppingBtn) {
+//         continueShoppingBtn.addEventListener("click", function () {
+//             window.location.href = "/user/shop";
+//         });
+//     }
+// }); // Only one closing bracket here
+
+
+
+
+
+// async function addToCart(productId) {
+//     try {
+//         console.log(`Adding to cart: productId=${productId}`);
+//         const response = await fetch('/user/wishlist/add-from-wishlist', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ productId, quantity: 1 })
+//         });
+
+//         console.log(`Response status: ${response.status}`);
+//         const result = await response.json();
+//         console.log('Response data:', result);
+
+//         if (response.ok && result.success) {
+//             Swal.fire({
+//                 icon: "success",
+//                 title: "Added to Cart!",
+//                 text: result.message || "The item has been added to your cart.",
+//                 toast: true,
+//                 position: "top-end",
+//                 showConfirmButton: false,
+//                 timer: 1000,
+//                 customClass: {
+//                     popup: 'swal-custom',
+//                     title: 'swal-title-custom',
+//                     content: 'swal-text-custom'
+//                 },
+//                 background: '#F4F7F7',
+//                 timerProgressBar: true
+//             });
+//         } else {
+//             throw new Error(result.message || "Failed to add to cart");
+//         }
+//     } catch (error) {
+//         console.error("Error adding to cart:", error.message, error.stack);
+//         Swal.fire({
+//             icon: "error",
+//             title: "Oops!",
+//             text: "Something went wrong. Please try again.",
+//             toast: true,
+//             position: "top-end",
+//             showConfirmButton: false,
+//             timer: 1000,
+//             customClass: {
+//                 popup: 'swal-custom',
+//                 title: 'swal-title-custom',
+//                 content: 'swal-text-custom'
+//             },
+//             background: '#F4F7F7'
+//         });
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+// async function addToCart(productId) {
+//     try {
+//         console.log(`Adding to cart: productId=${productId}`);
+//         const response = await fetch('/user/wishlist/add-from-wishlist', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ productId, quantity: 1 })
+//         });
+
+//         console.log(`Response status: ${response.status}`);
+//         const result = await response.json();
+//         console.log('Response data:', result);
+
+//         if (response.ok && result.success) {
+//             Swal.fire({
+//                 icon: "success",
+//                 title: "Added to Cart!",
+//                 text: result.message || "The item has been added to your cart.",
+//                 toast: true,
+//                 position: "top-end",
+//                 showConfirmButton: false,
+//                 timer: 1000,
+//                 customClass: {
+//                     popup: 'swal-custom',
+//                     title: 'swal-title-custom',
+//                     content: 'swal-text-custom'
+//                 },
+//                 background: '#F4F7F7',
+//                 timerProgressBar: true
+//             });
+
+//             // Remove the wishlist item from the DOM
+//             const wishlistItem = document.querySelector(`.wishlist-item[data-product-id="${productId}"]`);
+//             if (wishlistItem) {
+//                 wishlistItem.remove();
+//                 console.log(`Removed product ${productId} from wishlist UI`);
+
+//                 // Check if wishlist is now empty and update UI if needed
+//                 const remainingItems = document.querySelectorAll('.wishlist-item');
+//                 if (remainingItems.length === 0) {
+//                     const wishlistItemsContainer = document.querySelector('.wishlist-items');
+//                     wishlistItemsContainer.innerHTML = `
+//                         <div class="empty-wishlist text-center">
+//                             <i class="bi bi-heart display-4"></i>
+//                             <h4 class="mt-2">Your Wishlist is Empty</h4>
+//                             <p class="text-muted">Browse our collection and save your favorite items for later.</p>
+//                             <button class="btn btn-accent mt-3 continue-shopping">
+//                                 <i class="bi bi-shop"></i> Continue Shopping
+//                             </button>
+//                         </div>
+//                     `;
+//                 }
+//             } else {
+//                 console.log(`Wishlist item with productId ${productId} not found in DOM`);
+//             }
+//         } else {
+//             throw new Error(result.message || "Failed to add to cart");
+//         }
+//     } catch (error) {
+//         console.error("Error adding to cart:", error.message, error.stack);
+//         Swal.fire({
+//             icon: "error",
+//             title: "Oops!",
+//             text: "Something went wrong. Please try again.",
+//             toast: true,
+//             position: "top-end",
+//             showConfirmButton: false,
+//             timer: 1000,
+//             customClass: {
+//                 popup: 'swal-custom',
+//                 title: 'swal-title-custom',
+//                 content: 'swal-text-custom'
+//             },
+//             background: '#F4F7F7'
+//         });
+//     }
+// }
+
+
+
+
+
+
+
+async function addToCart(productId) {
+    try {
+        console.log(`Adding to cart: productId=${productId}`);
+        const response = await fetch('/user/wishlist/add-from-wishlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId, quantity: 1 })
         });
 
-        // Copy wishlist link
-        function copyWishlistLink() {
-            var copyText = document.querySelector('.input-group input');
-            copyText.select();
-            document.execCommand("copy");
-            
+        const result = await response.json();
+        console.log(`Response status: ${response.status}, Result:`, result);
+
+        if (response.ok && result.success) {
+            // Success case
             Swal.fire({
-                icon: 'success',
-                title: 'Link Copied!',
-                text: 'Wishlist link has been copied to clipboard.',
+                icon: "success",
+                title: "Added to Cart!",
+                text: result.message || "The item has been added to your cart.",
                 toast: true,
-                position: 'top-end',
+                position: "top-end",
                 showConfirmButton: false,
-                timer: 3000
+                timer: 1000,
+                customClass: {
+                    popup: 'swal-custom',
+                    title: 'swal-title-custom',
+                    content: 'swal-text-custom'
+                },
+                background: '#F4F7F7',
+                timerProgressBar: true
             });
-        }
 
-        // Remove item from wishlist
-        function removeItem(id) {
-            Swal.fire({
-                title: 'Remove Item?',
-                text: "Are you sure you want to remove this item from your wishlist?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FE5F55',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Yes, remove it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Here you would typically make an API call to remove the item
-                    // For demo purposes, we'll just show a success message
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Removed!',
-                        text: 'The item has been removed from your wishlist.',
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                    
-                    // Check if wishlist would be empty (demo only)
-                    const wishlistItems = document.querySelectorAll('.wishlist-item');
-                    if (wishlistItems.length === 1) {
-                        document.querySelector('.wishlist-items').style.display = 'none';
-                        document.querySelector('.empty-wishlist').style.display = 'block';
-                        document.querySelector('h2').innerHTML = 'My Wishlist (0)';
-                    } else {
-                        // For demo, just remove the clicked item
-                        document.querySelectorAll('.wishlist-item')[id-1].style.display = 'none';
-                        document.querySelector('h2').innerHTML = `My Wishlist (${wishlistItems.length-1})`;
-                    }
+            // Remove the wishlist item from the DOM
+            const wishlistItem = document.querySelector(`.wishlist-item[data-product-id="${productId}"]`);
+            if (wishlistItem) {
+                wishlistItem.remove();
+                console.log(`Removed product ${productId} from wishlist UI`);
+                const remainingItems = document.querySelectorAll('.wishlist-item');
+                if (remainingItems.length === 0) {
+                    document.querySelector('.wishlist-items').innerHTML = `
+                        <div class="empty-wishlist text-center">
+                            <i class="bi bi-heart display-4"></i>
+                            <h4 class="mt-2">Your Wishlist is Empty</h4>
+                            <p class="text-muted">Browse our collection and save your favorite items for later.</p>
+                            <button class="btn btn-accent mt-3 continue-shopping">
+                                <i class="bi bi-shop"></i> Continue Shopping
+                            </button>
+                        </div>
+                    `;
                 }
+            }
+        } else {
+            // Handle all error cases (400, 401, 404, 500) with specific messages
+            Swal.fire({
+                icon: "error",
+                title: "Oops!",
+                text: result.message || "Failed to add to cart", // Use backend message
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 1500, // Longer timer for readability
+                customClass: {
+                    popup: 'swal-custom',
+                    title: 'swal-title-custom',
+                    content: 'swal-text-custom'
+                },
+                background: '#F4F7F7'
             });
         }
+    } catch (error) {
+        // Catch unexpected errors (e.g., network issues)
+        console.error("Error adding to cart:", error.message, error.stack);
+        Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "An unexpected error occurred. Please try again.", // Fallback for non-JSON errors
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+                popup: 'swal-custom',
+                title: 'swal-title-custom',
+                content: 'swal-text-custom'
+            },
+            background: '#F4F7F7'
+        });
+    }
+}
 
-        // Add all to cart
-        document.querySelector('.btn-accent:not(.mb-2):not(.mt-2):not(.mt-3):not(.btn-sm)').addEventListener('click', function() {
-            Swal.fire({
-                title: 'Added to Cart!',
-                text: 'All available items have been added to your cart.',
-                icon: 'success',
-                confirmButtonText: 'Go to Cart',
-                confirmButtonColor: '#FE5F55',
-                showCancelButton: true,
-                cancelButtonText: 'Continue Shopping',
-                cancelButtonColor: '#6c757d'
-            });
+
+
+
+
+
+// async function removeFromWishlist(productId) {
+//     try {
+//         // Show confirmation dialog
+//         const result = await Swal.fire({
+//             title: "Are You Sure?",
+//             text: "Do you want to remove this item from your wishlist?",
+//             icon: "question",
+//             showCancelButton: true,
+//             confirmButtonText: "Yes, Remove",
+//             cancelButtonText: "No, Keep",
+//             customClass: {
+//                 popup: 'swal-custom',
+//                 title: 'swal-title-custom',
+//                 content: 'swal-text-custom',
+//                 confirmButton: 'swal-confirm-custom',
+//                 cancelButton: 'swal-cancel-custom'
+//             },
+//             backdrop: `rgba(0, 0, 0, 0.5)`,
+//             buttonsStyling: false // Use custom classes
+//         });
+
+//         // If user cancels, exit
+//         if (!result.isConfirmed) {
+//             return;
+//         }
+
+//         // Proceed with removal
+//         const response = await fetch('/user/wishlist/remove', { // Adjust route if needed
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ productId })
+//         });
+
+//         const data = await response.json();
+
+//         if (response.ok && data.message) {
+//             // Success message
+//             await Swal.fire({
+//                 title: "Removed",
+//                 text: "The item has been removed from your wishlist.",
+//                 icon: "success",
+//                 confirmButtonText: "OK",
+//                 customClass: {
+//                     popup: 'swal-custom',
+//                     title: 'swal-title-custom',
+//                     content: 'swal-text-custom',
+//                     confirmButton: 'swal-confirm-custom'
+//                 },
+//                 backdrop: `rgba(0, 0, 0, 0.5)`,
+//                 timer: 1000,
+//                 timerProgressBar: true
+//             });
+//             window.location.reload(); // Refresh to update wishlist
+//         } else {
+//             throw new Error(data.error || "Failed to remove item");
+//         }
+//     } catch (error) {
+//         console.error("Error removing from wishlist:", error);
+//         Swal.fire({
+//             title: "Error",
+//             text: "Something went wrong. Please try again.",
+//             icon: "error",
+//             confirmButtonText: "OK",
+//             customClass: {
+//                 popup: 'swal-custom',
+//                 title: 'swal-title-custom',
+//                 content: 'swal-text-custom',
+//                 confirmButton: 'swal-confirm-custom'
+//             },
+//             backdrop: `rgba(0, 0, 0, 0.5)`
+//         });
+//     }
+// }
+
+
+
+
+    // Redirect user when clicking 'Continue Shopping' (for initial page load)
+    
+    
+    
+    
+    
+    
+    
+    
+    async function removeFromWishlist(productId) {
+    try {
+        // Show confirmation dialog
+        const result = await Swal.fire({
+            title: "Are You Sure?",
+            text: "Do you want to remove this item from your wishlist?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Remove",
+            cancelButtonText: "No, Keep",
+            customClass: {
+                popup: 'swal-custom',
+                title: 'swal-title-custom',
+                content: 'swal-text-custom',
+                confirmButton: 'swal-confirm-custom',
+                cancelButton: 'swal-cancel-custom'
+            },
+            backdrop: `rgba(0, 0, 0, 0.5)`,
+            buttonsStyling: false // Use custom classes
         });
 
-        // Individual add to cart
-        document.querySelectorAll('.btn-accent.mb-2').forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Added to Cart!',
-                    text: 'Item has been added to your cart.',
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-            });
+        // If user cancels, exit
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        // Proceed with removal
+        const response = await fetch('/user/wishlist/remove', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId })
         });
+
+        const data = await response.json();
+
+        if (response.ok && data.message) {
+            // Success message
+            await Swal.fire({
+                title: "Removed",
+                text: "The item has been removed from your wishlist.",
+                icon: "success",
+                confirmButtonText: "OK",
+                customClass: {
+                    popup: 'swal-custom',
+                    title: 'swal-title-custom',
+                    content: 'swal-text-custom',
+                    confirmButton: 'swal-confirm-custom'
+                },
+                backdrop: `rgba(0, 0, 0, 0.5)`,
+                timer: 1000,
+                timerProgressBar: true
+            });
+
+            // Remove the wishlist item from the DOM
+            const wishlistItem = document.querySelector(`.wishlist-item[data-product-id="${productId}"]`);
+            if (wishlistItem) {
+                wishlistItem.remove();
+                console.log(`Removed product ${productId} from wishlist UI`);
+
+                // Check if wishlist is now empty and update UI if needed
+                const remainingItems = document.querySelectorAll('.wishlist-item');
+                if (remainingItems.length === 0) {
+                    const wishlistItemsContainer = document.querySelector('.wishlist-items');
+                    wishlistItemsContainer.innerHTML = `
+                        <div class="empty-wishlist text-center">
+                            <i class="bi bi-heart display-4"></i>
+                            <h4 class="mt-2">Your Wishlist is Empty</h4>
+                            <p class="text-muted">Browse our collection and save your favorite items for later.</p>
+                            <button class="btn btn-accent mt-3 continue-shopping">
+                                <i class="bi bi-shop"></i> Continue Shopping
+                            </button>
+                        </div>
+                    `;
+                }
+            } else {
+                console.log(`Wishlist item with productId ${productId} not found in DOM`);
+            }
+        } else {
+            throw new Error(data.error || "Failed to remove item");
+        }
+    } catch (error) {
+        console.error("Error removing from wishlist:", error);
+        Swal.fire({
+            title: "Error",
+            text: "Something went wrong. Please try again.",
+            icon: "error",
+            confirmButtonText: "OK",
+            customClass: {
+                popup: 'swal-custom',
+                title: 'swal-title-custom',
+                content: 'swal-text-custom',
+                confirmButton: 'swal-confirm-custom'
+            },
+            backdrop: `rgba(0, 0, 0, 0.5)`
+        });
+    }
+}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    const continueShoppingBtn = document.querySelector(".continue-shopping");
+    if (continueShoppingBtn) {
+        continueShoppingBtn.addEventListener("click", function () {
+            window.location.href = "/user/shop";
+        });
+    }
+ // Only one closing bracket here
+
+
     </script>
 </body>
 </html>

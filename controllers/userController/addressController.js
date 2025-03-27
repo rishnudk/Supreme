@@ -6,15 +6,59 @@ const User =require('../../models/User')
 
 
 
+// exports.getAddressPage = async (req, res) => {
+//     try {
+//         if (!req.session.user) {
+//             console.log("Debug: No user in session");
+//             return res.redirect("/login"); 
+//         }
+
+//         const userId = req.session.user._id; 
+//         const addresses = await Address.find({ user: userId }); 
+
+//         res.render("user/address", { addresses, user: req.session.user });
+//     } catch (error) {
+//         console.error("Error fetching addresses:", error);
+//         res.status(500).send("Server Error");
+//     }
+// };
+
+
+
+
+
+
+
 exports.getAddressPage = async (req, res) => {
     try {
         if (!req.session.user) {
             console.log("Debug: No user in session");
-            return res.redirect("/login"); 
+            return res.redirect("/login");
         }
 
-        const userId = req.session.user._id; 
-        const addresses = await Address.find({ user: userId }); 
+        const userId = new mongoose.Types.ObjectId(req.session.user._id);
+        console.log("Debug: Fetching addresses for User ID:", userId.toString());
+
+        // Fetch all addresses for the user
+        const allAddresses = await Address.find({ user: userId }).lean();
+        console.log("Debug: Total addresses fetched:", allAddresses.length);
+
+        // Separate default address and others
+        const defaultAddress = allAddresses.find(addr => addr.isDefault === true);
+        const otherAddresses = allAddresses.filter(addr => addr.isDefault !== true);
+
+        // Sort other addresses by createdAt (newest first)
+        otherAddresses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        // Combine: default first (if exists), then sorted others
+        const addresses = defaultAddress ? [defaultAddress, ...otherAddresses] : otherAddresses;
+
+        console.log("Debug: Final address order:", addresses.map(addr => ({
+            _id: addr._id,
+            fullName: addr.fullName,
+            isDefault: addr.isDefault,
+            createdAt: addr.createdAt
+        })));
 
         res.render("user/address", { addresses, user: req.session.user });
     } catch (error) {

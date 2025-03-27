@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+ <style>
+    .wm-container {
+            max-width: 100%;
+            padding: 20px;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .wm-transaction-table {
+            width: 80%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .wm-transaction-table th,
+        .wm-transaction-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .wm-transaction-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .wm-transaction-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .wm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1050;
+        }
+
+        .wm-modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .wm-close-btn {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .wm-close-btn:hover {
+            color: #000;
+        }
+
+        .wm-btn {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .wm-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .wm-pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .wm-pagination-btn {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .wm-pagination-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 991px) {
+            .wm-container {
+                margin-left: 0;
+            }
+            body.navbar-open .wm-container {
+                margin-left: 250px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .wm-transaction-table th,
+            .wm-transaction-table td {
+                padding: 10px;
+                font-size: 14px;
+            }
+            .wm-modal-content {
+                width: 95%;
+                margin: 15% auto;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .wm-transaction-table {
+                display: block;
+                overflow-x: auto;
+            }
+            .wm-transaction-table th,
+            .wm-transaction-table td {
+                min-width: 120px;
+            }
+        }
+ </style>
+
+
+
+</head>
+<body>
+
+    <%- include('../partials/adminSidebar') %>
+
+
+
+
+    <div class="wm-container">
+        <h1>Wallet Management</h1>
+        
+        <!-- Transaction List -->
+        <table class="wm-transaction-table">
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Date</th>
+                    <th>User</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% transactions.forEach(txn => { %>
+                    <tr>
+                        <td><%= txn.transactionId %></td>
+                        <td><%= new Date(txn.date).toLocaleDateString() %></td>
+                        <td><%= txn.user.name %> (<%= txn.user.email %>)</td>
+                        <td><%= txn.type.charAt(0).toUpperCase() + txn.type.slice(1) %></td>
+                        <td><%= txn.amount.toFixed(2) %> INR</td>
+                        <td>
+                            <button class="wm-btn" onclick='showDetails(<%- JSON.stringify(txn) %>)'>
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+    <div class="wm-pagination">
+        <button class="wm-pagination-btn" <%= !hasPrev ? 'disabled' : '' %> 
+                onclick="window.location.href='/admin/wallet?page=<%= currentPage - 1 %>'">
+            Previous
+        </button>
+        <span>Page <%= currentPage %> of <%= totalPages %></span>
+        <button class="wm-pagination-btn" <%= !hasNext ? 'disabled' : '' %> 
+                onclick="window.location.href='/admin/wallet?page=<%= currentPage + 1 %>'">
+            Next
+        </button>
+    </div>
+    
+    <div id="transactionModal" class="wm-modal">
+        <div class="wm-modal-content">
+            <span class="wm-close-btn" onclick="closeModal()">×</span>
+            <h2>Transaction Details</h2>
+            <div id="transactionDetails">
+                <p><strong>User:</strong> <span id="userDetails"></span></p>
+                <p><strong>Transaction ID:</strong> <span id="txnId"></span></p>
+                <p><strong>Date:</strong> <span id="txnDate"></span></p>
+                <p><strong>Type:</strong> <span id="txnType"></span></p>
+                <p><strong>Amount:</strong> <span id="txnAmount"></span></p>
+                <p><strong>Source:</strong> <span id="txnSource"></span></p>
+                <div id="orderLink" style="display: none;">
+                    <button class="wm-btn" onclick="fetchOrderDetails()">View Order Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap Order Details Modal (unchanged, uses Bootstrap classes) -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+                            <p><strong>Order Date:</strong> <span id="modalOrderDate"></span></p>
+                            <p><strong>Created At:</strong> <span id="modalCreatedAt"></span></p>
+                            <p><strong>Last Updated:</strong> <span id="modalUpdatedAt"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Original Amount:</strong> ₹<span id="modalOriginalAmount"></span></p>
+                            <p><strong>Total Offer Discount:</strong> ₹<span id="modalOfferDiscount"></span></p>
+                            <p><strong>Coupon Discount:</strong> ₹<span id="modalCouponDiscount"></span> (<span id="modalCouponCode"></span>)</p>
+                            <p><strong>Total Amount:</strong> ₹<span id="modalTotalAmount"></span></p>
+                            <p><strong>Payment Method:</strong> <span id="modalPaymentMethod"></span></p>
+                            <p><strong>Payment Status:</strong> <span id="modalPaymentStatus"></span></p>
+                            <p><strong>Transaction ID:</strong> <span id="modalTransactionId"></span></p>
+                        </div>
+                    </div>
+                    <h6 class="mt-3">Products:</h6>
+                    <ul id="modalProducts" class="list-group mb-3">
+                        <!-- Products will be dynamically inserted here -->
+                    </ul>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="mt-3">Shipping Details:</h6>
+                            <p id="modalShipping">
+                                <strong>Name:</strong> <span id="modalShippingName"></span><br>
+                                <strong>Phone:</strong> <span id="modalShippingPhone"></span><br>
+                                <strong>Address:</strong> <span id="modalShippingAddress"></span><br>
+                                <strong>City:</strong> <span id="modalShippingCity"></span><br>
+                                <strong>State:</strong> <span id="modalShippingState"></span><br>
+                                <strong>Country:</strong> <span id="modalShippingCountry"></span><br>
+                                <strong>Pincode:</strong> <span id="modalShippingPincode"></span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="mt-3">Return Status:</h6>
+                            <p>
+                                <strong>Requested:</strong> <span id="modalReturnRequested"></span><br>
+                                <strong>Approved:</strong> <span id="modalReturnApproved"></span><br>
+                                <strong>Refund Status:</strong> <span id="modalRefundStatus"></span>
+                            </p>
+                            <h6 class="mt-3">Order Status:</h6>
+                            <p><strong>Status:</strong> <span id="modalOrderStatus"></span></p>
+                            <p><strong>Delivery Status:</strong> <span id="modalIsDelivered"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentOrderId = null;
+
+        function showDetails(txn) {
+            document.getElementById('userDetails').textContent = `${txn.user.name} (${txn.user.email})`;
+            document.getElementById('txnId').textContent = txn.transactionId;
+            document.getElementById('txnDate').textContent = new Date(txn.date).toLocaleString();
+            document.getElementById('txnType').textContent = txn.type.charAt(0).toUpperCase() + txn.type.slice(1);
+            document.getElementById('txnAmount').textContent = `${txn.amount.toFixed(2)} INR`;
+            document.getElementById('txnSource').textContent = txn.description;
+
+            const orderLink = document.getElementById('orderLink');
+            const isReturnOrCancel = txn.description.toLowerCase().includes('return') || 
+                                   txn.description.toLowerCase().includes('cancel');
+            if (txn.orderId && isReturnOrCancel) {
+                currentOrderId = txn.orderId;
+                orderLink.style.display = 'block';
+            } else {
+                currentOrderId = null;
+                orderLink.style.display = 'none';
+            }
+
+            document.getElementById('transactionModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('transactionModal').style.display = 'none';
+        }
+
+        async function fetchOrderDetails() {
+            if (!currentOrderId) return;
+
+            try {
+                const response = await fetch(`/admin/wallet-order/${currentOrderId}`);
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    const order = data.order;
+                    document.getElementById('modalOrderId').textContent = order.orderID || order._id;
+                    document.getElementById('modalOrderDate').textContent = new Date(order.orderDate).toLocaleString();
+                    document.getElementById('modalCreatedAt').textContent = new Date(order.createdAt).toLocaleString();
+                    document.getElementById('modalUpdatedAt').textContent = new Date(order.updatedAt).toLocaleString();
+                    document.getElementById('modalOriginalAmount').textContent = order.originalAmount.toFixed(2);
+                    document.getElementById('modalOfferDiscount').textContent = order.totalOfferDiscount.toFixed(2);
+                    document.getElementById('modalCouponDiscount').textContent = order.appliedCoupon?.discountAmount.toFixed(2) || '0.00';
+                    document.getElementById('modalCouponCode').textContent = order.appliedCoupon?.code || 'N/A';
+                    document.getElementById('modalTotalAmount').textContent = order.totalAmount.toFixed(2);
+                    document.getElementById('modalPaymentMethod').textContent = order.paymentMethod;
+                    document.getElementById('modalPaymentStatus').textContent = order.paymentStatus;
+                    document.getElementById('modalTransactionId').textContent = order.transactionId || 'N/A';
+
+                    const productsList = document.getElementById('modalProducts');
+                    productsList.innerHTML = '';
+                    order.products.forEach(product => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.innerHTML = `
+                            ${product.product.name} - ₹${product.price.toFixed(2)} x ${product.quantity}<br>
+                            Status: ${product.productStatus}
+                        `;
+                        productsList.appendChild(li);
+                    });
+
+                    document.getElementById('modalShippingName').textContent = order.shippingAddress.fullName;
+                    document.getElementById('modalShippingPhone').textContent = order.shippingAddress.phone;
+                    document.getElementById('modalShippingAddress').textContent = order.shippingAddress.address;
+                    document.getElementById('modalShippingCity').textContent = order.shippingAddress.city;
+                    document.getElementById('modalShippingState').textContent = order.shippingAddress.state;
+                    document.getElementById('modalShippingCountry').textContent = order.shippingAddress.country;
+                    document.getElementById('modalShippingPincode').textContent = order.shippingAddress.pincode;
+
+                    document.getElementById('modalReturnRequested').textContent = order.return.requested ? 'Yes' : 'No';
+                    document.getElementById('modalReturnApproved').textContent = order.return.approved ? 'Yes' : 'No';
+                    document.getElementById('modalRefundStatus').textContent = order.refundStatus;
+
+                    document.getElementById('modalOrderStatus').textContent = order.orderStatus;
+                    document.getElementById('modalIsDelivered').textContent = order.isDelivered ? 'Yes' : 'No';
+
+                    const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+                    modal.show();
+                } else {
+                    alert(data.message || 'Error fetching order details');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to load order details');
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('transactionModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+
+
+
+</body>
+</html>

@@ -127,7 +127,7 @@ body {
 
 /* Selected address gets a stylish border & glow effect */
 .modern-card.selected {
-    border: 2px solid #4caf50;
+    border: 2px solid #e5574e;
     background: #eafaea;
     box-shadow: 0px 4px 15px rgba(76, 175, 80, 0.3);
 }
@@ -161,9 +161,9 @@ body {
 
 /* Selected payment method gets a stylish border & glow */
 .payment-method.selected {
-    border: 2px solid #4caf50;
+    border: 2px solid #cf5b1d;
     background: #eafaea;
-    box-shadow: 0px 4px 15px rgba(76, 175, 80, 0.3);
+    box-shadow: 0px 4px 15px rgba(238, 50, 3, 0.965);
 }
 
 /* Hide radio buttons */

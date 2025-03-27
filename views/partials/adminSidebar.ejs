@@ -18,7 +18,7 @@
 <section id="admin-sidebar">
     <ul class="admin-side-menu">
         <li>
-            <a href="/admin/dashboard">
+            <a href="/admin/salesReport">
                 <i class='bx bxs-dashboard bx-sm'></i>
                 <span class="text">Dashboard</span>
             </a>
@@ -53,10 +53,27 @@
                 <span class="text">Orders</span>
             </a>
         </li>
+         <li>
+            <a href="/admin/coupons">
+                <i class='bx bxs-group bx-sm'></i>
+                <span class="text">Coupons</span>
+            </a>
+        </li>  <li>
+            <a href="/admin/Offers">
+                <i class='bx bxs-group bx-sm'></i>
+                <span class="text">offers</span>
+            </a>
+        </li>
         <li>
-            <a href="/admin/settings">
+            <a href="/admin/return-requests">
                 <i class='bx bxs-cog bx-sm bx-spin-hover'></i>
-                <span class="text">Settings</span>
+                <span class="text">Return Orders</span>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/wallet">
+                <i class='bx bxs-cog bx-sm bx-spin-hover'></i>
+                <span class="text">Wallet Transaction</span>
             </a>
         </li>
         <li>
@@ -172,7 +189,7 @@
     .admin-dashboard-link {
         position: absolute;
         top: 15px;
-        left: 65px;
+        left: 165px;
         font-size: 18px;
         font-weight: bold;
         text-decoration: none;
@@ -201,7 +218,7 @@
     /* When Sidebar is Expanded */
     #admin-sidebar.show {
         width: var(--sidebar-width-open);
-        padding: 15px;
+        padding: 23px;
     }
     
     /* 📌 Navbar Toggle Button */
@@ -226,11 +243,11 @@
     .admin-side-menu {
         list-style: none;
         padding: 0;
-        margin-top: 60px; /* Increased to account for toggle and link */
+        margin-top: 25px; /* Increased to account for toggle and link */
     }
     
     .admin-side-menu li {
-        padding: 10px;
+        padding: 1px;
     }
     
     .admin-side-menu li a {

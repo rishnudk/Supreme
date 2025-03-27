@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report Dashboard | Admin Panel</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- DateRangePicker CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --info-color: #4895ef;
+            --warning-color: #f72585;
+            --danger-color: #e63946;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f6f9fc;
+            color: #333;
+        }
+        
+        .sidebar {
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            z-index: 100;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: transparent;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 15px 20px;
+        }
+        
+        .stat-card {
+            border-left: 5px solid var(--primary-color);
+            padding: 20px;
+        }
+        
+        .stat-card.sales {
+            border-left-color: var(--success-color);
+        }
+        
+        .stat-card.orders {
+            border-left-color: var(--info-color);
+        }
+        
+        .stat-card.discount {
+            border-left-color: var(--warning-color);
+        }
+        
+        .stat-icon {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-radius: 10px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            height: 50px;
+            width: 50px;
+        }
+        
+        .stat-icon.sales {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success-color);
+        }
+        
+        .stat-icon.orders {
+            background-color: rgba(72, 149, 239, 0.1);
+            color: var(--info-color);
+        }
+        
+        .stat-icon.discount {
+            background-color: rgba(247, 37, 133, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .stat-title {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .stat-value {
+            color: #333;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-percentage {
+            font-size: 0.8rem;
+        }
+        
+        .stat-percentage.positive {
+            color: #10b981;
+        }
+        
+        .stat-percentage.negative {
+            color: #ef4444;
+        }
+        
+        .btn-custom {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 8px 15px;
+            transition: all 0.3s;
+        }
+        
+        .btn-custom:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-custom.btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-custom.btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            border-top: none;
+            font-weight: 600;
+            padding: 12px;
+        }
+        
+        .table td {
+            padding: 12px;
+            vertical-align: middle;
+        }
+        
+        .nav-link {
+            color: #6c757d;
+            font-weight: 500;
+            padding: 12px 20px;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .nav-link i {
+            margin-right: 10px;
+        }
+        
+        .dropdown-menu {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column justify-content-between py-3">
+        <div>
+            <div class="px-3 mb-4">
+                <h5 class="fw-bold text-primary">E-Shop Admin</h5>
+            </div>
+            
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-cart"></i> Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-box"></i> Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-people"></i> Customers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="bi bi-graph-up"></i> Sales Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-tag"></i> Discounts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-gear"></i> Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="px-3">
+            <div class="d-flex align-items-center mb-3">
+                <img src="/api/placeholder/40/40" class="rounded-circle" alt="Admin">
+                <div class="ms-3">
+                    <h6 class="mb-0 fw-bold">John Smith</h6>
+                    <small class="text-muted">Administrator</small>
+                </div>
+            </div>
+            <a href="#" class="btn btn-custom btn-outline btn-sm w-100">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="mb-1">Sales Report</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Sales Report</li>
+                    </ol>
+                </nav>
+            </div>
+            
+            <div class="d-flex">
+                <div class="dropdown me-2">
+                    <button class="btn btn-custom btn-outline dropdown-toggle" type="button" id="downloadReport" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-download"></i> Download
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="downloadReport">
+                        <li><a class="dropdown-item" href="#" id="downloadPdf"><i class="bi bi-file-earmark-pdf"></i> PDF</a></li>
+                        <li><a class="dropdown-item" href="#" id="downloadExcel"><i class="bi bi-file-earmark-excel"></i> Excel</a></li>
+                    </ul>
+                </div>
+                
+                <button class="btn btn-custom">
+                    <i class="bi bi-sliders"></i> Advanced Filters
+                </button>
+            </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Date Range</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                            <input type="text" class="form-control" id="dateRangePicker" value="01/01/2025 - 03/17/2025">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Quick Select</label>
+                        <select class="form-select" id="quickDateSelect">
+                            <option value="custom">Custom Range</option>
+                            <option value="today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="last7days">Last 7 Days</option>
+                            <option value="last30days" selected>Last 30 Days</option>
+                            <option value="thisMonth">This Month</option>
+                            <option value="lastMonth">Last Month</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Product Category</label>
+                        <select class="form-select" id="productCategory">
+                            <option value="all" selected>All Categories</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="beauty">Beauty</option>
+                            <option value="food">Food & Beverage</option>
+                            <option value="home">Home & Garden</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body stat-card sales">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="stat-title">Total Sales</p>
+                                <h3 class="stat-value">$42,856.89</h3>
+                                <span class="stat-percentage positive">
+                                    <i class="bi bi-arrow-up"></i> 12.5% vs prev period
+                                </span>
+                            </div>
+                            <div class="stat-icon sales">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body stat-card orders">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="stat-title">Orders</p>
+                                <h3 class="stat-value">1,285</h3>
+                                <span class="stat-percentage positive">
+                                    <i class="bi bi-arrow-up"></i> 8.3% vs prev period
+                                </span>
+                            </div>
+                            <div class="stat-icon orders">
+                                <i class="bi bi-bag"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body stat-card discount">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="stat-title">Discounts</p>
+                                <h3 class="stat-value">$5,432.10</h3>
+                                <span class="stat-percentage negative">
+                                    <i class="bi bi-arrow-down"></i> 3.2% vs prev period
+                                </span>
+                            </div>
+                            <div class="stat-icon discount">
+                                <i class="bi bi-tag"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sales Graph -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Sales Overview</h5>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary active" data-graph-period="daily">Daily</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-graph-period="weekly">Weekly</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-graph-period="monthly">Monthly</button>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="salesChart" style="width: 100%; height: 350px;"></canvas>
+            </div>
+        </div>
+        
+        <!-- Detailed Sales Report -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Detailed Sales Report</h5>
+                <div class="input-group" style="width: 250px;">
+                    <input type="text" class="form-control" placeholder="Search...">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Products</th>
+                                <th>Subtotal</th>
+                                <th>Discount</th>
+                                <th>Coupon</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#ORD-2025-7841</td>
+                                <td>Mar 16, 2025</td>
+                                <td>Sarah Johnson</td>
+                                <td>3 items</td>
+                                <td>$240.00</td>
+                                <td>$12.00</td>
+                                <td>SPRING25 ($24.00)</td>
+                                <td>$204.00</td>
+                                <td><span class="badge bg-success">Delivered</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-2025-7840</td>
+                                <td>Mar 16, 2025</td>
+                                <td>Michael Smith</td>
+                                <td>1 item</td>
+                                <td>$899.00</td>
+                                <td>$0.00</td>
+                                <td>-</td>
+                                <td>$899.00</td>
+                                <td><span class="badge bg-success">Delivered</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-2025-7839</td>
+                                <td>Mar 15, 2025</td>
+                                <td>Emma Davis</td>
+                                <td>2 items</td>
+                                <td>$175.50</td>
+                                <td>$8.78</td>
+                                <td>NEWYEAR ($17.55)</td>
+                                <td>$149.17</td>
+                                <td><span class="badge bg-info">Shipped</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-2025-7838</td>
+                                <td>Mar 15, 2025</td>
+                                <td>David Wilson</td>
+                                <td>5 items</td>
+                                <td>$562.25</td>
+                                <td>$28.11</td>
+                                <td>-</td>
+                                <td>$534.14</td>
+                                <td><span class="badge bg-warning">Processing</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-2025-7837</td>
+                                <td>Mar 14, 2025</td>
+                                <td>Linda Taylor</td>
+                                <td>1 item</td>
+                                <td>$49.99</td>
+                                <td>$0.00</td>
+                                <td>WELCOME10 ($5.00)</td>
+                                <td>$44.99</td>
+                                <td><span class="badge bg-success">Delivered</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-2025-7836</td>
+                                <td>Mar 14, 2025</td>
+                                <td>Robert Brown</td>
+                                <td>4 items</td>
+                                <td>$385.75</td>
+                                <td>$19.29</td>
+                                <td>-</td>
+                                <td>$366.46</td>
+                                <td><span class="badge bg-success">Delivered</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-2025-7835</td>
+                                <td>Mar 13, 2025</td>
+                                <td>Jennifer Martinez</td>
+                                <td>2 items</td>
+                                <td>$120.50</td>
+                                <td>$6.03</td>
+                                <td>SALE15 ($18.08)</td>
+                                <td>$96.40</td>
+                                <td><span class="badge bg-danger">Canceled</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Discount and Coupon Report (Collapsed by default) -->
+        <div class="accordion mt-4" id="discountAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDiscount">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDiscount" aria-expanded="false" aria-controls="collapseDiscount">
+                        Discount and Coupon Report
+                    </button>
+                </h2>
+                <div id="collapseDiscount" class="accordion-collapse collapse" aria-labelledby="headingDiscount" data-bs-parent="#discountAccordion">
+                    <div class="accordion-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Type</th>
+                                        <th>Value</th>
+                                        <th>Usage Count</th>
+                                        <th>Total Discount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>SPRING25</td>
+                                        <td>Percentage</td>
+                                        <td>25%</td>
+                                        <td>142</td>
+                                        <td>$1,856.25</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>WELCOME10</td>
+                                        <td>Fixed Amount</td>
+                                        <td>$10.00</td>
+                                        <td>68</td>
+                                        <td>$680.00</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>NEWYEAR</td>
+                                        <td>Percentage</td>
+                                        <td>10%</td>
+                                        <td>215</td>
+                                        <td>$1,753.80</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>SALE15</td>
+                                        <td>Percentage</td>
+                                        <td>15%</td>
+                                        <td>97</td>
+                                        <td>$942.05</td>
+                                        <td><span class="badge bg-danger">Expired</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>FLASHSALE</td>
+                                        <td>Percentage</td>
+                                        <td>30%</td>
+                                        <td>45</td>
+                                        <td>$1,200.00</td>
+                                        <td><span class="badge bg-danger">Expired</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery (required for DateRangePicker) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <!-- Moment.js (required for DateRangePicker) -->
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <!-- DateRangePicker JS -->
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Initialize DateRangePicker
+        $(function() {
+            $('#dateRangePicker').daterangepicker({
+                opens: 'left',
+                startDate: moment().subtract(30, 'days'),
+                endDate: moment(),
+                ranges: {
+                   'Today': [moment(), moment()],
+                   'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                   'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                   'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                   'This Month': [moment().startOf('month'), moment().endOf('month')],
+                   'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            });
+        });
+        
+        // Quick date select handler
+        document.getElementById('quickDateSelect').addEventListener('change', function() {
+            const value = this.value;
+            let start, end;
+            
+            switch(value) {
+                case 'today':
+                    start = moment();
+                    end = moment();
+                    break;
+                case 'yesterday':
+                    start = moment().subtract(1, 'days');
+                    end = moment().subtract(1, 'days');
+                    break;
+                case 'last7days':
+                    start = moment().subtract(6, 'days');
+                    end = moment();
+                    break;
+                case 'last30days':
+                    start = moment().subtract(29, 'days');
+                    end = moment();
+                    break;
+                case 'thisMonth':
+                    start = moment().startOf('month');
+                    end = moment().endOf('month');
+                    break;
+                case 'lastMonth':
+                    start = moment().subtract(1, 'month').startOf('month');
+                    end = moment().subtract(1, 'month').endOf('month');
+                    break;
+                default:
+                    return;
+            }
+            
+            $('#dateRangePicker').data('daterangepicker').setStartDate(start);
+            $('#dateRangePicker').data('daterangepicker').setEndDate(end);
+            updateDashboard(start, end);
+        });
+        
+        // Initialize sales chart
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        let currentChart = null;
+        
+        // Chart data
+        const dailyData = {
+            labels: ['Mar 11', 'Mar 12', 'Mar 13', 'Mar 14', 'Mar 15', 'Mar 16', 'Mar 17'],
+            datasets: [
+                {
+                    label: 'Sales ($)',
+                    data: [3750, 4250, 5125, 4750, 6250, 8500, 9750],
+                    borderColor: '#4cc9f0',
+                    backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Discounts ($)',
+                    data: [375, 480, 615, 525, 750, 950, 1150],
+                    borderColor: '#f72585',
+                    backgroundColor: 'rgba(247, 37, 133, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        };
+        
+        const weeklyData = {
+            labels: ['Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10', 'Week 11'],
+            datasets: [
+                {
+                    label: 'Sales ($)',
+                    data: [24500, 28750, 32125, 35750, 38250, 42500],
+                    borderColor: '#4cc9f0',
+                    backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Discounts ($)',
+                    data: [2450, 3100, 3550, 3950, 4200, 4785],
+                    borderColor: '#f72585',
+                    backgroundColor: 'rgba(247, 37, 133, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        };
+        
+        const monthlyData = {
+            labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+            datasets: [
+                {
+                    label: 'Sales ($)',
+                    data: [98750, 125000, 175250, 135750, 148250, 168500],
+                    borderColor: '#4cc9f0',
+                    backgroundColor: 'rgba(76,201, 240, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Discounts ($)',
+                    data: [10250, 14750, 21250, 15750, 17250, 18500],
+                    borderColor: '#f72585',
+                    backgroundColor: 'rgba(247, 37, 133, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        };
+        
+        // Chart options
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        boxWidth: 15,
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                        }
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        };
+        
+        // Initialize chart with daily data
+        currentChart = new Chart(ctx, {
+            type: 'line',
+            data: dailyData,
+            options: chartOptions
+        });
+        
+        // Switch between daily, weekly, monthly data
+        document.querySelectorAll('[data-graph-period]').forEach(button => {
+            button.addEventListener('click', function() {
+                const period = this.getAttribute('data-graph-period');
+                let data;
+                
+                // Remove active class from all buttons
+                document.querySelectorAll('[data-graph-period]').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Set data based on period
+                switch(period) {
+                    case 'daily':
+                        data = dailyData;
+                        break;
+                    case 'weekly':
+                        data = weeklyData;
+                        break;
+                    case 'monthly':
+                        data = monthlyData;
+                        break;
+                }
+                
+                // Update chart
+                if (currentChart) {
+                    currentChart.destroy();
+                }
+                
+                currentChart = new Chart(ctx, {
+                    type: 'line',
+                    data: data,
+                    options: chartOptions
+                });
+            });
+        });
+        
+        // Function to update dashboard based on date range
+        function updateDashboard(start, end) {
+            console.log('Updating dashboard for date range:', start.format('YYYY-MM-DD'), 'to', end.format('YYYY-MM-DD'));
+            
+            // In a real application, this would fetch data from the server
+            // For this demo, we'll just update the date range text
+            document.querySelector('.breadcrumb-item.active').textContent = 'Sales Report: ' + start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY');
+            
+            // Simulate loading state
+            const loadingToast = new bootstrap.Toast(document.getElementById('loadingToast'));
+            loadingToast.show();
+            
+            // In a real application, you would fetch data here
+            setTimeout(() => {
+                // Update would happen here
+                loadingToast.hide();
+            }, 1000);
+        }
+        
+        // Handle date range picker change
+        $('#dateRangePicker').on('apply.daterangepicker', function(ev, picker) {
+            updateDashboard(picker.startDate, picker.endDate);
+            
+            // Reset quick select to custom
+            document.getElementById('quickDateSelect').value = 'custom';
+        });
+        
+        // Handle download PDF
+        document.getElementById('downloadPdf').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // In a real application, this would generate a PDF
+            alert('Generating PDF report...');
+            
+            // Get date range
+            const dateRange = $('#dateRangePicker').val();
+            console.log('Generating PDF report for date range:', dateRange);
+            
+            // This would be replaced with actual PDF generation code
+            setTimeout(() => {
+                alert('PDF downloaded successfully!');
+            }, 1000);
+        });
+        
+        // Handle download Excel
+        document.getElementById('downloadExcel').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // In a real application, this would generate an Excel file
+            alert('Generating Excel report...');
+            
+            // Get date range
+            const dateRange = $('#dateRangePicker').val();
+            console.log('Generating Excel report for date range:', dateRange);
+            
+            // This would be replaced with actual Excel generation code
+            setTimeout(() => {
+                alert('Excel file downloaded successfully!');
+            }, 1000);
+        });
+    </script>
+    
+    <!-- Toast for loading indicator -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="loadingToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Loading Data</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Fetching sales data for the selected date range...
+            </div>
+        </div>
+    </div>
+</body>
+</html>

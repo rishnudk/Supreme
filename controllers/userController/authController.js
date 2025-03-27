@@ -80,22 +80,92 @@ exports.getSignupPage = (req, res) => {
 
 
 exports.renderLogin = (req, res) => {
-    if (req.session.user) {
-        return res.redirect("/user/shop"); // Redirect if logged in
-    }
-    res.render("user/userLogin");
+  if (req.session.user) {
+      return res.redirect("/user/shop"); // Redirect if logged in
+  }
+  const message = req.query.message || ""; // Get message from query parameter
+  console.log("🔍 Rendering login with message:", message);
+  res.render("user/userLogin", { message });
 };
-
 
 exports.renderSignup = (req, res) => {
     if (req.session.user) {
         return res.redirect("/user/shop"); // Redirect if logged in
     }
-    res.render("user/signup", { title: "User Signup" });
+    res.render("user/signup", { title: "User Signup", });
 };
 
 
 
+
+
+
+exports.signup = async (req, res) => {
+  console.log("oooooooooooooooooooo",req.body);
+  try {
+      const { name, email, password, confirmPassword, phone, referral } = req.body;
+
+      if (password !== confirmPassword) {
+          req.flash('error_msg', 'Passwords do not match');
+          return res.redirect('/auth/signup');
+      }
+
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+          req.flash('error_msg', 'Email already exists');
+          return res.redirect('/auth/signup');
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = new User({ 
+          name, 
+          email, 
+          password: hashedPassword, 
+          phone 
+      });
+
+      // Handle referral
+      if (referral) {
+        console.log('Referral code entered:', referral);
+        const referrer = await User.findOne({ referralCode: referral });
+        console.log('Referrer found:', referrer);
+        if (referrer) {
+            newUser.referredBy = referral;
+            newUser.wallet = 50;
+            referrer.wallet += 50;
+            await referrer.save();
+            console.log('Referral applied, new user:', newUser);
+        }
+    } else {
+          req.flash('success_msg', 'Signup successful! Welcome to our platform!');
+      }
+
+      await newUser.save();
+      req.session.user = { 
+          id: newUser._id, 
+          name: newUser.name, 
+          email: newUser.email,
+          referralCode: newUser.referralCode,
+          wallet: newUser.wallet 
+      };
+
+      res.render('user/success', {
+          name: newUser.name,
+          referralCode: newUser.referralCode,
+          wallet: newUser.wallet,
+          message: req.flash('success_msg').length ? req.flash('success_msg')[0] : 'Signup successful!'
+      });
+  } catch (error) {
+      req.flash('error_msg', 'Signup error: ' + error.message);
+      res.redirect('/auth/signup');
+  }
+};
+
+
+
+
+
+//og 
 exports.login = async (req, res) => {
   try {
     console.log(req.body);
@@ -122,6 +192,10 @@ exports.login = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+
+
+
 
 exports.googleAuth = (req, res, next) => {
   passport.authenticate("google", { scope: ["profile", "email"] })(
@@ -330,71 +404,166 @@ exports.isAuthenticated = (req, res, next) => {
 //     }
 // };
 
+
+
+
+
+//og
+
+
+// exports.sendSignupOTP = async (req, res) => {
+//   try {
+//     const { email } = req.body;
+
+//     const otp = Math.floor(100000 + Math.random() * 900000);
+
+//     req.session.storedOtpData = {
+//       otp: String(otp),
+//       expiresAt: Date.now() + 5 * 60 * 1000,
+//     };
+
+//     console.log(`Generated OTP for ${email}:`, otp);
+
+//     await transporter.sendMail({
+//       from: process.env.EMAIL,
+//       to: email,
+//       subject: "Your OTP for Signup",
+//       text: `Your OTP is ${otp}. It is valid for 5 minutes.`,
+//     });
+
+//     res.status(200).json({ message: "OTP sent successfully" });
+//   } catch (error) {
+//     console.error("Error sending OTP:", error);
+//     res.status(500).json({ error: "Error sending OTP" });
+//   }
+// };
+
+
+
+// exports.verifySignupOTP = async (req, res) => {
+//   try {
+//     const { email, otp, name, password, phone } = req.body;
+
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) {
+//       return res.status(400).json({ error: "Email already registered" });
+//     }
+
+//     console.log("Received Request Body:", req.body);
+//     console.log("otppppppp");
+
+//     const storedOtpData = req.session.storedOtpData;
+
+//     if (!storedOtpData || storedOtpData.expiresAt < Date.now()) {
+//       return res
+//         .status(400)
+//         .json({ error: "OTP expired. Please request a new one." });
+//     }
+
+//     if (storedOtpData.otp !== String(otp)) {
+//       return res.status(400).json({ error: "Invalid OTP. Try again." });
+//     }
+
+//     const newUser = new User({ name, email, password, phone });
+//     await newUser.save();
+
+//     req.session.user = newUser;
+//     req.session.userId = newUser._id;
+
+//     res.status(200).json({
+//       message: "Account created successfully!",
+//       redirect: "/user/home",
+//     });
+
+
+//   } catch (error) {
+//     console.error("Error verifying OTP:", error);
+//     res.status(500).json({ error: "Error verifying OTP" });
+//   }
+// };
+
+
 exports.sendSignupOTP = async (req, res) => {
   try {
-    const { email } = req.body;
-
-    const otp = Math.floor(100000 + Math.random() * 900000);
-
-    req.session.storedOtpData = {
-      otp: String(otp),
-      expiresAt: Date.now() + 5 * 60 * 1000,
-    };
-
-    console.log(`Generated OTP for ${email}:`, otp);
-
-    await transporter.sendMail({
-      from: process.env.EMAIL,
-      to: email,
-      subject: "Your OTP for Signup",
-      text: `Your OTP is ${otp}. It is valid for 5 minutes.`,
-    });
-
-    res.status(200).json({ message: "OTP sent successfully" });
+      const { email } = req.body;
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      req.session.storedOtpData = {
+          otp: String(otp),
+          expiresAt: Date.now() + 5 * 60 * 1000,
+      };
+      console.log(`Generated OTP for ${email}:`, otp);
+      await transporter.sendMail({
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Your OTP for Signup",
+          text: `Your OTP is ${otp}. It is valid for 5 minutes.`,
+      });
+      res.status(200).json({ message: "OTP sent successfully" });
   } catch (error) {
-    console.error("Error sending OTP:", error);
-    res.status(500).json({ error: "Error sending OTP" });
+      console.error("Error sending OTP:", error);
+      res.status(500).json({ error: "Error sending OTP" });
   }
 };
 
 exports.verifySignupOTP = async (req, res) => {
   try {
-    const { email, otp, name, password, phone } = req.body;
+      const { email, otp, name, password, phone, referral } = req.body;
+      console.log("Received Request Body:", req.body);
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: "Email already registered" });
-    }
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+          return res.status(400).json({ error: "Email already registered" });
+      }
 
-    console.log("Received Request Body:", req.body);
-    console.log("otppppppp");
+      const storedOtpData = req.session.storedOtpData;
+      if (!storedOtpData || storedOtpData.expiresAt < Date.now()) {
+          return res.status(400).json({ error: "OTP expired. Please request a new one." });
+      }
 
-    const storedOtpData = req.session.storedOtpData;
+      if (storedOtpData.otp !== String(otp)) {
+          return res.status(400).json({ error: "Invalid OTP. Try again." });
+      }
 
-    if (!storedOtpData || storedOtpData.expiresAt < Date.now()) {
-      return res
-        .status(400)
-        .json({ error: "OTP expired. Please request a new one." });
-    }
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = new User({ name, email, password: hashedPassword, phone });
 
-    if (storedOtpData.otp !== String(otp)) {
-      return res.status(400).json({ error: "Invalid OTP. Try again." });
-    }
+      if (referral) {
+          const trimmedReferral = referral.trim();
+          console.log('Referral code entered:', trimmedReferral);
+          const referrer = await User.findOne({ referralCode: trimmedReferral });
+          if (referrer) {
+              newUser.referredBy = trimmedReferral;
+              newUser.wallet = 50;
+              referrer.wallet += 50;
+              await referrer.save();
+          }
+      }
 
-    const newUser = new User({ name, email, password, phone });
-    await newUser.save();
+      await newUser.save();
+      // req.session.user = {
+      //     id: newUser._id,
+      //     name: newUser.name,
+      //     email: newUser.email,
+      //     referralCode: newUser.referralCode,
+      //     wallet: newUser.wallet,
+      // };
+      req.session.user=newUser
 
-    req.session.user = newUser;
-    req.session.userId = newUser._id;
-
-    res.status(200).json({
-      message: "Account created successfully!",
-      redirect: "/user/home",
-    });
-
-
+      res.status(200).json({
+          message: referral && newUser.referredBy 
+              ? "Account created successfully! You received ₹50 for using a valid referral code!" 
+              : "Account created successfully!",
+          redirect: "/user/home",
+      });
   } catch (error) {
-    console.error("Error verifying OTP:", error);
-    res.status(500).json({ error: "Error verifying OTP" });
+      console.error("Error verifying OTP:", error);
+      res.status(500).json({ error: "Error verifying OTP" });
   }
 };
+
+
+
+
+
+
+

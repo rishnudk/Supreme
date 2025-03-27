@@ -60,47 +60,70 @@ document.addEventListener("DOMContentLoaded", function () {
         return isValid;
     }
 
-    // Edit Address Form Submission
-    editAddressForm?.addEventListener("submit", async function (event) {
-        event.preventDefault(); // Prevent form submission if validation fails
 
+
+
+
+
+
+    editAddressForm?.addEventListener("submit", async function (event) {
+        event.preventDefault();
+    
         if (!validateForm(editAddressForm)) {
             editAddressModal.show();
             return;
         }
-
-        // Prepare data for submission
+    
         const formData = new FormData(editAddressForm);
         const data = Object.fromEntries(formData);
         data.isDefault = data.isDefault === 'on';
         const addressId = data.addressId;
-
+    
         console.log("Debug: Update data being sent:", data);
-
+    
         try {
             const response = await fetch(`/user/checkout/address/${addressId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-
+    
             const result = await response.json();
             console.log("Debug: Update response:", { status: response.status, result });
-
+    
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to update address');
+            }
+    
+            // Use server response to update UI
+            updateAddressOnPage(addressId, result.address);
+    
             // Hide the modal
             editAddressModal.hide();
-
-            // Update Address in UI Without Reload
-            updateAddressOnPage(addressId, data);
-
-            alert('Address updated successfully!');
+    
+            // Show success alert
+            Swal.fire({
+                icon: 'success',
+                title: 'Address Updated',
+                text: 'Your address has been updated successfully!',
+                timer: 1500,
+                showConfirmButton: false,
+            });
+    
         } catch (error) {
-            console.error("Debug: Update error:", {
-                message: error.message,
-                stack: error.stack
+            console.error("Debug: Update error:", { message: error.message, stack: error.stack });
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message || 'Failed to update address',
             });
         }
     });
+
+
+
+
+
 
     // Add Address Form Submission
     addAddressForm?.addEventListener("submit", async function (event) {
@@ -148,6 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert(`Failed to add address: ${error.message || 'Network error'}`);
         }
     });
+    
 
     // Function to Populate the Edit Address Modal
     document.querySelectorAll('[data-bs-target="#editAddressModal"]').forEach(button => {
@@ -192,136 +216,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Function to Update Address in the UI Dynamically
-
-
-// function updateAddressOnPage(addressId, data) {
-//     // Find the address container using the addressId
-//     const addressElement = document.getElementById(`address-card-${addressId}`);
-//     if (!addressElement) {
-//         console.error(`Debug: No address element found for ID: ${addressId}`);
-//         alert('Failed to update address: Address element not found.');
-//         return;
-//     }
-
-//     console.log("Debug: addressElement:", addressElement);
-//     console.log("Debug: addressElement HTML:", addressElement.innerHTML);
-
-//     // Update the address details in the DOM
-//     const fullNameElement = document.getElementById(`fullName-${addressId}`);
-//     const addressDetailsElement = document.getElementById(`addressDetails-${addressId}`);
-//     const phoneElement = document.getElementById(`phone-${addressId}`);
-//     const defaultBadgeElement = document.getElementById(`defaultBadge-${addressId}`);
-
-//     if (fullNameElement) {
-//         fullNameElement.textContent = data.fullName;
-//     } else {
-//         console.error(`Debug: Full Name element not found for ID: ${addressId}`);
-//     }
-
-//     if (addressDetailsElement) {
-//         addressDetailsElement.textContent = `${data.address}, ${data.city}, ${data.state}, ${data.pincode}`;
-//     } else {
-//         console.error(`Debug: Address Details element not found for ID: ${addressId}`);
-//     }
-
-//     if (phoneElement) {
-//         phoneElement.textContent = data.phone;
-//     } else {
-//         console.error(`Debug: Phone element not found for ID: ${addressId}`);
-//     }
-
-//     // Update the default address indicator
-//     if (data.isDefault) {
-//         // Remove "Default" badge from all addresses
-//         document.querySelectorAll('.badge.bg-success').forEach(el => el.remove());
-//         // Add "Default" badge to the current address
-//         if (defaultBadgeElement) {
-//             defaultBadgeElement.textContent = 'Default';
-//             defaultBadgeElement.classList.add('badge', 'bg-success', 'me-2');
-//         } else {
-//             console.error(`Debug: Default Badge element not found for ID: ${addressId}`);
-//         }
-//     } else {
-//         // Remove "Default" badge if the address is no longer default
-//         if (defaultBadgeElement) {
-//             defaultBadgeElement.remove();
-//         }
-//     }
-
-//     console.log("Debug: Address updated successfully in the DOM.");
-// }
 
 
 function updateAddressOnPage(addressId, data) {
     try {
-        // Validate input
         if (!addressId || !data) {
             throw new Error('Address ID and data are required.');
         }
 
-        // Find the address container using the addressId
         const addressElement = document.getElementById(`address-card-${addressId}`);
         if (!addressElement) {
             throw new Error(`No address element found for ID: ${addressId}`);
         }
 
-        console.log("Debug: addressElement:", addressElement);
-        console.log("Debug: addressElement HTML:", addressElement.innerHTML);
+        console.log(`Debug: Updating address ID ${addressId} with data:`, data);
 
-        // Update the address details in the DOM
-        const fullNameElement = document.getElementById(`fullName-${addressId}`);
-        const addressDetailsElement = document.getElementById(`addressDetails-${addressId}`);
-        const phoneElement = document.getElementById(`phone-${addressId}`);
-        const defaultBadgeElement = document.getElementById(`defaultBadge-${addressId}`);
-
-        // Update Full Name
-        if (fullNameElement) {
-            fullNameElement.textContent = data.fullName;
-        } else {
-            console.error(`Debug: Full Name element not found for ID: ${addressId}`);
-        }
-
-        // Update Address Details
-        if (addressDetailsElement) {
-            addressDetailsElement.textContent = `${data.address}, ${data.city}, ${data.state}, ${data.pincode}`;
-        } else {
-            console.error(`Debug: Address Details element not found for ID: ${addressId}`);
-        }
-
-        // Update Phone Number
-        if (phoneElement) {
-            phoneElement.textContent = data.phone;
-        } else {
-            console.error(`Debug: Phone element not found for ID: ${addressId}`);
-        }
-
-        // Update the default address indicator
-        if (data.isDefault) {
-            // Remove "Default" badge from all addresses
-            document.querySelectorAll('.badge.bg-success').forEach(el => el.remove());
-
-            // Add "Default" badge to the current address
-            if (defaultBadgeElement) {
-                defaultBadgeElement.textContent = 'Default';
-                defaultBadgeElement.classList.add('badge', 'bg-success', 'me-2');
-            } else {
-                console.error(`Debug: Default Badge element not found for ID: ${addressId}`);
-            }
-        } else {
-            // Remove "Default" badge if the address is no longer default
-            if (defaultBadgeElement) {
-                defaultBadgeElement.remove();
-            }
-        }
+        // Replace entire content with updated address
+        addressElement.innerHTML = `
+            ${data.isDefault ? '<span class="badge bg-success me-2">Default</span>' : ''}
+            <span class="full-name">${data.fullName || 'N/A'}</span><br>
+            <span class="address-details">${data.address || ''}, ${data.city || ''}, ${data.state || ''}, ${data.pincode || ''}</span><br>
+            <span class="phone">${data.phone || 'N/A'}</span>
+        `.trim();
 
         console.log("Debug: Address updated successfully in the DOM.");
     } catch (error) {
-        console.error("Debug: Error updating address on page:", {
-            message: error.message,
-            stack: error.stack
-        });
-        alert(`Failed to update address: ${error.message}`);
+        console.error("Debug: Error updating address on page:", error.message);
     }
 }
 
@@ -524,6 +444,7 @@ function selectAddress(addressId) {
     }
 }
 
+
 // Function to select a payment method
 function selectPayment(paymentMethod) {
     
@@ -554,55 +475,348 @@ function selectPayment(paymentMethod) {
 
 
 
-// Function to place an order
+
+
+
+let selectedPaymentMethod = null;
+let selectedAddressId = null // Set this appropriately
+let cartTotal = 0;
+
+// Function to fetch and display cart total
+
+
+async function fetchCartTotal() {
+    try {
+        const response = await fetch("/user/cart/total", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+        const data = await response.json();
+        cartTotal = data.total || 0; // Includes shipping
+        document.getElementById("cart-total").innerText = `Total: ₹${cartTotal.toFixed(2)}`;
+        console.log("Cart total fetched (with shipping):", cartTotal);
+    } catch (error) {
+        console.error("Error fetching cart total:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", fetchCartTotal);
+
+
+
+
+
+
+// async function placeOrder() {
+//     try {
+//         console.log(`1 - Starting placeOrder`);
+//         console.log(`2 - Current selectedAddressId: ${selectedAddressId}`);
+//         console.log(`3 - Current selectedPaymentMethod: ${selectedPaymentMethod}`);
+
+//         if (!selectedAddressId) throw new Error("Please select an address.");
+//         if (!selectedPaymentMethod) throw new Error("Please select a payment method.");
+
+//         const orderData = {
+//             addressId: selectedAddressId,
+//             paymentMethod: selectedPaymentMethod,
+//         };
+//         console.log(`4 - Sending Order Data:`, orderData);
+
+//         const response = await fetch("/user/place-order", {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify(orderData),
+//         });
+
+//         const result = await response.json();
+//         console.log(`5 - place-order response:`, result);
+
+//         if (!response.ok || !result.success) {
+//             // Handle specific errors with SweetAlert
+//             Swal.fire({
+//                 icon: "error",
+//                 title: "Order Failed",
+//                 text: result.error || "Failed to place order",
+//                 confirmButtonText: "OK",
+//             });
+//             return;
+//         }
+
+//         if (selectedPaymentMethod === "razorpay") {
+//             console.log(`6 - Initiating Razorpay payment for order: ${result.orderId}`);
+//             const razorpayResponse = await fetch("/user/create-order", {
+//                 method: "POST",
+//                 headers: { "Content-Type": "application/json" },
+//                 body: JSON.stringify({
+//                     orderId: result.orderId,
+//                     totalAmount: result.totalAmount,
+//                 }),
+//             });
+
+//             const razorpayResult = await razorpayResponse.json();
+//             console.log(`7 - Razorpay create-order response:`, razorpayResult);
+
+//             if (!razorpayResponse.ok || !razorpayResult.success) {
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Payment Initiation Failed",
+//                     text: razorpayResult.message || "Failed to create Razorpay order",
+//                 });
+//                 return;
+//             }
+
+//             console.log(`8 - Opening Razorpay checkout with:`, razorpayResult);
+//             const options = {
+//                 key: razorpayResult.key,
+//                 amount: razorpayResult.amount,
+//                 currency: razorpayResult.currency,
+//                 order_id: razorpayResult.orderId,
+//                 name: "Supreme",
+//                 description: "Order Payment",
+//                 handler: async function (response) {
+//                     console.log(`9 - Razorpay payment response:`, response);
+//                     const verifyResponse = await fetch("/user/verify-payment", {
+//                         method: "POST",
+//                         headers: { "Content-Type": "application/json" },
+//                         body: JSON.stringify({
+//                             razorpay_order_id: response.razorpay_order_id,
+//                             razorpay_payment_id: response.razorpay_payment_id,
+//                             razorpay_signature: response.razorpay_signature,
+//                             orderId: result.orderId,
+//                         }),
+//                     });
+
+//                     const verifyResult = await verifyResponse.json();
+//                     console.log(`10 - Payment verification result:`, verifyResult);
+
+//                     if (verifyResult.success) {
+//                         console.log(`11 - Payment verified successfully`);
+//                         // Show success message and redirect
+//                         await Swal.fire({
+//                             icon: "success",
+//                             title: "Payment Successful",
+//                             text: "Your order has been placed!",
+//                             timer: 2000,
+//                             showConfirmButton: false,
+//                         });
+//                         window.location.href = `/user/order-success/${result.orderId}`;
+//                     } else {
+//                         throw new Error(verifyResult.message || "Payment verification failed");
+//                     }
+//                 },
+//                 modal: {
+//                     ondismiss: function () {
+//                         console.log(`12 - Razorpay modal dismissed`);
+//                         window.location.href = `/user/order-failure/${result.orderId}?addressId=${selectedAddressId}&error=Payment%20cancelled%20by%20user`;
+//                     },
+//                 },
+//                 prefill: { name: "Customer Name", email: "customer@example.com", contact: "9999999999" },
+//                 theme: { color: "#3399cc" },
+//             };
+
+//             const rzp = new Razorpay(options);
+//             rzp.on("payment.failed", function (response) {
+//                 console.log(`13 - Razorpay payment failed:`, response.error);
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Payment Failed",
+//                     text: response.error.description || "Payment processing failed",
+//                 }).then(() => {
+//                     window.location.href = `/user/order-failure/${result.orderId}?addressId=${selectedAddressId}&error=${encodeURIComponent(response.error.description)}`;
+//                 });
+//             });
+//             rzp.open();
+//         } else if (selectedPaymentMethod === "cod") {
+//             console.log(`14 - COD order placed successfully: ${result.orderId}`);
+//             await Swal.fire({
+//                 icon: "success",
+//                 title: "Order Placed",
+//                 text: "Your COD order has been successfully placed!",
+//                 timer: 2000,
+//                 showConfirmButton: false,
+//             });
+//             window.location.href = `/user/order-success/${result.orderId}`;
+//         } else {
+//             throw new Error("Unsupported payment method");
+//         }
+//     } catch (error) {
+//         console.error(`15 - Error in placeOrder: ${error.message}`, error);
+//         Swal.fire({
+//             icon: "error",
+//             title: "Error",
+//             text: error.message || "An unexpected error occurred",
+//         });
+//     }
+// }
+
+
+
+
+
+
+
+
 async function placeOrder() {
     try {
-        // Validate selected address
-        if (!selectedAddressId) {
-            throw new Error('Please select an address.');
-        }
+        console.log(`1 - Starting placeOrder`);
+        console.log(`2 - Current selectedAddressId: ${selectedAddressId}`);
+        console.log(`3 - Current selectedPaymentMethod: ${selectedPaymentMethod}`);
 
-        // Validate selected payment method
-        if (!selectedPaymentMethod) {
-            throw new Error('Please select a payment method.');
-        }
+        if (!selectedAddressId) throw new Error("Please select an address.");
+        if (!selectedPaymentMethod) throw new Error("Please select a payment method.");
 
-     
-
-        // Prepare order data
         const orderData = {
             addressId: selectedAddressId,
             paymentMethod: selectedPaymentMethod,
         };
+        console.log(`4 - Sending Order Data:`, orderData);
 
-        console.log('📩 Sending Order Data:', orderData); // Debugging
-
-        // Send order data to the server
-        const response = await fetch('/user/place-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(orderData)
+        const response = await fetch("/user/place-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
         });
 
-        console.log('📨 Server Response:', response); // Debugging
+        const result = await response.json();
+        console.log(`5 - place-order response:`, result);
 
-        // Handle server response
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to place order.');
+        if (!response.ok || !result.success) {
+            if (result.error === "Insufficient wallet balance") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Insufficient Wallet Balance",
+                    html: `Required: ₹${result.requiredAmount}<br>Current Balance: ₹${result.currentBalance}<br>Please add funds to your wallet.`,
+                    confirmButtonText: "Add Funds",
+                    showCancelButton: true,
+                    cancelButtonText: "Cancel"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/user/wallet/add-funds";
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Order Failed",
+                    text: result.error || "Failed to place order",
+                    confirmButtonText: "OK",
+                });
+            }
+            return;
         }
 
-        const result = await response.json();
-        console.log('✅ Order placed successfully:', result); // Debugging
+        if (selectedPaymentMethod === "razorpay") {
+            console.log(`6 - Initiating Razorpay payment for order: ${result.orderId}`);
+            const razorpayResponse = await fetch("/user/create-order", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    orderId: result.orderId,
+                    totalAmount: result.totalAmount,
+                }),
+            });
 
-        // Show success modal
-        const successModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
-        successModal.show();
+            const razorpayResult = await razorpayResponse.json();
+            console.log(`7 - Razorpay create-order response:`, razorpayResult);
 
+            if (!razorpayResponse.ok || !razorpayResult.success) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Payment Initiation Failed",
+                    text: razorpayResult.message || "Failed to create Razorpay order",
+                });
+                return;
+            }
+
+            console.log(`8 - Opening Razorpay checkout with:`, razorpayResult);
+            const options = {
+                key: razorpayResult.key,
+                amount: razorpayResult.amount,
+                currency: razorpayResult.currency,
+                order_id: razorpayResult.orderId,
+                name: "Supreme",
+                description: "Order Payment",
+                handler: async function (response) {
+                    console.log(`9 - Razorpay payment response:`, response);
+                    const verifyResponse = await fetch("/user/verify-payment", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            orderId: result.orderId,
+                        }),
+                    });
+
+                    const verifyResult = await verifyResponse.json();
+                    console.log(`10 - Payment verification result:`, verifyResult);
+
+                    if (verifyResult.success) {
+                        console.log(`11 - Payment verified successfully`);
+                        await Swal.fire({
+                            icon: "success",
+                            title: "Payment Successful",
+                            text: "Your order has been placed!",
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                        window.location.href = `/user/order-success/${result.orderId}`;
+                    } else {
+                        throw new Error(verifyResult.message || "Payment verification failed");
+                    }
+                },
+                modal: {
+                    ondismiss: function () {
+                        console.log(`12 - Razorpay modal dismissed`);
+                        window.location.href = `/user/order-failure/${result.orderId}?addressId=${selectedAddressId}&error=Payment%20cancelled%20by%20user`;
+                    },
+                },
+                prefill: { name: "Customer Name", email: "customer@example.com", contact: "9999999999" },
+                theme: { color: "#3399cc" },
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on("payment.failed", function (response) {
+                console.log(`13 - Razorpay payment failed:`, response.error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Payment Failed",
+                    text: response.error.description || "Payment processing failed",
+                }).then(() => {
+                    window.location.href = `/user/order-failure/${result.orderId}?addressId=${selectedAddressId}&error=${encodeURIComponent(response.error.description)}`;
+                });
+            });
+            rzp.open();
+        } else if (selectedPaymentMethod === "cod") {
+            console.log(`14 - COD order placed successfully: ${result.orderId}`);
+            await Swal.fire({
+                icon: "success",
+                title: "Order Placed",
+                text: "Your COD order has been successfully placed!",
+                timer: 2000,
+                showConfirmButton: false,
+            });
+            window.location.href = `/user/order-success/${result.orderId}`;
+        } else if (selectedPaymentMethod === "wallet") {
+            console.log(`14 - Wallet order placed successfully: ${result.orderId}`);
+            await Swal.fire({
+                icon: "success",
+                title: "Order Placed",
+                text: "Your order has been paid with wallet balance!",
+                timer: 2000,
+                showConfirmButton: false,
+            });
+            window.location.href = `/user/order-success/${result.orderId}`;
+        } else {
+            throw new Error("Unsupported payment method");
+        }
     } catch (error) {
-        console.error('🚨 Error in placeOrder:', error.message); // Debugging
-        alert(`Error: ${error.message}`);
+        console.error(`15 - Error in placeOrder: ${error.message}`, error);
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message || "An unexpected error occurred",
+        });
     }
 }

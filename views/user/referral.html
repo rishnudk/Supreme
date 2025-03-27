@@ -1,0 +1,720 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral Program</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #2A3F54;
+            --secondary-color: #F4F5F7;
+            --accent-color: #E67E22;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --text-color: #333;
+            --light-text: #6C757D;
+            --border-radius: 16px;
+            --card-border-radius: 20px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F8F9FA;
+            color: var(--text-color);
+        }
+        
+        .account-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page-title {
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 1rem;
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            height: 100%;
+            transition: var(--transition);
+        }
+        
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.8rem;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .invite-subtitle {
+            font-size: 0.75rem;
+            color: var(--light-text);
+            margin-left: 1.8rem;
+        }
+        
+        @media (max-width: 991.98px) {
+            .sidebar {
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Referral specific styles */
+        .referral-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.75rem;
+            height: 100%;
+        }
+
+        .referral-card {
+            background: linear-gradient(120deg, var(--primary-color), #1A2A36);
+            color: white;
+            border-radius: var(--card-border-radius);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .referral-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+        }
+
+        .referral-card::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            z-index: 1;
+        }
+
+        .referral-header {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 1.5rem;
+        }
+
+        .referral-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .referral-header p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .referral-link-container {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 1.5rem;
+        }
+
+        .referral-link-container .input-group {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .referral-link-container .form-control {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .referral-link-container .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .referral-link-container .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .referral-code {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .referral-code-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.25rem;
+        }
+
+        .referral-code-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .referral-code .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .referral-code .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .referral-actions {
+            display: flex;
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-accent:hover {
+            background-color: #D35400;
+            border-color: #D35400;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-outline-primary {
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+            background-color: transparent;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-card {
+            border-radius: var(--card-border-radius);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card-success {
+            background: linear-gradient(120deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .stat-card-info {
+            background: linear-gradient(120deg, #17a2b8, #6610f2);
+            color: white;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+        }
+
+        .stat-details h4 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-details p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0;
+        }
+
+        .referral-details {
+            margin-bottom: 2rem;
+        }
+
+        .referral-details h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .referral-details p {
+            font-size: 1rem;
+            color: var(--light-text);
+            margin-bottom: 1rem;
+        }
+
+        .referral-details ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .referral-details li {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .referral-steps {
+            margin-bottom: 2rem;
+        }
+
+        .step-card {
+            background-color: white;
+            border-radius: var(--card-border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 70px;
+            height: 70px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            opacity: 0.4;
+        }
+
+        .step-card h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .step-card p {
+            font-size: 0.95rem;
+            color: var(--light-text);
+            margin-bottom: 0;
+        }
+
+        .referral-faq {
+            margin-bottom: 2rem;
+        }
+
+        .accordion-item {
+            border: none;
+            margin-bottom: 1rem;
+            border-radius: var(--border-radius) !important;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .accordion-button {
+            padding: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+        }
+
+        .accordion-body {
+            padding: 1.25rem;
+            color: var(--light-text);
+        }
+
+        @media (max-width: 767.98px) {
+            .referral-actions {
+                flex-direction: column;
+            }
+            
+            .referral-code {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .referral-code .btn {
+                margin-top: 1rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="account-container">
+        <h1 class="page-title">Referral Program</h1>
+        
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <h2 class="sidebar-title">Account</h2>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="#" class="d-flex align-items-center">
+                                    <i class="bi bi-house"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-flex align-items-center">
+                                    <i class="bi bi-wallet2"></i>
+                                    Wallet
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="active d-flex align-items-center">
+                                    <i class="bi bi-people"></i>
+                                    Referrals
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-flex align-items-center">
+                                    <i class="bi bi-clock-history"></i>
+                                    Transaction History
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-flex align-items-center">
+                                    <i class="bi bi-gear"></i>
+
+
+
+                                    Account Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-flex align-items-center">
+                                    <i class="bi bi-shield-check"></i>
+                                    Security
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <h2 class="sidebar-title">Support</h2>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="#" class="d-flex align-items-center">
+                                    <i class="bi bi-question-circle"></i>
+                                    Help Center
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-flex align-items-center">
+                                    <i class="bi bi-chat-dots"></i>
+                                    Contact Support
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <div class="referral-container">
+                    <!-- Referral Card -->
+                    <div class="referral-card">
+                        <div class="referral-header">
+                            <h2>Share & Earn Rewards</h2>
+                            <p>Invite friends and earn rewards when they join our platform</p>
+                        </div>
+                        
+                        <div class="referral-link-container">
+                            <label class="referral-code-label">Your Referral Link</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" value="https://yourdomain.com/ref/johndoe" readonly>
+                                <button class="btn" type="button" onclick="copyReferralLink()">
+                                    <i class="bi bi-clipboard"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="referral-code">
+                            <div>
+                                <div class="referral-code-label">Your Unique Code</div>
+                                <div class="referral-code-value">R3F4D9</div>
+                            </div>
+                            <button class="btn" onclick="copyReferralCode()">
+                                <i class="bi bi-clipboard"></i> Copy Code
+                            </button>
+                        </div>
+                        
+                        <div class="referral-actions">
+                            <button class="btn btn-accent">
+                                <i class="bi bi-share"></i> Share via Email
+                            </button>
+                            <button class="btn btn-outline-primary">
+                                <i class="bi bi-facebook"></i> Share on Facebook
+                            </button>
+                            <button class="btn btn-outline-primary">
+                                <i class="bi bi-twitter-x"></i> Share on X
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Referral Stats -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="stat-card stat-card-success">
+                                <div class="stat-icon">
+                                    <i class="bi bi-people-fill fs-4"></i>
+                                </div>
+                                <div class="stat-details">
+                                    <h4>24</h4>
+                                    <p>Total Referrals</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-card stat-card-info">
+                                <div class="stat-icon">
+                                    <i class="bi bi-person-check-fill fs-4"></i>
+                                </div>
+                                <div class="stat-details">
+                                    <h4>18</h4>
+                                    <p>Successful Sign-ups</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- How Referrals Work -->
+                    <div class="referral-details">
+                        <h3>How Our Referral Program Works</h3>
+                        <p>Earn rewards by inviting your friends, family, and colleagues to join our platform. It's simple to get started:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="step-card">
+                                    <div class="step-number">1</div>
+                                    <h4>Share Your Link</h4>
+                                    <p>Copy your unique referral link or code and share it with friends through email, social media, or messaging apps.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="step-card">
+                                    <div class="step-number">2</div>
+                                    <h4>Friends Sign Up</h4>
+                                    <p>When your friends click your link or use your code during registration, they're connected to your account.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="step-card">
+                                    <div class="step-number">3</div>
+                                    <h4>Earn Rewards</h4>
+                                    <p>For each friend who successfully signs up and completes their first transaction, you both receive rewards.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Referral Benefits -->
+                    <div class="referral-details">
+                        <h3>Benefits</h3>
+                        <ul>
+                            <li>Earn $25 for each successful referral who completes their first transaction</li>
+                            <li>Your referred friends get a $15 bonus when they sign up</li>
+                            <li>Unlock exclusive rewards when you reach referral milestones</li>
+                            <li>No limit on how many people you can refer</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- FAQ -->
+                    <div class="referral-faq">
+                        <h3>Frequently Asked Questions</h3>
+                        
+                        <div class="accordion" id="referralFAQ">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                        How long does it take to receive my referral reward?
+                                    </button>
+                                </h2>
+                                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#referralFAQ">
+                                    <div class="accordion-body">
+                                        Referral rewards are typically processed within 24-48 hours after your friend completes their first transaction. You'll receive a notification when the reward is added to your account.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                        Is there a limit to how many people I can refer?
+                                    </button>
+                                </h2>
+                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#referralFAQ">
+                                    <div class="accordion-body">
+                                        No, there's no limit to the number of people you can refer. The more friends you invite who join and use our platform, the more rewards you can earn!
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                        What happens if my friend forgets to use my referral code?
+                                    </button>
+                                </h2>
+                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#referralFAQ">
+                                    <div class="accordion-body">
+                                        Referral codes must be applied during the registration process. If your friend forgets to use your code, they can contact our support team within 7 days of creating their account to have the referral added manually.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyReferralLink() {
+            const referralLink = document.querySelector('.referral-link-container input');
+            referralLink.select();
+            referralLink.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(referralLink.value);
+            
+            const copyBtn = document.querySelector('.referral-link-container button');
+            const originalContent = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="bi bi-check-lg"></i> Copied!';
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = originalContent;
+            }, 2000);
+        }
+        
+        function copyReferralCode() {
+            const referralCode = document.querySelector('.referral-code-value').innerText;
+            navigator.clipboard.writeText(referralCode);
+            
+            const copyBtn = document.querySelector('.referral-code button');
+            const originalContent = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="bi bi-check-lg"></i> Copied!';
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = originalContent;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

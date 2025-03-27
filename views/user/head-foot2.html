@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern E-commerce | 2025</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4F6367;
+            --secondary-color: #B8D8D8;
+            --accent-color: #FE5F55;
+            --light-color: #F4F7F7;
+            --dark-color: #2D3B3E;
+            --text-color: #333333;
+        }
+
+        body {
+            background-color: var(--light-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 80px; /* Adjust for fixed header */
+        }
+
+        /* Header Styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            font-weight: 500;
+            margin: 0 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-item.active .nav-link {
+            color: var(--accent-color);
+        }
+
+        .nav-item.active .nav-link::after {
+            width: 100%;
+        }
+
+        .search-bar {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input {
+            border-radius: 50px;
+            border: 1px solid var(--secondary-color);
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            box-shadow: 0 0 0 3px rgba(184, 216, 216, 0.3);
+            border-color: var(--secondary-color);
+        }
+
+        .search-bar .btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-color);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar .btn:hover {
+            background: #e5574e;
+            transform: scale(1.05);
+        }
+
+        .action-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            position: relative;
+            color: var(--primary-color);
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .icon-btn:hover {
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .icon-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .mobile-nav-toggle {
+            background: transparent;
+            border: none;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        /* Mega Menu */
+        .mega-menu {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            background: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .mega-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .category-column h5 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .category-column h5::after {
+            content: '';
+            width: 30px;
+            height: 2px;
+            background: var(--accent-color);
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+        }
+
+        .category-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .category-column li {
+            margin-bottom: 8px;
+        }
+
+        .category-column a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .category-column a:hover {
+            color: var(--accent-color);
+            padding-left: 5px;
+        }
+
+        /* Floating Cart Preview */
+        .cart-preview {
+            position: fixed;
+            top: 80px;
+            right: -300px;
+            width: 300px;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px 0 0 10px;
+            padding: 20px;
+            transition: right 0.4s ease;
+            z-index: 1001;
+        }
+
+        .cart-preview.show {
+            right: 0;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 50px 0 0;
+            margin-top: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-bg-shape {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 250px;
+            height: 250px;
+            background: rgba(254, 95, 85, 0.1);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-about p {
+            opacity: 0.8;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-heading {
+            font-size: 18px;
+            margin-bottom: 25px;
+            color: white;
+            position: relative;
+        }
+
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--light-color);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .footer-links a i {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--accent-color);
+            transform: translateY(-5px);
+        }
+
+        .newsletter-form {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .newsletter-form input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .newsletter-form input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+
+        .newsletter-form button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            height: calc(100% - 10px);
+            border-radius: 50px;
+            padding: 0 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background: #e5574e;
+        }
+
+        .footer-bottom {
+            background: rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .footer-payment {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .footer-payment img {
+            height: 30px;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .footer-payment img:hover {
+            opacity: 1;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background: #e5574e;
+            transform: translateY(-5px);
+        }
+
+        /* Floating Support Chat Button */
+        .support-chat-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .support-chat-btn i {
+            font-size: 24px;
+        }
+
+        .support-chat-btn:hover {
+            background: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            .mega-menu {
+                position: static;
+                box-shadow: none;
+                padding: 0;
+                margin-top: 10px;
+            }
+            
+            .category-column {
+                margin-bottom: 20px;
+            }
+            
+            .search-bar {
+                margin: 15px 0;
+            }
+            
+            .action-icons {
+                margin-top: 15px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .footer-col {
+                margin-bottom: 30px;
+            }
+            
+            .mobile-search-toggle {
+                display: block;
+            }
+            
+            .search-bar {
+                display: none;
+            }
+            
+            .search-bar.show {
+                display: block;
+            }
+        }
+
+        /* Animation for elements appearing on page load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated-element {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand animated-element" href="#">StyleEdge</a>
+                
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler mobile-nav-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- Navigation Menu -->
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item active animated-element delay-1">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item animated-element delay-1">
+                            <a class="nav-link" href="#">Products</a>
+                            <!-- Mega Menu -->
+                            <div class="mega-menu">
+                                <div class="row">
+                                    <div class="col-md-3 category-column">
+                                        <h5>Clothing</h5>
+                                        <ul>
+                                            <li><a href="#">Men's Fashion</a></li>
+                                            <li><a href="#">Women's Fashion</a></li>
+                                            <li><a href="#">Kids Collection</a></li>
+                                            <li><a href="#">Seasonal Specials</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-3 category-column">
+                                        <h5>Electronics</h5>
+                                        <ul>
+                                            <li><a href="#">Smartphones</a></li>
+                                            <li><a href="#">Laptops & Computers</a></li>
+                                            <li><a href="#">Audio & Headphones</a></li>
+                                            <li><a href="#">Smart Home</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-3 category-column">
+                                        <h5>Home & Living</h5>
+                                        <ul>
+                                            <li><a href="#">Furniture</a></li>
+                                            <li><a href="#">Kitchenware</a></li>
+                                            <li><a href="#">Decor & Lighting</a></li>
+                                            <li><a href="#">Bedding & Bath</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-3 category-column">
+                                        <h5>New Arrivals</h5>
+                                        <ul>
+                                            <li><a href="#">Featured Products</a></li>
+                                            <li><a href="#">Trending Items</a></li>
+                                            <li><a href="#">Limited Editions</a></li>
+                                            <li><a href="#">Special Offers</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item animated-element delay-2">
+                            <a class="nav-link" href="#">Deals</a>
+                        </li>
+                        <li class="nav-item animated-element delay-2">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item animated-element delay-3">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Search Bar -->
+                    <div class="search-bar ms-auto me-3 animated-element delay-3">
+                        <input type="text" class="form-control" placeholder="Search products...">
+                        <button class="btn"><i class="fas fa-search"></i></button>
+                    </div>
+                    
+                    <!-- Action Icons -->
+                    <div class="action-icons animated-element delay-4">
+                        <a href="#" class="icon-btn" id="account-btn">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <a href="#" class="icon-btn" id="wishlist-btn">
+                            <i class="fas fa-heart"></i>
+                            <span class="icon-badge">2</span>
+                        </a>
+                        <a href="#" class="icon-btn" id="cart-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="icon-badge">3</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Floating Cart Preview -->
+        <div class="cart-preview" id="cartPreview">
+            <h5 class="mb-3">Your Cart (3)</h5>
+            <div class="cart-items">
+                <div class="cart-item">
+                    <img src="/api/placeholder/50/50" alt="Product">
+                    <div>
+                        <h6 class="mb-0">Wireless Earbuds</h6>
+                        <p class="mb-0">1 × $79.99</p>
+                    </div>
+                    <button class="btn text-danger btn-sm ms-auto"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="cart-item">
+                    <img src="/api/placeholder/50/50" alt="Product">
+                    <div>
+                        <h6 class="mb-0">Smart Watch X2</h6>
+                        <p class="mb-0">1 × $129.99</p>
+                    </div>
+                    <button class="btn text-danger btn-sm ms-auto"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="cart-item">
+                    <img src="/api/placeholder/50/50" alt="Product">
+                    <div>
+                        <h6 class="mb-0">Premium T-Shirt</h6>
+                        <p class="mb-0">2 × $24.99</p>
+                    </div>
+                    <button class="btn text-danger btn-sm ms-auto"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span>$259.96</span>
+            </div>
+            <div class="d-grid gap-2">
+                <a href="#" class="btn btn-accent">Checkout</a>
+                <a href="#" class="btn btn-outline-secondary">View Cart</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Content Placeholder -->
+    <div class="container py-5">
+        <h1>E-commerce Website Content</h1>
+        <p>This is a placeholder for your e-commerce website content. The focus of this implementation is on the header and footer design.</p>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-bg-shape"></div>
+        <div class="container">
+            <div class="row">
+                <!-- About Column -->
+                <div class="col-lg-4 col-md-6 footer-col animated-element">
+                    <div class="footer-about">
+                        <a href="#" class="footer-logo">StyleEdge</a>
+                        <p>We're dedicated to providing you with the best shopping experience possible, offering high-quality products at competitive prices with exceptional customer service.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-pinterest"></i></a>
+                            <a href="#"><i class="fab fa-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Links Column -->
+                <div class="col-lg-2 col-md-6 footer-col animated-element delay-1">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Products</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Special Offers</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> New Arrivals</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Brands</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Customer Service Column -->
+                <div class="col-lg-2 col-md-6 footer-col animated-element delay-2">
+                    <h4 class="footer-heading">Customer Service</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-headset"></i> Contact Us</a></li>
+                        <li><a href="#"><i class="fas fa-exchange-alt"></i> Returns Policy</a></li>
+                        <li><a href="#"><i class="fas fa-truck"></i> Shipping Info</a></li>
+                        <li><a href="#"><i class="fas fa-question-circle"></i> FAQs</a></li>
+                        <li><a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter Column -->
+                <div class="col-lg-4 col-md-6 footer-col animated-element delay-3">
+                    <h4 class="footer-heading">Newsletter</h4>
+                    <p>Subscribe to receive updates, exclusive offers, and more.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                    <p class="mt-3">Get our app:</p>
+                    <div class="app-download d-flex gap-2">
+                        <a href="#"><img src="/api/placeholder/120/40" alt="App Store"></a>
+                        <a href="#"><img src="/api/placeholder/120/40" alt="Google Play"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 StyleEdge. All Rights Reserved.</p>
+                <div class="footer-payment">
+                    <img src="/api/placeholder/40/25" alt="Visa">
+                    <img src="/api/placeholder/40/25" alt="Mastercard">
+                    <img src="/api/placeholder/40/25" alt="PayPal">
+                    <img src="/api/placeholder/40/25" alt="Apple Pay">
+                    <img src="/api/placeholder/40/25" alt="Google Pay">
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scrollTop">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+    
+    <!-- Support Chat Button -->
+    <div class="support-chat-btn">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cart Preview Toggle
+            const cartBtn = document.getElementById('cart-btn');
+            const cartPreview = document.getElementById('cartPreview');
+            
+            cartBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                cartPreview.classList.toggle('show');
+            });
+            
+            // Hide cart preview when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!cartBtn.contains(e.target) && !cartPreview.contains(e.target)) {
+                    cartPreview.classList.remove('show');
+                }
+            });
+            
+            // Scroll to Top Button
+            const scrollTopBtn = document.getElementById('scrollTop');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+            
+            scrollTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Navbar animation on scroll
+            const navbar = document.querySelector('.navbar');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 50) {
+                    navbar.style.padding = '10px 0';
+                    navbar.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+                } else {
+                    navbar.style.padding = '15px 0';
+                    navbar.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.05)';
+                }
+            });
+            
+            // Support Chat Button
+            const supportChatBtn = document.querySelector('.support-chat-btn');
+            
+            supportChatBtn.addEventListener('click', function() {
+                alert('Chat support feature would open here!');
+            });
+        });
+    </script>
+</body>
+</html>

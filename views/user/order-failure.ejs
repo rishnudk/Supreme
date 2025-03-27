@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Failed</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .illustration { max-width: 300px; margin: 20px auto; }
+    </style>
+</head>
+<body>
+    <%- include('../partials/userNavbar') %>
+
+    <div class="container text-center py-5">
+        <!-- Dynamic SVG generation instead of using image file -->
+        <div id="error-icon" class="mb-4" style="height: 120px; display: flex; justify-content: center; align-items: center;">
+            <!-- Dynamic SVG will be inserted here -->
+        </div>
+        
+        <h2 class="text-danger">Payment Failed</h2>
+        <p class="text-muted">
+         
+            <p>Error: <%= errorMessage %></p>
+    <p>Order ID: <%= order._id %></p>
+    <% if (order.paymentMethod === 'razorpay' || order.paymentMethod === 'paylater' && order.paymentStatus === 'Pending') { %>
+        <button onclick="retryPayment('<%= order._id %>', '<%= addressId %>')" class="btn btn-primary me-3">Retry Payment</button>
+        <button onclick="payLater('<%= order._id %>', '<%= addressId %>')" class="btn btn-outline-secondary">Pay Later</button>
+    <% } else { %>
+        <p>This order cannot be retried or set to Pay Later.</p>
+    <% } %>
+        
+        </div>
+    </div>
+
+
+    <%- include('../partials/userFooter') %>
+
+    <script>
+
+// Generate payment failure SVG icon dynamically
+document.addEventListener('DOMContentLoaded', function() {
+        const errorIcon = document.getElementById('error-icon');
+        
+        // Create SVG element dynamically
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("width", "120");
+        svg.setAttribute("height", "120");
+        svg.setAttribute("viewBox", "0 0 120 120");
+        
+        // Create circle background
+        const circle = document.createElementNS(svgNS, "circle");
+        circle.setAttribute("cx", "60");
+        circle.setAttribute("cy", "60");
+        circle.setAttribute("r", "54");
+        circle.setAttribute("fill", "#f8d7da");
+        circle.setAttribute("stroke", "#dc3545");
+        circle.setAttribute("stroke-width", "2");
+        
+        // Create X mark (cross)
+        const crossGroup = document.createElementNS(svgNS, "g");
+        crossGroup.setAttribute("stroke", "#dc3545");
+        crossGroup.setAttribute("stroke-width", "8");
+        crossGroup.setAttribute("stroke-linecap", "round");
+        
+        const line1 = document.createElementNS(svgNS, "line");
+        line1.setAttribute("x1", "40");
+        line1.setAttribute("y1", "40");
+        line1.setAttribute("x2", "80");
+        line1.setAttribute("y2", "80");
+        
+        const line2 = document.createElementNS(svgNS, "line");
+        line2.setAttribute("x1", "80");
+        line2.setAttribute("y1", "40");
+        line2.setAttribute("x2", "40");
+        line2.setAttribute("y2", "80");
+        
+        // Add elements to SVG
+        crossGroup.appendChild(line1);
+        crossGroup.appendChild(line2);
+        svg.appendChild(circle);
+        svg.appendChild(crossGroup);
+        
+        // Add SVG to container
+        errorIcon.appendChild(svg);
+    });
+ 
+
+
+
+
+
+        // function retryPayment(razorpayOrderId, addressId) {
+        //     console.log("retryPayment - Starting with Razorpay Order ID:", razorpayOrderId, "Address ID:", addressId);
+        //     if (!addressId) {
+        //         console.error("retryPayment - No addressId provided");
+        //         alert("Error: Address is missing. Please go back and select an address.");
+        //         return;
+        //     }
+        //     fetch('/user/create-order', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify({ addressId: addressId, paymentMethod: 'razorpay' })
+        //     })
+        //     .then(response => {
+        //         console.log("retryPayment - Fetch response status:", response.status);
+        //         return response.json();
+        //     })
+        //     .then(result => {
+        //         console.log("retryPayment - Server response:", result);
+        //         if (result.success && result.orderId) {
+        //             const options = {
+        //                 key: result.key,
+        //                 amount: result.amount,
+        //                 currency: result.currency,
+        //                 order_id: result.orderId,
+        //                 name: "Your Company Name",
+        //                 description: "Order Payment Retry",
+        //                 handler: function (response) {
+        //                     console.log("retryPayment - Razorpay payment response:", response);
+        //                     fetch('/user/verify-payment', {
+        //                         method: 'POST',
+        //                         headers: { 'Content-Type': 'application/json' },
+        //                         body: JSON.stringify({
+        //                             razorpay_order_id: response.razorpay_order_id,
+        //                             razorpay_payment_id: response.razorpay_payment_id,
+        //                             razorpay_signature: response.razorpay_signature,
+        //                             addressId: addressId
+        //                         })
+        //                     })
+        //                     .then(res => res.json())
+        //                     .then(verifyResult => {
+        //                         console.log("retryPayment - Verification result:", verifyResult);
+        //                         if (verifyResult.success) {
+        //                             window.location.href = `/user/order-success/${verifyResult.orderId}`;
+        //                         } else {
+        //                             window.location.href = `/user/order-failure/${result.orderId}?addressId=${addressId}&error=${encodeURIComponent(verifyResult.message || 'Verification failed')}`;
+        //                         }
+        //                     })
+        //                     .catch(error => {
+        //                         console.error("retryPayment - Verification fetch error:", error);
+        //                         window.location.href = `/user/order-failure/${result.orderId}?addressId=${addressId}&error=${encodeURIComponent('Verification error')}`;
+        //                     });
+        //                 },
+        //                 modal: {
+        //                     ondismiss: function() {
+        //                         console.log("retryPayment - Razorpay modal dismissed");
+        //                         window.location.href = `/user/order-failure/${result.orderId}?addressId=${addressId}&error=Payment%20cancelled%20by%20user`;
+        //                     }
+        //                 },
+        //                 prefill: { name: "Customer Name", email: "customer@example.com", contact: "9999999999" },
+        //                 theme: { color: "#3399cc" }
+        //             };
+        //             const rzp = new Razorpay(options);
+        //             rzp.on('payment.failed', function (response) {
+        //                 console.log("retryPayment - Razorpay payment failed:", response.error);
+        //                 window.location.href = `/user/order-failure/${result.orderId}?addressId=${addressId}&error=${encodeURIComponent(response.error.description)}`;
+        //             });
+        //             rzp.open();
+        //         } else {
+        //             throw new Error("Invalid response from create-order: " + (result.message || "Unknown error"));
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error("retryPayment - Error:", error);
+        //         alert("Error retrying payment: " + error.message);
+        //     });
+        // }
+
+        // function payLater(razorpayOrderId, addressId) {
+        //     console.log("payLater - Starting with Razorpay Order ID:", razorpayOrderId, "Address ID:", addressId);
+        //     if (!addressId) {
+        //         console.error("payLater - No addressId provided");
+        //         alert("Error: Address is missing. Please go back and select an address.");
+        //         return;
+        //     }
+        //     fetch('/user/pay-later', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify({ addressId: addressId, paymentMethod: 'Razorpay' })
+        //     })
+        //     .then(response => {
+        //         console.log("payLater - Fetch response status:", response.status);
+        //         return response.json();
+        //     })
+        //     .then(result => {
+        //         console.log("payLater - Server response:", result);
+        //         if (result.success && result.orderId) {
+        //             window.location.href = `/user/details/${result.orderId}`;
+        //         } else {
+        //             throw new Error(result.error || "Failed to place order with Pay Later");
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error("payLater - Error:", error);
+        //         alert("Error processing Pay Later: " + error.message);
+        //     });
+        // }
+   
+   
+   
+
+
+//og
+
+//         function retryPayment(orderId, addressId) { 
+//     console.log("retryPayment - Starting with Order ID:", orderId, "Address ID:", addressId);
+//     if (!orderId || !addressId) { // Check both parameters
+//         console.error("retryPayment - Missing orderId or addressId");
+//         alert("Error: Order or address is missing.");
+//         return;
+//     }
+//     fetch('/user/create-order-from-existing', { 
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ orderId }) 
+//     })
+//     .then(response => {
+//         console.log("retryPayment - Fetch response status:", response.status);
+//         return response.json();
+//     })
+//     .then(result => {
+//         console.log("retryPayment - Server response:", result);
+//         if (result.success && result.orderId) {
+//             const options = {
+//                 key: result.key,
+//                 amount: result.amount,
+//                 currency: result.currency,
+//                 order_id: result.orderId,
+//                 name: "Your Company Name",
+//                 description: "Order Payment Retry",
+//                 handler: function (response) {
+//                     console.log("retryPayment - Razorpay payment response:", response);
+//                     fetch('/user/verify-payment-from-existing', { 
+//                         method: 'POST',
+//                         headers: { 'Content-Type': 'application/json' },
+//                         body: JSON.stringify({
+//                             razorpay_order_id: response.razorpay_order_id,
+//                             razorpay_payment_id: response.razorpay_payment_id,
+//                             razorpay_signature: response.razorpay_signature,
+//                             orderId 
+//                         })
+//                     })
+//                     .then(res => res.json())
+//                     .then(verifyResult => {
+//                         console.log("retryPayment - Verification result:", verifyResult);
+//                         if (verifyResult.success) {
+//                             window.location.href = `/user/order-success/${verifyResult.orderId}`;
+//                         } else {
+//                             window.location.href = `/user/order-failure/${orderId}?addressId=${addressId}&error=${encodeURIComponent(verifyResult.message || 'Verification failed')}`;
+//                         }
+//                     })
+//                     .catch(error => {
+//                         console.error("retryPayment - Verification fetch error:", error);
+//                         window.location.href = `/user/order-failure/${orderId}?addressId=${addressId}&error=${encodeURIComponent('Verification error')}`;
+//                     });
+//                 },
+//                 modal: {
+//                     ondismiss: function() {
+//                         console.log("retryPayment - Razorpay modal dismissed");
+//                         window.location.href = `/user/order-failure/${orderId}?addressId=${addressId}&error=Payment%20cancelled%20by%20user`;
+//                     }
+//                 },
+//                 prefill: { name: "Customer Name", email: "customer@example.com", contact: "9999999999" },
+//                 theme: { color: "#3399cc" }
+//             };
+//             const rzp = new Razorpay(options);
+//             rzp.on('payment.failed', function (response) {
+//                 console.log("retryPayment - Razorpay payment failed:", response.error);
+//                 window.location.href = `/user/order-failure/${orderId}?addressId=${addressId}&error=${encodeURIComponent(response.error.description)}`;
+//             });
+//             rzp.open();
+//         } else {
+//             throw new Error("Invalid response from create-order-from-existing: " + (result.message || "Unknown error"));
+//         }
+//     })
+//     .catch(error => {
+//         console.error("retryPayment - Error:", error);
+//         alert("Error retrying payment: " + error.message);
+//     });
+// }
+
+
+
+
+
+
+
+
+
+
+
+function retryPayment(orderId, addressId) {
+    console.log("retryPayment - Starting with Order ID:", orderId, "Address ID:", addressId);
+    if (!orderId || !addressId) {
+        console.error("retryPayment - Missing orderId or addressId");
+        alert("Error: Order or address is missing.");
+        return;
+    }
+    fetch('/user/create-order-from-existing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId })
+    })
+    .then(response => {
+        console.log("retryPayment - Fetch response status:", response.status);
+        return response.json();
+    })
+    .then(result => {
+        console.log("retryPayment - Server response:", result);
+        if (result.success && result.orderId) {
+            const options = {
+                key: result.key,
+                amount: result.amount,
+                currency: result.currency,
+                order_id: result.orderId,
+                name: "Your Company Name",
+                description: "Order Payment Retry",
+                handler: function (response) {
+                    console.log("retryPayment - Razorpay payment response:", response);
+                    fetch('/user/verify-payment-from-existing', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            orderId
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(verifyResult => {
+                        console.log("retryPayment - Verification result:", verifyResult);
+                        if (verifyResult.success) {
+                            window.location.href = `/user/order-success/${verifyResult.orderId}`;
+                        } else {
+                            window.location.href = `/user/order-failure/${orderId}?addressId=${addressId}&error=${encodeURIComponent(verifyResult.message || 'Verification failed')}`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error("retryPayment - Verification fetch error:", error);
+                        window.location.href = `/user/order-failure/${orderId}?addressId=${addressId}&error=${encodeURIComponent('Verification error')}`;
+                    });
+                },
+                modal: {
+                    ondismiss: function() {
+                        console.log("retryPayment - Razorpay modal dismissed");
+                        window.location.href = `/user/order-failure/${orderId}?addressId=${addressId}&error=Payment%20cancelled%20by%20user`;
+                    }
+                },
+                prefill: { name: "Customer Name", email: "customer@example.com", contact: "9999999999" },
+                theme: { color: "#3399cc" }
+            };
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+                console.log("retryPayment - Razorpay payment failed:", response.error);
+                window.location.href = `/user/order-failure/${orderId}?addressId=${addressId}&error=${encodeURIComponent(response.error.description)}`;
+            });
+            rzp.open();
+        } else {
+            throw new Error("Invalid response from create-order-from-existing: " + (result.message || "Unknown error"));
+        }
+    })
+    .catch(error => {
+        console.error("retryPayment - Error:", error);
+        Swal.fire({
+            icon: "error",
+            title: "Retry Failed",
+            text: error.message,
+            confirmButtonText: "OK"
+        });
+    });
+}
+
+
+
+
+
+
+ //og
+// function payLater(mongoOrderId, addressId) { 
+//     console.log("payLater - Starting with MongoDB Order ID:", mongoOrderId, "Address ID:", addressId);
+//     if (!mongoOrderId || !addressId) {
+//         console.error("payLater - Missing mongoOrderId or addressId");
+//         alert("Error: Order or address is missing.");
+//         return;
+//     }
+//     fetch('/user/pay-later', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ orderId: mongoOrderId }) // Use MongoDB orderId
+//     })
+//     .then(response => {
+//         console.log("payLater - Fetch response status:", response.status);
+//         return response.json();
+//     })
+//     .then(result => {
+//         console.log("payLater - Server response:", result);
+//         if (result.success && result.orderId) {
+//             window.location.href = `/user/details/${result.orderId}`;
+//         } else {
+//             throw new Error(result.error || "Failed to set Pay Later");
+//         }
+//     })
+//     .catch(error => {
+//         console.error("payLater - Error:", error);
+//         alert("Error processing Pay Later: " + error.message);
+//     });
+// }
+   
+
+
+
+function payLater(mongoOrderId, addressId) {
+    console.log("payLater - Starting with MongoDB Order ID:", mongoOrderId, "Address ID:", addressId);
+    if (!mongoOrderId || !addressId) {
+        console.error("payLater - Missing mongoOrderId or addressId");
+        alert("Error: Order or address is missing.");
+        return;
+    }
+    fetch('/user/pay-later', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: mongoOrderId })
+    })
+    .then(response => {
+        console.log("payLater - Fetch response status:", response.status);
+        return response.json();
+    })
+    .then(result => {
+        console.log("payLater - Server response:", result);
+        if (result.success && result.orderId) {
+            window.location.href = `/user/details/${result.orderId}`;
+        } else {
+            throw new Error(result.error || "Failed to set Pay Later");
+        }
+    })
+    .catch(error => {
+        console.error("payLater - Error:", error);
+        alert("Error processing Pay Later: " + error.message);
+    });
+}
+
+
+   
+   
+   
+   </script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</body>
+</html>

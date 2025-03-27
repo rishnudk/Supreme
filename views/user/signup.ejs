@@ -544,7 +544,7 @@ function resendOTP() {
 </script> -->
 
 
-
+<!-- 
 <script>
 	// Define CSS for the modal to ensure it works properly
 const modalStyle = document.createElement('style');
@@ -786,9 +786,140 @@ function testModal() {
     modal.style.display = "block";
     document.getElementById("otpInput").focus();
 }
+</script> -->
+
+
+
+
+<script>
+    // Define CSS for the modal (unchanged)
+    const modalStyle = document.createElement('style');
+    modalStyle.textContent = `
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 5px; position: relative; }
+        .close { color: #aaa; position: absolute; top: 10px; right: 15px; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover, .close:focus { color: black; text-decoration: none; }
+        #otpInput { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        #verifyOtp { width: 100%; padding: 12px; margin: 10px 0; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        #verifyOtp:disabled { background-color: #cccccc; cursor: not-allowed; }
+    `;
+    document.head.appendChild(modalStyle);
+
+    // Form submission
+    document.getElementById("createAccountForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        let isValid = true;
+
+        // Get form values
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirmPassword = document.getElementById("confirmPassword").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const referral = document.getElementById("referral").value.trim();
+
+        // Store form data
+        window.formData = { name, email, password, phone, referral };
+
+        // Validation patterns
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const phonePattern = /^[0-9]{10}$/;
+
+        // Clear previous errors
+        document.querySelectorAll(".error").forEach(el => el.remove());
+
+        function showError(input, message) {
+            const error = document.createElement("small");
+            error.classList.add("error");
+            error.style.color = "red";
+            error.innerText = message;
+            input.parentNode.insertBefore(error, input.nextSibling);
+        }
+
+        // Validate inputs
+        if (!name) { showError(document.getElementById("name"), "Name cannot be empty."); isValid = false; }
+        if (!emailPattern.test(email)) { showError(document.getElementById("email"), "Enter a valid email."); isValid = false; }
+        if (!passwordPattern.test(password)) { showError(document.getElementById("password"), "Password must be at least 8 characters, include a letter and a number."); isValid = false; }
+        if (password !== confirmPassword) { showError(document.getElementById("confirmPassword"), "Passwords do not match."); isValid = false; }
+        if (!phonePattern.test(phone)) { showError(document.getElementById("phone"), "Enter a valid 10-digit phone number."); isValid = false; }
+
+        if (!isValid) return;
+
+        const submitButton = document.getElementById("createAccount");
+        submitButton.disabled = true;
+        submitButton.innerText = "Sending OTP...";
+
+        try {
+            const response = await fetch("/user/send-signup-otp", { // Changed to /user
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                document.getElementById("otpModal").style.display = "block";
+                document.getElementById("otpInput").focus();
+            } else {
+                alert(data.error || "Failed to send OTP");
+            }
+        } catch (error) {
+            console.error("Error sending OTP:", error);
+            alert("Error sending OTP");
+        }
+
+        submitButton.disabled = false;
+        submitButton.innerText = "Create Account";
+    });
+
+    // Close modal
+    document.querySelector(".close").addEventListener("click", function() {
+        document.getElementById("otpModal").style.display = "none";
+    });
+    window.addEventListener("click", function(event) {
+        const modal = document.getElementById("otpModal");
+        if (event.target === modal) modal.style.display = "none";
+    });
+
+    // OTP Verification
+    document.getElementById("verifyOtp").addEventListener("click", async function () {
+        const otp = document.getElementById("otpInput").value.trim();
+        const { email, name, password, phone, referral } = window.formData;
+
+        if (!otp) {
+            alert("Please enter the OTP.");
+            return;
+        }
+
+        const verifyButton = document.getElementById("verifyOtp");
+        verifyButton.disabled = true;
+        verifyButton.innerText = "Verifying...";
+
+        try {
+            const otpResponse = await fetch("/user/verify-signup-otp", { // Changed to /user
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, name, password, phone, otp, referral })
+            });
+
+            const otpData = await otpResponse.json();
+            if (otpResponse.ok) {
+                alert(otpData.message);
+                window.location.href = otpData.redirect;
+            } else {
+                alert(otpData.error || "Invalid OTP");
+            }
+        } catch (error) {
+            console.error("Error during verification:", error);
+            alert("Error during verification process");
+        }
+
+        verifyButton.disabled = false;
+        verifyButton.innerText = "Verify OTP";
+    });
 </script>
-
-
 
 </body>
 

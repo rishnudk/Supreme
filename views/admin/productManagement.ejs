@@ -65,24 +65,15 @@
     </table>
 
     <!-- Pagination Controls -->
+    <!-- Pagination Controls -->
     <div class="pagination">
-      <span class="pagination-info">
-        Showing <%= (page - 1) * 10 + 1 %> to <%= Math.min(page * 10, total) %> of <%= total %> entries
-      </span>
-      <div class="pagination-buttons">
-        <% if (page > 1) { %>
-          <a href="?page=<%= page - 1 %>&limit=10" class="pagination-btn">Previous</a>
-        <% } %>
-        <% for (let i = 1; i <= totalPages; i++) { %>
-          <a href="?page=<%= i %>&limit=10" class="pagination-btn <%= i === page ? 'active' : '' %>">
-            <%= i %>
-          </a>
-        <% } %>
-        <% if (page < totalPages) { %>
-          <a href="?page=<%= page + 1 %>&limit=10" class="pagination-btn">Next</a>
-        <% } %>
-      </div>
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <a href="?page=<%= i %>&limit=<%= limit %>" class="pagination-btn <%= i === page ? 'active' : '' %>">
+          <%= i %>
+        </a>
+      <% } %>
     </div>
+
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -102,43 +93,97 @@
       }
     }
 
-    // Pagination and Search Handling
+
+
+
+
+
+
+
+
+    // // Pagination and Search Handling
+    // document.addEventListener("DOMContentLoaded", function () {
+    //   const paginationButtons = document.querySelectorAll(".pagination-btn");
+    //   const searchInput = document.getElementById("search-input");
+
+    //   paginationButtons.forEach((button) => {
+    //     button.addEventListener("click", function (e) {
+    //       e.preventDefault();
+    //       const url = this.getAttribute("href");
+    //       fetch(url)
+    //         .then(response => response.text())
+    //         .then(html => {
+    //           const parser = new DOMParser();
+    //           const doc = parser.parseFromString(html, "text/html");
+    //           document.getElementById("product-list").innerHTML = doc.querySelector("#product-list").innerHTML;
+    //           document.querySelector(".pagination").innerHTML = doc.querySelector(".pagination").innerHTML;
+    //           window.history.pushState(null, "", url);
+    //         })
+    //         .catch(error => console.error("Error loading page:", error));
+    //     });
+    //   });
+
+    //   searchInput.addEventListener("input", function () {
+    //     const searchQuery = this.value;
+    //     const url = `/admin/products?page=1&limit=10&search=${encodeURIComponent(searchQuery)}`;
+    //     fetch(url)
+    //       .then(response => response.text())
+    //       .then(html => {
+    //         const parser = new DOMParser();
+    //         const doc = parser.parseFromString(html, "text/html");
+    //         document.getElementById("product-list").innerHTML = doc.querySelector("#product-list").innerHTML;
+    //         document.querySelector(".pagination").innerHTML = doc.querySelector(".pagination").innerHTML;
+    //         window.history.pushState(null, "", url);
+    //       })
+    //       .catch(error => console.error("Error searching products:", error));
+    //   });
+    // });
+ 
+
+
+
+
+
     document.addEventListener("DOMContentLoaded", function () {
-      const paginationButtons = document.querySelectorAll(".pagination-btn");
-      const searchInput = document.getElementById("search-input");
+  const paginationButtons = document.querySelectorAll(".pagination-btn");
+  const searchInput = document.getElementById("search-input");
 
-      paginationButtons.forEach((button) => {
-        button.addEventListener("click", function (e) {
-          e.preventDefault();
-          const url = this.getAttribute("href");
-          fetch(url)
-            .then(response => response.text())
-            .then(html => {
-              const parser = new DOMParser();
-              const doc = parser.parseFromString(html, "text/html");
-              document.getElementById("product-list").innerHTML = doc.querySelector("#product-list").innerHTML;
-              document.querySelector(".pagination").innerHTML = doc.querySelector(".pagination").innerHTML;
-              window.history.pushState(null, "", url);
-            })
-            .catch(error => console.error("Error loading page:", error));
-        });
-      });
-
-      searchInput.addEventListener("input", function () {
-        const searchQuery = this.value;
-        const url = `/admin/products?page=1&limit=10&search=${encodeURIComponent(searchQuery)}`;
-        fetch(url)
-          .then(response => response.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, "text/html");
-            document.getElementById("product-list").innerHTML = doc.querySelector("#product-list").innerHTML;
-            document.querySelector(".pagination").innerHTML = doc.querySelector(".pagination").innerHTML;
-            window.history.pushState(null, "", url);
-          })
-          .catch(error => console.error("Error searching products:", error));
-      });
+  paginationButtons.forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      const url = this.getAttribute("href"); // Already includes ?page=X&limit=Y
+      fetch(url)
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          document.getElementById("product-list").innerHTML = doc.querySelector("#product-list").innerHTML;
+          document.querySelector(".pagination").innerHTML = doc.querySelector(".pagination").innerHTML;
+          window.history.pushState(null, "", url);
+        })
+        .catch(error => console.error("Error loading page:", error));
     });
-  </script>
+  });
+
+  searchInput.addEventListener("input", function () {
+    const searchQuery = this.value;
+    const url = `/admin/products?page=1&limit=${window.paginationLimit}&search=${encodeURIComponent(searchQuery)}`;
+    fetch(url)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        document.getElementById("product-list").innerHTML = doc.querySelector("#product-list").innerHTML;
+        document.querySelector(".pagination").innerHTML = doc.querySelector(".pagination").innerHTML;
+        window.history.pushState(null, "", url);
+      })
+      .catch(error => console.error("Error searching products:", error));
+  });
+});
+    
+ 
+ 
+ 
+ </script>
 </body>
 </html>

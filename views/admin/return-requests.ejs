@@ -1,0 +1,225 @@
+<!-- views/admin/return-requests.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Requests</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Base styles for Return Requests */
+        .rr-container {
+            max-width: 100%;
+            padding: 20px;
+            margin-left: 240px; /* Default margin for 250px sidebar */
+            margin-top: 20px;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .rr-table {
+            width: 80%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .rr-table th,
+        .rr-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+            vertical-align: middle;
+        }
+
+        .rr-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .rr-table tr:nth-child(even) {
+            background-color: #f9f9f9; /* Striped effect */
+        }
+
+        .rr-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .rr-btn {
+            padding: 8px 16px;
+            background-color: #28a745; /* Success green */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 5px;
+        }
+
+        .rr-btn:hover {
+            background-color: #218838;
+        }
+
+        .rr-img {
+            max-width: 50px;
+            margin: 5px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive adjustments for sidebar toggle */
+        @media (max-width: 991px) {
+            .rr-container {
+                margin-left: 0; /* No margin when sidebar is collapsed */
+            }
+
+            body.navbar-open .rr-container {
+                margin-left: 250px; /* Margin when sidebar is open */
+            }
+        }
+
+        @media (max-width: 767px) {
+            .rr-table th,
+            .rr-table td {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .rr-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .rr-img {
+                max-width: 40px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .rr-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .rr-table th,
+            .rr-table td {
+                min-width: 100px;
+            }
+
+            .rr-btn {
+                display: block;
+                width: 100%;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <%- include('../partials/adminSidebar') %>
+
+
+    <div class="rr-container">
+        <h2>Pending Return Requests</h2>
+        <% if (returnRequests.length === 0) { %>
+            <p>No pending return requests.</p>
+        <% } else { %>
+            <table class="rr-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Product Name</th>
+                        <th>Image</th>
+                        <th>Reason</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% returnRequests.forEach(request => { %>
+                        <tr>
+                            <td><%= request.orderID %></td>
+                            <td><%= request.user.name %></td>
+                            <td>
+                                <% request.products.forEach(product => { %>
+                                    <%= product.name %><br>
+                                <% }); %>
+                            </td>
+                            <td>
+                                <% request.products.forEach(product => { %>
+                                    <img src="<%= product.image %>" alt="<%= product.name %>" class="rr-img">
+                                <% }); %>
+                            </td>
+                            <td><%= request.return.reason || 'N/A' %></td>
+                            <td>
+                                <% request.products.forEach(product => { %>
+                                    <% if (product.productStatus === 'Return Requested') { %>
+                                        <button class="rr-btn accept-return-btn" 
+                                                data-order-id="<%= request._id %>" 
+                                                data-product-id="<%= product.product._id.toString() %>">
+                                            Accept Return (<%= product.name %>)
+                                        </button><br>
+                                    <% } %>
+                                <% }); %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        document.querySelectorAll('.accept-return-btn').forEach(button => {
+            button.addEventListener('click', async function () {
+                const orderId = this.getAttribute('data-order-id');
+                const productId = this.getAttribute('data-product-id');
+    
+                console.log('Sending request:', { orderId, productId }); // Debug log
+    
+                try {
+                    const response = await fetch('/admin/orders/accept-return', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ orderId, productId })
+                    });
+                    const data = await response.json();
+    
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Return accepted successfully',
+                            icon: 'success',
+                            timer: 1500
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.message || 'Failed to accept return',
+                            icon: 'error'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error accepting return:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to accept return',
+                        icon: 'error'
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

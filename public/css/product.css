@@ -173,10 +173,13 @@
   color: #b71c1c;
 }
 
+
+
+
 /* 📌 Pagination Controls */
 .pagination {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: 2rem;
 }
@@ -210,6 +213,9 @@
   background: #1565c0;
   font-weight: 600;
 }
+
+
+
 
 /* 📌 Responsive Adjustments */
 @media (max-width: 768px) {

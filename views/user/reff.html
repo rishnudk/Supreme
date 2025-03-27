@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Referrals | Furniture E-commerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2A3F54;
+            --secondary-color: #F4F5F7;
+            --accent-color: #E67E22;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --text-color: #333;
+            --light-text: #6C757D;
+            --border-radius: 16px;
+            --card-border-radius: 20px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F8F9FA;
+            color: var(--text-color);
+        }
+        
+        .account-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+
+
+
+
+
+
+
+
+
+
+
+        
+        .page-title {
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 1rem;
+        }.sidebar {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            height: 100%;
+            transition: var(--transition);
+        }
+        
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.8rem;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .invite-subtitle {
+            font-size: 0.75rem;
+            color: var(--light-text);
+            margin-left: 1.8rem;
+        }
+        
+        @media (max-width: 991.98px) {
+            .sidebar {
+                margin-bottom: 2rem;
+            }
+        }.referral-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.75rem;
+            height: 100%;
+        }
+        
+        .referral-card {
+            background: linear-gradient(120deg, var(--primary-color), #1A2A36);
+            color: white;
+            border-radius: var(--card-border-radius);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .referral-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+        }
+        
+        .referral-card::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            z-index: 1;
+        }
+        
+        .referral-header {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 1.5rem;
+        }
+        
+        .referral-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .referral-header p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }.referral-link-container {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 2rem;
+        }
+        
+        .referral-input-group {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .referral-input {
+            flex-grow: 1;
+            background-color: transparent;
+            border: none;
+            color: white;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .referral-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .referral-input:focus {
+            outline: none;
+        }
+        
+        .copy-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .copy-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .referral-code-display {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .referral-code-title {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+        
+        .referral-code {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }.code-digit {
+            width: 3rem;
+            height: 3.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+        
+        .code-digit:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .referral-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .btn-accent:hover {
+            background-color: #D35400;
+            border-color: #D35400;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card {
+            border-radius: var(--card-border-radius);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }.stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card-success {
+            background: linear-gradient(120deg, #28a745, #20c997);
+            color: white;
+        }
+        
+        .stat-card-primary {
+            background: linear-gradient(120deg, var(--primary-color), #34495E);
+            color: white;
+        }
+        
+        .stat-card-accent {
+            background: linear-gradient(120deg, var(--accent-color), #F39C12);
+            color: white;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .stat-content {
+            flex-grow: 1;
+        }
+        
+        .stat-title {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .referral-history {
+            margin-top: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }.referral-item {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem;
+            border-radius: var(--card-border-radius);
+            margin-bottom: 1rem;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        
+        .referral-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .referral-user-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.25rem;
+            flex-shrink: 0;
+            color: var(--primary-color);
+        }
+        
+        .referral-user-info {
+            flex-grow: 1;
+        }
+        
+        .referral-user-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .referral-date {
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+        
+        .referral-status {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.15rem 0.75rem;
+            border-radius: 50px;
+            background-color: #D4EDDA;
+            color: #155724;
+        }
+        
+        @media (max-width: 767.98px) {
+            .code-digit {
+                width: 2.5rem;
+                height: 3rem;
+                font-size: 1.25rem;
+            }
+            
+            .referral-input-group {
+                flex-direction: column;
+            }
+            
+            .copy-btn {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Include navbar from partials -->
+    <%- include('../partials/userNavbar') %>
+
+    <div class="account-container">
+        <h1 class="page-title">My Account</h1>
+        
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-md-4">
+                <div class="sidebar">
+                    <!-- Orders Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">My Account</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/user/account">
+                                    <i class="fas fa-box"></i> Orders
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/wallet">
+                                    <i class="fas fa-wallet"></i> Wallet
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/referrals" class="active">
+                                    <i class="fas fa-user-plus"></i> Invite Friends
+                                </a>
+                                <p class="invite-subtitle">Earn 100 points for every friend</p>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Profile Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Profile</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/user/profile">
+                                    <i class="fas fa-user"></i> Personal Information
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/address">
+                                    <i class="fas fa-address-book"></i> Address Book
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-credit-card"></i> Payments
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9 col-md-8">
+                <div class="referral-container">
+
+
+
+                    <!-- Referral Card -->
+
+
+
+                    <div class="referral-card">
+                        <div class="referral-header">
+                            <h2>Invite Friends & Earn Rewards</h2>
+                            <p>Share your referral code with friends and earn 100 points for each friend who makes a purchase.</p>
+                        </div>
+                        
+                        <!-- Referral Code -->
+                        <div class="referral-code-container">
+                            <p class="referral-code-title">Your Unique Referral Code</p>
+                            <div class="referral-code-wrapper">
+                                <div class="referral-code">A7B9C3</div>
+                                <button class="copy-btn" onclick="copyToClipboard('referralCode')">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+             <!-- Statistics Cards -->
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card stat-card-success">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <p class="stat-title">Total Referred</p>
+                                    <h3 class="stat-value">24</h3>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card stat-card-primary">
+                                <div class="stat-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <p class="stat-title">Purchases Made</p>
+                                    <h3 class="stat-value">18</h3>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card stat-card-accent">
+                                <div class="stat-icon">
+                                    <i class="fas fa-gift"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <p class="stat-title">Points Earned</p>
+                                    <h3 class="stat-value">1,800</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Referral History -->
+                    <div class="referral-history">
+                        <h2 class="section-title">Referral History</h2>
+                        
+                        <!-- Referral Item 1 -->
+                        <div class="referral-item">
+                            <div class="referral-user-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="referral-user-info">
+                                <h4 class="referral-user-name">John Smith</h4>
+                                <p class="referral-date">Joined on March 12, 2025</p>
+                            </div>
+                            <div class="referral-meta">
+                                <span class="referral-status">Completed</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Referral Item 2 -->
+                        <div class="referral-item">
+                            <div class="referral-user-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="referral-user-info">
+                                <h4 class="referral-user-name">Sarah Johnson</h4>
+                                <p class="referral-date">Joined on March 10, 2025</p>
+                            </div>
+                            <div class="referral-meta">
+                                <span class="referral-status">Completed</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Referral Item 3 -->
+                        <div class="referral-item">
+                            <div class="referral-user-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="referral-user-info">
+                                <h4 class="referral-user-name">Michael Brown</h4>
+                                <p class="referral-date">Joined on March 8, 2025</p>
+                            </div>
+                            <div class="referral-meta">
+                                <span class="referral-status">Completed</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Referral Item 4 -->
+                        <div class="referral-item">
+                            <div class="referral-user-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="referral-user-info">
+                                <h4 class="referral-user-name">Emily Davis</h4>
+                                <p class="referral-date">Joined on March 5, 2025</p>
+                            </div>
+                            <div class="referral-meta">
+                                <span class="referral-status">Completed</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Referral Item 5 -->
+                        <div class="referral-item">
+                            <div class="referral-user-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="referral-user-info">
+                                <h4 class="referral-user-name">David Wilson</h4>
+                                <p class="referral-date">Joined on February 28, 2025</p>
+                            </div>
+                            <div class="referral-meta">
+                                <span class="referral-status">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Load More Button -->
+                    <div class="text-center load-more">
+                        <button class="btn btn-outline-accent" id="loadMoreBtn">
+                            <i class="fas fa-sync-alt me-2"></i> Load More Referrals
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyToClipboard(elementId) {
+            const copyText = document.getElementById(elementId);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            
+            // Change button text temporarily
+            const copyBtn = copyText.nextElementSibling;
+            const originalHTML = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = originalHTML;
+            }, 2000);
+        }
+        
+        // Load more functionality
+        document.getElementById('loadMoreBtn').addEventListener('click', function() {
+            // You can implement actual loading functionality here
+            // For demo purposes, we'll just show a "no more" message
+            this.disabled = true;
+            this.innerHTML = 'No More Referrals';
+            this.classList.remove('btn-outline-accent');
+            this.classList.add('btn-secondary');
+        });
+
+
+
+        function copyToClipboard(elementId) {
+    const code = "A7B9C3";
+    navigator.clipboard.writeText(code).then(() => {
+        alert("Referral code copied to clipboard!");
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+}function copyToClipboard(elementId) {
+    const code = "A7B9C3";
+    navigator.clipboard.writeText(code).then(() => {
+        alert("Referral code copied to clipboard!");
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+}
+    </script>
+</body>
+</html>

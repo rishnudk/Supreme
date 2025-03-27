@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Supreme Furniture</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- Nouislider for Price Range -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #E5574E;
+            --light-gray: #F4F7F7;
+            --white: #FFFFFF;
+            --text-dark: #333333;
+            --text-light: #666666;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--white);
+        }
+        
+        /* Header Styles */
+        .announcement-bar {
+            background-color: var(--primary);
+            color: white;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--text-dark);
+        }
+        
+        .navbar-brand span {
+            color: var(--primary);
+        }
+        
+        .nav-link {
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 10px 15px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Shop Header */
+        .shop-header {
+            background-color: var(--light-gray);
+            padding: 40px 0;
+        }
+        
+        .shop-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        /* Search and Sort Bar */
+        .search-sort-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .search-input {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px 15px;
+            width: 100%;
+        }
+        
+        .sort-select {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px 15px;
+            width: 100%;
+            background-color: white;
+        }
+        
+        /* Filter Panel */
+        .filter-panel {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .filter-section {
+            margin-bottom: 25px;
+        }
+        
+        .filter-heading {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        /* Range Slider */
+        .price-slider {
+            height: 8px;
+            margin: 30px 0;
+        }
+        
+        .price-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .price-input {
+            width: 45%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        /* Checkbox Styles */
+        .category-item, .brand-item {
+            margin-bottom: 8px;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        /* Product Card */
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .product-details {
+            padding: 15px;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-left: 5px;
+        }
+        
+        .product-rating {
+            color: gold;
+            margin-bottom: 10px;
+        }
+        
+        .add-to-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #d43f36;
+        }
+        
+        /* Pagination */
+        .pagination {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .page-link {
+            color: var(--text-dark);
+            border: 1px solid #ddd;
+            margin: 0 5px;
+            border-radius: 4px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .page-link:hover:not(.active) {
+            background-color: var(--light-gray);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--light-gray);
+            padding: 60px 0 20px;
+        }
+        
+        .footer-heading {
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .footer-link {
+            color: var(--text-light);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+        
+        .footer-link:hover {
+            color: var(--primary);
+        }
+        
+        .social-icons {
+            margin-top: 15px;
+        }
+        
+        .social-icon {
+            color: var(--text-dark);
+            font-size: 18px;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+        
+        .social-icon:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            margin-top: 30px;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .filter-panel {
+                margin-bottom: 30px;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .shop-header {
+                padding: 30px 0;
+            }
+            
+            .search-sort-container {
+                flex-direction: column;
+            }
+            
+            .search-container, .sort-container {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar text-center">
+        Free Delivery on Orders Over $500 | 30-Day Returns
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Supreme<span>.</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Living Room</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Bedroom</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Dining</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Office</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="#" class="nav-link me-3">
+                        <i class="bi bi-person"></i>
+                    </a>
+                    <a href="#" class="nav-link me-3">
+                        <i class="bi bi-heart"></i>
+                    </a>
+                    <a href="#" class="nav-link cart-icon">
+                        <i class="bi bi-bag"></i>
+                        <span class="cart-count">3</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Shop Header -->
+    <section class="shop-header">
+        <div class="container">
+            <h1 class="shop-title">Shop All Products</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shop</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+    
+    <!-- Shop Content -->
+    <section class="shop-content py-5">
+        <div class="container">
+            <!-- Search and Sort Bar -->
+            <div class="search-sort-container d-flex justify-content-between align-items-center mb-4">
+                <div class="search-container flex-grow-1 me-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0 search-input" placeholder="Search products...">
+                    </div>
+                </div>
+                <div class="sort-container" style="width: 250px;">
+                    <select class="form-select sort-select">
+                        <option selected>Sort by: Featured</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Newest Arrivals</option>
+                        <option>Best Selling</option>
+                        <option>Customer Rating</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- Filter Column -->
+                <div class="col-lg-3">
+                    <div class="filter-panel sticky-top" style="top: 100px;">
+                        <h3 class="filter-title">Filters</h3>
+                        
+                        <!-- Price Range Filter -->
+                        <div class="filter-section">
+                            <h4 class="filter-heading">Price Range</h4>
+                            <div id="price-slider" class="price-slider"></div>
+                            <div class="price-inputs">
+                                <input type="text" id="min-price" class="price-input" placeholder="$0" readonly>
+                                <input type="text" id="max-price" class="price-input" placeholder="$2000" readonly>
+                            </div>
+                        </div>
+                        
+                        <!-- Category Filter -->
+                        <div class="filter-section">
+                            <h4 class="filter-heading">Categories</h4>
+                            <div class="category-list">
+                                <div class="category-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cat-sofas">
+                                        <label class="form-check-label" for="cat-sofas">
+                                            Sofas & Couches (24)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cat-beds">
+                                        <label class="form-check-label" for="cat-beds">
+                                            Beds & Mattresses (18)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cat-tables">
+                                        <label class="form-check-label" for="cat-tables">
+                                            Tables & Desks (32)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cat-chairs">
+                                        <label class="form-check-label" for="cat-chairs">
+                                            Chairs (42)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cat-storage">
+                                        <label class="form-check-label" for="cat-storage">
+                                            Storage & Organization (16)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cat-lighting">
+                                        <label class="form-check-label" for="cat-lighting">
+                                            Lighting (28)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Brand Filter -->
+                        <div class="filter-section">
+                            <h4 class="filter-heading">Brands</h4>
+                            <div class="brand-list">
+                                <div class="brand-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="brand-modloft">
+                                        <label class="form-check-label" for="brand-modloft">
+                                            Modloft (15)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="brand-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="brand-article">
+                                        <label class="form-check-label" for="brand-article">
+                                            Article (23)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="brand-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="brand-floyd">
+                                        <label class="form-check-label" for="brand-floyd">
+                                            Floyd (18)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="brand-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="brand-hay">
+                                        <label class="form-check-label" for="brand-hay">
+                                            HAY (12)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="brand-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="brand-burrow">
+                                        <label class="form-check-label" for="brand-burrow">
+                                            Burrow (9)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Color Filter -->
+                        <div class="filter-section">
+                            <h4 class="filter-heading">Color</h4>
+                            <div class="d-flex flex-wrap">
+                                <div class="me-2 mb-2">
+                                    <button class="btn p-0" style="width: 30px; height: 30px; background-color: #000; border-radius: 50%;"></button>
+                                </div>
+                                <div class="me-2 mb-2">
+                                    <button class="btn p-0" style="width: 30px; height: 30px; background-color: #fff; border: 1px solid #ddd; border-radius: 50%;"></button>
+                                </div>
+                                <div class="me-2 mb-2">
+                                    <button class="btn p-0" style="width: 30px; height: 30px; background-color: #964B00; border-radius: 50%;"></button>
+                                </div>
+                                <div class="me-2 mb-2">
+                                    <button class="btn p-0" style="width: 30px; height: 30px; background-color: #808080; border-radius: 50%;"></button>
+                                </div>
+                                <div class="me-2 mb-2">
+                                    <button class="btn p-0" style="width: 30px; height: 30px; background-color: #E5574E; border-radius: 50%;"></button>
+                                </div>
+                                <div class="me-2 mb-2">
+                                    <button class="btn p-0" style="width: 30px; height: 30px; background-color: #4169E1; border-radius: 50%;"></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter Buttons -->
+                        <div class="d-flex">
+                            <button class="btn btn-primary flex-grow-1 me-2" style="background-color: var(--primary); border-color: var(--primary);">Apply Filters</button>
+                            <button class="btn btn-outline-secondary flex-grow-1">Reset</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Products Column -->
+                <div class="col-lg-9">
+                    <div class="row">
+                        <!-- Product 1 -->
+                        <div class="col-md-4 col-sm-6 mb-4">
+                            <div class="product-card">
+                                <img src="/public/images/fp1.jpg" alt="Modern Sofa" class="product-image">
+                                <div class="product-details">
+                                    <h3 class="product-title">Modern Velvet Sofa</h3>
+                                    <div class="product-price">
+                                        $899 <span class="original-price">$1,199</span>
+                                    </div>
+                                    <div class="product-rating">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-muted ms-2">(24)</span>
+                                    </div>
+                                    <button class="btn add-to-cart">
+                                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 2 -->
+                        <div class="col-md-4 col-sm-6 mb-4">
+                            <div class="product-card">
+                                <img src="/public/images/fp1.jpg" alt="Dining Table" class="product-image">
+                                <div class="product-details">
+                                    <h3 class="product-title">Walnut Dining Table</h3>
+                                    <div class="product-price">
+                                        $649
+                                    </div>
+                                    <div class="product-rating">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-muted ms-2">(18)</span>
+                                    </div>
+                                    <button class="btn add-to-cart">
+                                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 3 -->
+                        <div class="col-md-4 col-sm-6 mb-4">
+                            <div class="product-card">
+                                <img src="/public/images/fp1.jpg" alt="Accent Chair" class="product-image">
+                                <div class="product-details">
+                                    <h3 class="product-title">Mid-Century Accent Chair</h3>
+                                    <div class="product-price">
+                                        $349 <span class="original-price">$429</span>
+                                    </div>
+                                    <div class="product-rating">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <span class="text-muted ms-2">(32)</span>
+                                    </div>
+                                    <button class="btn add-to-cart">
+                                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 4 -->
+                        <div class="col-md-4 col-sm-6 mb-4">
+                            <div class="product-card">
+                                <img src="/public/images/fp1.jpg" alt="Queen Bed Frame" class="product-image">
+                                <div class="product-details">
+                                    <h3 class="product-title">Modern Queen Bed Frame</h3>
+                                    <div class="product-price">
+                                        $799
+                                    </div>
+                                    <div class="product-rating">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-muted ms-2">(15)</span>
+                                    </div>
+                                    <button class="btn add-to-cart">
+                                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 5 -->
+                        <div class="col-md-4 col-sm-6 mb-4">
+                            <div class="product-card">
+                                <img src="/public/images/fp1.jpg" alt="Coffee Table" class="product-image">
+                                <div class="product-details">
+                                    <h3 class="product-title">Glass Top Coffee Table</h3>
+                                    <div class="product-price">
+                                        $299 <span class="original-price">$349</span>
+                                    </div>
+                                    <div class="product-rating">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-muted ms-2">(8)</span>
+                                    </div>
+                                    <button class="btn add-to-cart">
+                                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 6 -->
+                        <div class="col-md-4 col-sm-6 mb-4">
+                            <div class="product-card">
+                                <img src="/public/images/fp1.jpg" alt="Bookshelf" class="product-image">
+                                <div class="product-details">
+                                    <h3 class="product-title">5-Tier Modern Bookshelf</h3>
+                                    <div class="product-price">
+                                        $249
+                                    </div>
+                                    <div class="product-rating">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-muted ms-2">(21)</span>
+                                    </div>
+                                    <button class="btn add-to-cart">
+                                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 7 -->
+                        <div class="col-md-4 col-sm-6 mb-4">
+                            <div class="product-card">
+                                <img src="/public/images/fp1.jpg" alt="Floor Lamp" class="product-image">
+                                <div class="product-details">
+                                    <h3 class="product-title">Adjustable Floor Lamp</h3>
+                                    <div class="product-price">
+                                        $129 <span class="original-price">$159</span>
+                                    </div>
+                                    <div class="product-rating">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-muted ms-2">(12)</span>
+                                    </div>
+                                    <button class="btn add-to-cart">
+                                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 8 -->
+                        <div class="col-md-4 col-sm-6 mb-4">
+                            <div class="product-card">
+                                <img src="/public/images/fp1.jpg" alt="Dining Chairs" class="product-image">
+                                <div class="product-details">
+                                    <h3 class="product-title">Set of 4 Dining Chairs</h3>
+                                    <div class="product-price">
+                                        $499
+                                    </div>
+                                    <div class="product-rating">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-muted ms-2">(19)</span>
+
+</div>
+<button class="btn add-to-cart">
+    <i class="bi bi-cart-plus me-2"></i>Add to Cart
+</button>
+</div>
+</div>
+</div>
+
+<!-- Product 9 -->
+<div class="col-md-4 col-sm-6 mb-4">
+<div class="product-card">
+<img src="/public/images/fp1.jpg" alt="Desk" class="product-image">
+<div class="product-details">
+<h3 class="product-title">Modern Writing Desk</h3>
+<div class="product-price">
+    $399
+</div>
+<div class="product-rating">
+    <i class="bi bi-star-fill"></i>
+    <i class="bi bi-star-fill"></i>
+    <i class="bi bi-star-fill"></i>
+    <i class="bi bi-star-half"></i>
+    <i class="bi bi-star"></i>
+    <span class="text-muted ms-2">(14)</span>
+</div>
+<button class="btn add-to-cart">
+    <i class="bi bi-cart-plus me-2"></i>Add to Cart
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Pagination -->
+<nav aria-label="Product pagination">
+<ul class="pagination justify-content-center">
+<li class="page-item">
+<a class="page-link" href="#" aria-label="Previous">
+<i class="bi bi-chevron-left"></i>
+</a>
+</li>
+<li class="page-item active"><a class="page-link" href="#">1</a></li>
+<li class="page-item"><a class="page-link" href="#">2</a></li>
+<li class="page-item"><a class="page-link" href="#">3</a></li>
+<li class="page-item">
+<a class="page-link" href="#" aria-label="Next">
+<i class="bi bi-chevron-right"></i>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer>
+<div class="container">
+<div class="row">
+<div class="col-lg-3 col-md-6 mb-4">
+<h5 class="footer-heading">Supreme</h5>
+<p class="text-muted mb-4">Premium furniture for modern living. Crafted with quality materials and designed for comfort.</p>
+<div class="social-icons">
+<a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+<a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+<a href="#" class="social-icon"><i class="bi bi-pinterest"></i></a>
+<a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+</div>
+</div>
+
+<div class="col-lg-3 col-md-6 mb-4">
+<h5 class="footer-heading">Shop</h5>
+<a href="#" class="footer-link">Living Room</a>
+<a href="#" class="footer-link">Bedroom</a>
+<a href="#" class="footer-link">Dining</a>
+<a href="#" class="footer-link">Office</a>
+<a href="#" class="footer-link">Lighting</a>
+<a href="#" class="footer-link">Decor</a>
+</div>
+
+<div class="col-lg-3 col-md-6 mb-4">
+<h5 class="footer-heading">Customer Service</h5>
+<a href="#" class="footer-link">Contact Us</a>
+<a href="#" class="footer-link">FAQs</a>
+<a href="#" class="footer-link">Shipping & Returns</a>
+<a href="#" class="footer-link">Product Care</a>
+<a href="#" class="footer-link">Warranty</a>
+</div>
+
+<div class="col-lg-3 col-md-6 mb-4">
+<h5 class="footer-heading">Newsletter</h5>
+<p class="text-muted mb-3">Subscribe to get special offers and updates on new arrivals.</p>
+<div class="input-group mb-3">
+<input type="email" class="form-control" placeholder="Your email">
+<button class="btn btn-primary" type="button" style="background-color: var(--primary); border-color: var(--primary);">
+<i class="bi bi-arrow-right"></i>
+</button>
+</div>
+</div>
+</div>
+
+<div class="text-center copyright">
+<p>&copy; 2025 Supreme Furniture. All Rights Reserved.</p>
+</div>
+</div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- noUiSlider JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"></script>
+
+<!-- Init Scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+// Initialize price range slider
+var priceSlider = document.getElementById('price-slider');
+
+if (priceSlider) {
+noUiSlider.create(priceSlider, {
+start: [0, 2000],
+connect: true,
+range: {
+'min': 0,
+'max': 2000
+},
+format: {
+to: function (value) {
+return Math.round(value);
+},
+from: function (value) {
+return value;
+}
+}
+});
+
+var minPriceInput = document.getElementById('min-price');
+var maxPriceInput = document.getElementById('max-price');
+
+priceSlider.noUiSlider.on('update', function (values, handle) {
+if (handle === 0) {
+minPriceInput.value = '$' + values[0];
+} else {
+maxPriceInput.value = '$' + values[1];
+}
+});
+}
+
+// Add hover effect to product cards
+const productCards = document.querySelectorAll('.product-card');
+
+productCards.forEach(card => {
+card.addEventListener('mouseenter', function() {
+this.style.transform = 'translateY(-5px)';
+this.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.1)';
+});
+
+card.addEventListener('mouseleave', function() {
+this.style.transform = 'translateY(0)';
+this.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
+});
+});
+
+// Add to cart button effect
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+addToCartButtons.forEach(button => {
+button.addEventListener('click', function(e) {
+e.preventDefault();
+
+// Add animation class
+this.innerHTML = '<i class="bi bi-check-lg me-2"></i>Added';
+this.style.backgroundColor = '#2e7d32';
+
+// Reset after 2 seconds
+setTimeout(() => {
+this.innerHTML = '<i class="bi bi-cart-plus me-2"></i>Add to Cart';
+this.style.backgroundColor = '';
+}, 2000);
+});
+});
+});
+</script>
+</body>
+</html>

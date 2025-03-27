@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+  <style>
+    /* Best Sellers Section Styles */
+.best-sellers {
+  background-color: #F4F7F7;
+  padding: 60px 0;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Product Card Styles */
+.product-card {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* FIX: Updated image container with fixed dimensions */
+.product-image-container {
+  position: relative;
+  width: 100%;
+  height: 220px; /* Fixed height */
+  overflow: hidden;
+}
+
+/* FIX: Ensure images fill the container properly */
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  display: block;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.05);
+}
+
+/* Product Badge (New, Sale, etc.) */
+.product-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px; /* Changed from right to left to match the image */
+  color: #FFF;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.product-badge.best-seller {
+  background-color: #E5574E;
+}
+
+.product-badge.sale {
+  background-color: #E5574E;
+}
+
+.product-badge.new {
+  background-color: #FF9800;
+}
+
+/* Product Overlay (Quick actions) */
+.product-overlay {
+  position: absolute;
+  bottom: -60px;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  transition: bottom 0.3s ease;
+  z-index: 1;
+}
+
+.product-card:hover .product-overlay {
+  bottom: 0;
+}
+
+.btn-add-to-cart,
+.btn-quick-view {
+  border: none;
+  background-color: #FFF;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add-to-cart {
+  border: 1px solid #E5574E;
+  color: #E5574E;
+}
+
+.btn-add-to-cart:hover {
+  background-color: #E5574E;
+  color: #FFF;
+}
+
+.btn-quick-view {
+  border: 1px solid #333;
+}
+
+.btn-quick-view:hover {
+  background-color: #333;
+  color: #FFF;
+}
+
+/* Product Info Styles */
+.product-info {
+  padding: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-price {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.current-price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #E5574E;
+}
+
+.original-price {
+  font-size: 0.875rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* Star Rating Styles */
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: auto; /* Push ratings to bottom of info div */
+}
+
+.stars {
+  display: flex;
+}
+
+.star-filled,
+.star-half,
+.star-empty {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.star-filled {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
+}
+
+.star-half {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z' fill-opacity='.5'/%3E%3Cpath d='M12 2v15.27l6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2z'/%3E%3C/svg%3E");
+}
+
+.star-empty {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23CCCCCC'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
+}
+
+.rating-count {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* View All Button */
+.btn-view-all {
+  background-color: transparent;
+  border: 2px solid #E5574E;
+  color: #E5574E;
+  padding: 10px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.btn-view-all:hover {
+  background-color: #E5574E;
+  color: #FFF;
+}
+
+/* Animation for add to cart */
+.btn-add-to-cart.added {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  border-color: #4CAF50 !important;
+}
+
+.cart-count-bump {
+  animation: cartBump 0.3s ease-in-out;
+}
+
+@keyframes cartBump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .product-title {
+    font-size: 0.9rem;
+  }
+  
+  .current-price {
+    font-size: 1rem;
+  }
+  
+  .product-image-container {
+    height: 200px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .best-sellers {
+    padding: 40px 0;
+  }
+  
+  .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .product-image-container {
+    height: 180px;
+  }
+  
+  .product-info {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  /* Ensure small screens still have proper card layout */
+  .product-image-container {
+    height: 160px;
+  }
+  
+  .product-overlay {
+    padding: 8px;
+  }
+  
+  .btn-add-to-cart,
+  .btn-quick-view {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .current-price {
+    font-size: 0.9rem;
+  }
+  
+  .original-price {
+    font-size: 0.75rem;
+  }
+}
+  </style>
+
+</head>
+<body>
+    
+<!-- Best Sellers Section -->
+<section class="best-sellers py-5">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <h2 class="section-title">Best Sellers</h2>
+        <p class="section-subtitle">Our most popular furniture pieces loved by customers</p>
+      </div>
+    </div>
+    
+    <div class="row best-sellers-grid">
+      <!-- Product Card 1 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="product-card">
+          <!-- Fixed image container -->
+          <div class="product-image-container">
+            <div class="product-badge best-seller">BEST</div>
+            <img src="/api/placeholder/400/300" alt="Modern Sofa" class="product-img">
+            <div class="product-overlay">
+              <button class="btn-add-to-cart">Add to Cart</button>
+              <button class="btn-quick-view">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Modern Sofa</h3>
+            <div class="product-price">
+              <span class="current-price">$1,299</span>
+              <span class="original-price">$1,599</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-half"></i>
+              </div>
+              <span class="rating-count">(42)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Card 2 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/api/placeholder/400/300" alt="Dining Table" class="product-img">
+            <div class="product-overlay">
+              <button class="btn-add-to-cart">Add to Cart</button>
+              <button class="btn-quick-view">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Oak Dining Table</h3>
+            <div class="product-price">
+              <span class="current-price">$899</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+              </div>
+              <span class="rating-count">(37)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Card 3 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="product-card">
+          <div class="product-image-container">
+            <div class="product-badge sale">SALE</div>
+            <img src="/api/placeholder/400/300" alt="Accent Chair" class="product-img">
+            <div class="product-overlay">
+              <button class="btn-add-to-cart">Add to Cart</button>
+              <button class="btn-quick-view">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Accent Chair</h3>
+            <div class="product-price">
+              <span class="current-price">$499</span>
+              <span class="original-price">$649</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-empty"></i>
+              </div>
+              <span class="rating-count">(28)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Card 4 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/api/placeholder/400/300" alt="Coffee Table" class="product-img">
+            <div class="product-overlay">
+              <button class="btn-add-to-cart">Add to Cart</button>
+              <button class="btn-quick-view">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Coffee Table</h3>
+            <div class="product-price">
+              <span class="current-price">$349</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-half"></i>
+              </div>
+              <span class="rating-count">(51)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Card 5 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/api/placeholder/400/300" alt="Bookshelf" class="product-img">
+            <div class="product-overlay">
+              <button class="btn-add-to-cart">Add to Cart</button>
+              <button class="btn-quick-view">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Modern Bookshelf</h3>
+            <div class="product-price">
+              <span class="current-price">$599</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-half"></i>
+                <i class="star-empty"></i>
+              </div>
+              <span class="rating-count">(19)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Card 6 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="product-card">
+          <div class="product-image-container">
+            <div class="product-badge new">NEW</div>
+            <img src="/api/placeholder/400/300" alt="Bed Frame" class="product-img">
+            <div class="product-overlay">
+              <button class="btn-add-to-cart">Add to Cart</button>
+              <button class="btn-quick-view">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Queen Bed Frame</h3>
+            <div class="product-price">
+              <span class="current-price">$1,099</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-empty"></i>
+              </div>
+              <span class="rating-count">(12)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Card 7 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/api/placeholder/400/300" alt="Desk" class="product-img">
+            <div class="product-overlay">
+              <button class="btn-add-to-cart">Add to Cart</button>
+              <button class="btn-quick-view">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Home Office Desk</h3>
+            <div class="product-price">
+              <span class="current-price">$449</span>
+              <span class="original-price">$499</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-empty"></i>
+              </div>
+              <span class="rating-count">(24)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Card 8 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/api/placeholder/400/300" alt="Floor Lamp" class="product-img">
+            <div class="product-overlay">
+              <button class="btn-add-to-cart">Add to Cart</button>
+              <button class="btn-quick-view">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Modern Floor Lamp</h3>
+            <div class="product-price">
+              <span class="current-price">$199</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-filled"></i>
+                <i class="star-empty"></i>
+              </div>
+              <span class="rating-count">(32)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mt-4">
+      <div class="col-12 text-center">
+        <a href="#" class="btn btn-view-all">View All Best Sellers</a>
+      </div>
+    </div>
+  </div>
+</section>
+    <script>
+        // Best Sellers Section JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize product card functionality
+  initProductCards();
+
+  // Function to initialize product card interactions
+  function initProductCards() {
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+      // Add to cart button functionality
+      const addToCartBtn = card.querySelector('.btn-add-to-cart');
+      if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Get product information
+          const productTitle = card.querySelector('.product-title').textContent;
+          const productPrice = card.querySelector('.current-price').textContent;
+          
+          // Show add to cart animation
+          const originalText = addToCartBtn.textContent;
+          addToCartBtn.textContent = 'Added!';
+          addToCartBtn.classList.add('added');
+          
+          // Reset button after animation
+          setTimeout(() => {
+            addToCartBtn.textContent = originalText;
+            addToCartBtn.classList.remove('added');
+          }, 1500);
+          
+          // Here you would typically add the item to cart via AJAX
+          console.log(`Added to cart: ${productTitle} - ${productPrice}`);
+          
+          // Trigger cart count update animation (assuming there's a cart counter in the header)
+          updateCartCount();
+        });
+      }
+      
+      // Quick view button functionality
+      const quickViewBtn = card.querySelector('.btn-quick-view');
+      if (quickViewBtn) {
+        quickViewBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Get product information for quick view modal
+          const productTitle = card.querySelector('.product-title').textContent;
+          const productImage = card.querySelector('.product-image img').src;
+          const productPrice = card.querySelector('.current-price').textContent;
+          
+          // Here you would typically open a quick view modal with the product details
+          console.log(`Quick view: ${productTitle}`);
+          // Example implementation would include opening a modal with these details
+          // openQuickViewModal(productTitle, productImage, productPrice);
+        });
+      }
+    });
+  }
+  
+  // Function to update cart count animation
+  function updateCartCount() {
+    // This is a placeholder for the cart count update animation
+    const cartCounter = document.querySelector('.cart-count');
+    if (cartCounter) {
+      // Add "bump" animation class
+      cartCounter.classList.add('cart-count-bump');
+      
+      // Increment the count (for demo purposes)
+      const currentCount = parseInt(cartCounter.textContent);
+      cartCounter.textContent = currentCount + 1;
+      
+      // Remove animation class after animation completes
+      setTimeout(() => {
+        cartCounter.classList.remove('cart-count-bump');
+      }, 300);
+    }
+  }
+  
+  // Handle lazy loading for product images
+  if ('IntersectionObserver' in window) {
+    const productImages = document.querySelectorAll('.product-image img');
+    
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const dataSrc = img.getAttribute('data-src');
+          
+          if (dataSrc) {
+            img.src = dataSrc;
+            img.removeAttribute('data-src');
+          }
+          
+          imageObserver.unobserve(img);
+        }
+      });
+    });
+    
+    productImages.forEach(img => {
+      if (img.getAttribute('data-src')) {
+        imageObserver.observe(img);
+      }
+    });
+  }
+  
+  // Add functionality for "View All" button animation
+  const viewAllBtn = document.querySelector('.btn-view-all');
+  if (viewAllBtn) {
+    viewAllBtn.addEventListener('mouseenter', function() {
+      this.style.transition = 'all 0.3s ease';
+    });
+  }
+});
+
+// Additional CSS for JavaScript animations
+document.head.insertAdjacentHTML('beforeend', `
+  <style>
+    .btn-add-to-cart.added {
+      background-color: #4CAF50 !important;
+      color: white !important;
+      border-color: #4CAF50 !important;
+    }
+    
+    .cart-count-bump {
+      animation: cartBump 0.3s ease-in-out;
+    }
+    
+    @keyframes cartBump {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+  </style>
+`);
+    </script>
+</body>
+</html>

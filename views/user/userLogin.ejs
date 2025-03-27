@@ -64,19 +64,19 @@
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<% if (typeof message !== "undefined" && message) { %>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "<%= message %>",
-                confirmButtonColor: "#d33"
-            });
-        });
-    </script>
-<% } %>
-
+        <% if (typeof message !== "undefined" && message) { %>
+            <script>
+              document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                  icon: "error",
+                  title: "Access Denied",
+                  text: "<%= message %>",
+                  confirmButtonColor: "#d33",
+                  confirmButtonText: "OK"
+                });
+              });
+            </script>
+          <% } %>
 
         
         <div id="loginForm">
@@ -111,7 +111,8 @@
             </div>
         </div>
         
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+       
         <script>
          
          document.addEventListener("DOMContentLoaded", function () {

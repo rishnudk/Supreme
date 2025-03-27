@@ -34,15 +34,23 @@ function showCropper(file, index) {
   reader.readAsDataURL(file);
 }
 
+
+
+
+
+
+
+
+
 function cropImage() {
   console.log("Cropping image...");
   if (!cropper) return console.error("❌ Cropper not initialized");
 
   const existingImagesCount = document.querySelectorAll('input[name="existingImages[]"]').length;
-  const isReplacement = document.getElementById(`preview${currentImageIndex}`).classList.contains('cropped');
-  if (!isReplacement && processedImages.size >= (4 - existingImagesCount)) {
+  const totalImages = existingImagesCount + processedImages.size;
+  if (totalImages >= 4 && !document.getElementById(`preview${currentImageIndex}`).classList.contains('cropped')) {
     console.error("❌ Cannot add more images; limit of 4 total images reached");
-    Swal.fire({ title: "Error!", text: "Only 4 images allowed total", icon: "error" });
+    Swal.fire({ title: "Error!", text: "Maximum of 4 images allowed", icon: "error" });
     return;
   }
 
@@ -72,6 +80,11 @@ function cropImage() {
   }, 'image/jpeg', 0.8);
 }
 
+
+
+
+
+
 function cancelCrop() {
   console.log("Cancel clicked");
   document.getElementById('cropperModal').style.display = 'none';
@@ -80,6 +93,11 @@ function cancelCrop() {
     cropper = null;
   }
 }
+
+
+
+
+
 
 function removeImage(index) {
   console.log("Removing image for index:", index);
@@ -97,6 +115,13 @@ function removeImage(index) {
   if (existingImageInput) existingImageInput.remove();
   processedImages.delete(`image${index}`);
 }
+
+
+
+
+
+
+
 
 function validateForm() {
   console.log("Validating form...");
@@ -157,9 +182,9 @@ function validateForm() {
       const existingImagesCount = document.querySelectorAll('input[name="existingImages[]"]').length;
       const newImagesCount = processedImages.size;
       const totalImages = existingImagesCount + newImagesCount;
-      if (totalImages !== 4) {
-        console.log("Validation error: Exactly 4 product images required");
-        imagesError.textContent = `Exactly 4 product images are required (currently ${totalImages})`;
+      if (totalImages > 4) {
+        console.log("Validation error: Too many images");
+        imagesError.textContent = `Maximum of 4 images allowed (currently ${totalImages})`;
         isValid = false;
       } else {
         imagesError.textContent = '';
@@ -173,6 +198,8 @@ function validateForm() {
   console.log("Validation result:", isValid ? "Passed" : "Failed");
   return isValid;
 }
+
+
 
 form.addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -236,7 +263,8 @@ form.addEventListener('submit', async function(e) {
   }
 });
 
-// Initialize original previews
+
+
 document.querySelectorAll('.prd-prod-image-preview').forEach(img => {
   originalPreviews.set(img.id, img.src);
 });

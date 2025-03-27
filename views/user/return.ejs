@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+
+
+    <style>
+        .modal-content {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 1.5rem;
+  }
+  
+  .modal-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+  }
+  
+  .form-select, .form-control {
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.75rem 1rem;
+  }
+  
+  .form-select:focus, .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(58, 134, 255, 0.25);
+  }
+  
+  .btn-outline-secondary {
+    border-color: #dee2e6;
+    color: #6c757d;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    box-shadow: 0 4px 15px rgba(58, 134, 255, 0.3);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(58, 134, 255, 0.4);
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg, #00c853, #64dd17);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  
+  .success-message {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .success-title {
+    color: #212529;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .success-text {
+    color: #6c757d;
+    margin-bottom: 2rem;
+  }
+  
+  .order-details {
+    background-color: var(--light-bg);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .fade-scale {
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.2s linear;
+  }
+  
+  .fade-scale.show {
+    opacity: 1;
+    transform: scale(1);
+  }/* CSS for the Return Product modal and success message */
+.success-message {
+    text-align: center;
+    padding: 3rem;
+  }
+  
+  .success-icon {
+    background-color: #28a745;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  
+  .success-title {
+    color: #212529;
+    margin-bottom: 1rem;
+  }
+  
+  .success-text {
+    color: #6c757d;
+    margin-bottom: 2rem;
+  }
+  
+  .fade-scale .modal-dialog {
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .fade-scale.show .modal-dialog {
+    transform: scale(1);
+    opacity: 1;
+  }
+  
+  /* Improved button styling */
+  .return-product-btn {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+  
+  .return-product-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Card styling for the product info */
+  .card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .img-thumbnail {
+    border-radius: 0.375rem;
+  }
+    </style>
+
+
+
+
+    <%- include('../partials/userNavbar') %>
+
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Return Product</h5>
+            </div>
+            <div class="card-body">
+                <div class="order-details mb-4">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <small class="text-muted">Order #</small>
+                            <p class="mb-0 fw-medium"><%= orderID %></p>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <small class="text-muted">Product</small>
+                            <p class="mb-0 fw-medium"><%= productName %></p>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="returnForm">
+                    <div class="mb-4">
+                        <label for="returnReason" class="form-label">Please select a reason for return</label>
+                        <select class="form-select" id="returnReason" name="returnReason" required>
+                            <option value="" selected disabled>Select a reason</option>
+                            <option value="Defective product">Defective product</option>
+                            <option value="Wrong item received">Wrong item received</option>
+                            <option value="Item not as described">Item not as described</option>
+                            <option value="Changed my mind">Changed my mind</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4 d-none" id="returnOtherReasonContainer">
+                        <label for="returnOtherReason" class="form-label">Please specify your reason</label>
+                        <textarea class="form-control" id="returnOtherReason" name="returnOtherReason" rows="3" placeholder="Tell us why you're returning..."></textarea>
+                    </div>
+
+                    <input type="hidden" id="returnOrderId" name="orderId" value="<%= orderId %>">
+                    <input type="hidden" id="returnProductId" name="productId" value="<%= productId %>">
+
+                    <div class="alert alert-warning">
+                        <small>
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Your return request will be submitted for admin approval. Refunds will be processed to your wallet upon approval.
+                        </small>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="/user/orders" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="button" class="btn btn-primary" id="confirmReturnBtn">Submit Return Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <div class="success-message">
+                        <div class="success-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="white" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                            </svg>
+                        </div>
+                        <h4 class="success-title">Return Request Submitted</h4>
+                        <p class="success-text">Your return request for order #<span id="successOrderId"></span> has been submitted.<br>You’ll be notified once it’s approved by the admin.</p>
+                        <a href="/user/shop" class="btn btn-primary">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <%- include('../partials/userFooter') %>
+
+    <!-- Bootstrap JS and custom script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const returnReasonSelect = document.getElementById('returnReason');
+            const returnOtherReasonContainer = document.getElementById('returnOtherReasonContainer');
+            
+            returnReasonSelect.addEventListener('change', function() {
+                returnOtherReasonContainer.classList.toggle('d-none', this.value !== 'Other');
+            });
+
+            const confirmReturnBtn = document.getElementById('confirmReturnBtn');
+            confirmReturnBtn.addEventListener('click', async function() {
+                const returnReason = document.getElementById('returnReason').value;
+                const returnOtherReason = document.getElementById('returnOtherReason').value;
+                const orderId = document.getElementById('returnOrderId').value;
+                const productId = document.getElementById('returnProductId').value;
+
+                if (!returnReason) {
+                    alert('Please select a return reason');
+                    return;
+                }
+
+                if (returnReason === 'Other' && !returnOtherReason.trim()) {
+                    alert('Please specify your reason for return');
+                    return;
+                }
+
+                const payload = {
+                    orderId,
+                    productId,
+                    returnReason,
+                    returnOtherReason: returnReason === 'Other' ? returnOtherReason : ''
+                };
+                console.log('Submitting return request:', payload);
+
+                try {
+                    const response = await fetch('/user/return', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+                    console.log('Server response:', result);
+
+                    if (result.success) {
+                        document.getElementById('successOrderId').textContent = result.orderId;
+                        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                        successModal.show();
+                    } else {
+                        alert('Error: ' + result.message);
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    alert('An error occurred while submitting your return request: ' + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

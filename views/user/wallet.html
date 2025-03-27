@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet | Furniture E-commerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2A3F54;
+            --secondary-color: #F4F5F7;
+            --accent-color: #E67E22;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --text-color: #333;
+            --light-text: #6C757D;
+            --border-radius: 16px;
+            --card-border-radius: 20px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F8F9FA;
+            color: var(--text-color);
+        }
+        
+        .account-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page-title {
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 1rem;
+        }
+
+
+        .sidebar {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 1.5rem;
+        height: 100%;
+        transition: var(--transition);
+    }
+    
+    .sidebar-section {
+        margin-bottom: 2rem;
+    }
+    
+    .sidebar-title {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--secondary-color);
+    }
+    
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .sidebar-menu li {
+        margin-bottom: 0.8rem;
+    }
+    
+    .sidebar-menu a {
+        display: flex;
+        align-items: center;
+        color: var(--text-color);
+        text-decoration: none;
+        padding: 0.8rem;
+        border-radius: 12px;
+        transition: var(--transition);
+    }
+    
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        transform: translateX(5px);
+    }
+    
+    .sidebar-menu i {
+        margin-right: 10px;
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+    
+    .invite-subtitle {
+        font-size: 0.75rem;
+        color: var(--light-text);
+        margin-left: 1.8rem;
+    }
+    
+    @media (max-width: 991.98px) {
+        .sidebar {
+            margin-bottom: 2rem;
+        }
+    }
+
+
+
+
+
+
+    /* Add these styles to your existing <style> tag */
+        .wallet-container {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 1.75rem;
+        height: 100%;
+    }
+    
+    .wallet-overview {
+        margin-bottom: 2rem;
+    }
+    
+    .balance-card {
+        background: linear-gradient(120deg, var(--primary-color), #1A2A36);
+        color: white;
+        border-radius: var(--card-border-radius);
+        padding: 2rem;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--box-shadow);
+    }
+    
+    .balance-card::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        z-index: 1;
+    }
+    
+    .balance-card::after {
+        content: '';
+        position: absolute;
+        bottom: -80px;
+        left: -80px;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.03);
+        z-index: 1;
+    }
+    
+    .balance-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .balance-header h2 {
+        font-size: 1.25rem;
+        margin: 0;
+        font-weight: 400;
+    }
+    
+    .action-button {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .action-button:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .balance-amount {
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .balance-amount h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin: 0;
+    }
+    
+    .balance-actions {
+        display: flex;
+        gap: 1rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .btn-accent {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: white;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+    
+    .btn-accent:hover {
+        background-color: #D35400;
+        border-color: #D35400;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-outline-primary {
+        color: white;
+        border-color: rgba(255, 255, 255, 0.5);
+        background-color: transparent;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: white;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .stat-card {
+        border-radius: var(--card-border-radius);
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        box-shadow: var(--box-shadow);
+        transition: var(--transition);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stat-card-success {
+        background: linear-gradient(120deg, #28a745, #20c997);
+        color: white;
+    }
+    
+    .stat-card-danger {
+        background: linear-gradient(120deg, #dc3545, #e83e8c);
+        color: white;
+    }
+    
+    .stat-card-info {
+        background: linear-gradient(120deg, #17a2b8, #6610f2);
+        color: white;
+    }
+    
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+
+
+
+    /* Add these styles to your existing <style> tag */
+    .transaction-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin: 0;
+    }
+    
+    .search-box {
+        width: 250px;
+    }
+    
+    .search-box .input-group {
+        border-radius: 50px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .search-box .input-group-text {
+        border-radius: 50px 0 0 50px;
+        border-color: #ced4da;
+        color: var(--light-text);
+    }
+    
+    .search-box .form-control {
+        border-radius: 0 50px 50px 0;
+        border-color: #ced4da;
+    }
+    
+    .search-box .form-control:focus {
+        box-shadow: none;
+        border-color: var(--accent-color);
+    }
+    
+    .filter-dropdown .btn {
+        border-radius: 50px;
+        padding: 0.57rem 1.5rem;
+        border-color: #ced4da;
+    }
+    
+    .filter-dropdown .dropdown-menu {
+        border-radius: 12px;
+        padding: 0.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border: none;
+    }
+    
+    .filter-dropdown .dropdown-item {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: var(--transition);
+    }
+    
+    .filter-dropdown .dropdown-item:hover {
+        background-color: var(--secondary-color);
+    }
+    
+    .filter-dropdown .dropdown-item.active {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+
+
+    .transaction-list {
+        margin-bottom: 2rem;
+    }
+    
+    .transaction-date {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0 1rem;
+    }
+    
+    .transaction-date span {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--light-text);
+        background-color: var(--secondary-color);
+        padding: 0.25rem 1rem;
+        border-radius: 50px;
+    }
+    
+    .transaction-item {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem;
+        border-radius: var(--card-border-radius);
+        margin-bottom: 1rem;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        transition: var(--transition);
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+    
+    .transaction-item:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--box-shadow);
+    }
+    
+    .transaction-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1.25rem;
+        flex-shrink: 0;
+    }
+    
+    .transaction-icon.completed {
+        background-color: #D4EDDA;
+        color: #155724;
+    }
+    
+    .transaction-icon.pending {
+        background-color: #FFF3CD;
+        color: #856404;
+    }
+    
+    .transaction-icon.refunded {
+        background-color: #CCE5FF;
+        color: #004085;
+    }
+    
+    .transaction-icon.cancelled {
+        background-color: #F8D7DA;
+        color: #721C24;
+    }
+    
+    .transaction-icon.reward {
+        background-color: #E6D1F2;
+        color: #5B2C6F;
+    }
+    
+    .transaction-details {
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .transaction-info {
+        margin-right: 1rem;
+    }
+    
+    .transaction-info h4 {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+        font-weight: 600;
+    }
+    
+    .transaction-id {
+        font-size: 0.85rem;
+        color: var(--light-text);
+        margin-bottom: 0;
+    }
+    
+    .transaction-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        flex-shrink: 0;
+    }
+    
+    .transaction-time {
+        font-size: 0.85rem;
+        color: var(--light-text);
+        margin-bottom: 0.25rem;
+    }
+    
+    .transaction-status {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.15rem 0.75rem;
+        border-radius: 50px;
+        margin-bottom: 0.25rem;
+    }
+    
+    .transaction-status.completed {
+        background-color: #D4EDDA;
+        color: #155724;
+    }
+    
+    .transaction-status.pending {
+        background-color: #FFF3CD;
+        color: #856404;
+    }
+    
+    .transaction-status.refunded {
+        background-color: #CCE5FF;
+        color: #004085;
+    }
+    
+    .transaction-status.cancelled {
+        background-color: #F8D7DA;
+        color: #721C24;
+    }
+    
+    .transaction-status.reward {
+        background-color: #E6D1F2;
+        color: #5B2C6F;
+    }
+    
+    .transaction-amount {
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+    
+    .transaction-details .transaction-amount:first-child {
+        color: #28a745;
+    }
+    
+    .transaction-details .transaction-amount:last-child {
+        color: var(--text-color);
+    }
+    
+    @media (max-width: 767.98px) {
+        .transaction-details {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .transaction-meta {
+            margin-top: 0.5rem;
+            align-items: flex-start;
+        }
+    }
+
+
+
+ /* Add these styles to your existing <style> tag */
+    .load-more {
+        margin: 2rem 0;
+    }
+    
+    .btn-outline-accent {
+        color: var(--accent-color);
+        border-color: var(--accent-color);
+        border-radius: 50px;
+        padding: 0.75rem 2rem;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+    
+    .btn-outline-accent:hover {
+        background-color: var(--accent-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .no-more-transactions {
+        color: var(--light-text);
+        margin-top: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        border-radius: var(--border-radius);
+    }
+    
+    .spinner-container {
+        text-align: center;
+    }
+    
+    .spinner-container p {
+        margin-top: 0.75rem;
+        color: var(--primary-color);
+    }
+    
+    .text-accent {
+        color: var(--accent-color) !important;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="account-container">
+        <h1 class="page-title">My Account</h1>
+        
+        <div class="row">
+            <!-- Sidebar and main content will be added in next parts -->
+            <div class="col-lg-3 col-md-4">
+                <div class="sidebar">
+                    <!-- Orders Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">My Account</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-box"></i> Orders
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="active">
+                                    <i class="fas fa-wallet"></i> Wallet
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-user-plus"></i> Invite Friends
+                                </a>
+                                <p class="invite-subtitle">Earn 100 points for every friend</p>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-headset"></i> Customer Care
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Profile Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Profile</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-user"></i> Personal Information
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-address-book"></i> Address Book
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-credit-card"></i> Payments
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="col-lg-9 col-md-8">
+                <div class="wallet-container">
+                    <!-- Wallet Balance Overview -->
+                    <div class="wallet-overview">
+                        <div class="row">
+                            <div class="col-xl-7 col-lg-6 mb-4">
+                                <div class="balance-card">
+                                    <div class="balance-header">
+                                        <h2>Available Balance</h2>
+                                        <div class="dropdown">
+                                            <button class="action-button" type="button" id="walletActions" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="walletActions">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-plus-circle me-2"></i> Add Money</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-arrow-right me-2"></i> Transfer</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-file-invoice-dollar me-2"></i> Statement</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="balance-amount">
+                                        <h1>$2,456.78</h1>
+                                    </div>
+                                    <div class="balance-actions">
+                                        <button class="btn btn-accent"><i class="fas fa-plus me-2"></i> Add Money</button>
+                                        <button class="btn btn-outline-primary"><i class="fas fa-share-alt me-2"></i> Transfer</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-5 col-lg-6">
+                                <div class="row">
+                                    <div class="col-sm-6 mb-4">
+                                        <div class="stat-card stat-card-success">
+                                            <div class="stat-icon">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <h3>$1,230.45</h3>
+                                                <p>Total Income</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-4">
+                                        <div class="stat-card stat-card-danger">
+                                            <div class="stat-icon">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <h3>$756.20</h3>
+                                                <p>Total Spent</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="stat-card stat-card-info">
+                                            <div class="stat-icon">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <h3>$342.15</h3>
+                                                <p>Pending Refunds</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="transaction-header">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 mb-3 mb-lg-0">
+                                <h2 class="section-title">Transaction History</h2>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="d-flex flex-wrap justify-content-lg-end">
+                                    <div class="search-box me-2 mb-2 mb-md-0">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-transparent border-end-0">
+                                                <i class="fas fa-search"></i>
+                                            </span>
+                                            <input type="text" class="form-control border-start-0" placeholder="Search transactions...">
+                                        </div>
+                                    </div>
+                                    <div class="filter-dropdown mb-2 mb-md-0">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-filter me-1"></i> Filter
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="filterDropdown">
+                                            <li><a class="dropdown-item active" href="#">All Transactions</a></li>
+                                            <li><a class="dropdown-item" href="#">Completed</a></li>
+                                            <li><a class="dropdown-item" href="#">Pending</a></li>
+                                            <li><a class="dropdown-item" href="#">Refunded</a></li>
+                                            <li><a class="dropdown-item" href="#">Cancelled</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="transaction-list">
+                        <!-- Today's Transactions -->
+                        <div class="transaction-date">
+                            <span>Today</span>
+                        </div>
+                        
+                        <!-- Transaction Item 1 -->
+                        <div class="transaction-item">
+                            <div class="transaction-icon completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-info">
+                                    <h4>Modern Accent Chair</h4>
+                                    <p class="transaction-id">Order #FN-2456789</p>
+                                </div>
+                                <div class="transaction-meta">
+                                    <span class="transaction-time">2:45 PM</span>
+                                    <span class="transaction-status completed">Completed</span>
+                                    <span class="transaction-amount">-$249.99</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Transaction Item 2 -->
+                        <div class="transaction-item">
+                            <div class="transaction-icon pending">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-info">
+                                    <h4>Wallet Top-up</h4>
+                                    <p class="transaction-id">Transaction #WT-3478965</p>
+                                </div>
+                                <div class="transaction-meta">
+                                    <span class="transaction-time">11:30 AM</span>
+                                    <span class="transaction-status pending">Processing</span>
+                                    <span class="transaction-amount">+$500.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Yesterday's Transactions -->
+                        <div class="transaction-date">
+                            <span>Yesterday</span>
+                        </div>
+                        
+                        <!-- Transaction Item 3 -->
+                        <div class="transaction-item">
+                            <div class="transaction-icon refunded">
+                                <i class="fas fa-undo"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-info">
+                                    <h4>Leather Sofa Set</h4>
+                                    <p class="transaction-id">Order #FN-2456322</p>
+                                </div>
+                                <div class="transaction-meta">
+                                    <span class="transaction-time">5:20 PM</span>
+                                    <span class="transaction-status refunded">Refunded</span>
+                                    <span class="transaction-amount">+$1,249.99</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Transaction Item 4 -->
+                        <div class="transaction-item">
+                            <div class="transaction-icon cancelled">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-info">
+                                    <h4>Dining Table Set</h4>
+                                    <p class="transaction-id">Order #FN-2455789</p>
+                                </div>
+                                <div class="transaction-meta">
+                                    <span class="transaction-time">9:15 AM</span>
+                                    <span class="transaction-status cancelled">Cancelled</span>
+                                    <span class="transaction-amount">+$899.99</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Earlier This Week -->
+                        <div class="transaction-date">
+                            <span>Earlier This Week</span>
+                        </div>
+                        
+                        <!-- Transaction Item 5 -->
+                        <div class="transaction-item">
+                            <div class="transaction-icon completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-info">
+                                    <h4>Bedside Table</h4>
+                                    <p class="transaction-id">Order #FN-2453789</p>
+                                </div>
+                                <div class="transaction-meta">
+                                    <span class="transaction-time">Monday</span>
+                                    <span class="transaction-status completed">Completed</span>
+                                    <span class="transaction-amount">-$129.99</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Transaction Item 6 -->
+                        <div class="transaction-item">
+                            <div class="transaction-icon reward">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-info">
+                                    <h4>Referral Bonus</h4>
+                                    <p class="transaction-id">Reward #RB-9876543</p>
+                                </div>
+                                <div class="transaction-meta">
+                                    <span class="transaction-time">Monday</span>
+                                    <span class="transaction-status reward">Reward</span>
+                                    <span class="transaction-amount">+$50.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+<!-- Add this after the transaction-list div -->
+<!-- Load More Button -->
+<div class="text-center load-more">
+    <button class="btn btn-outline-accent" id="loadMoreBtn">
+        <i class="fas fa-sync-alt me-2"></i> Load More Transactions
+    </button>
+</div>
+
+
+
+
+
+                    
+                    <!-- Rest of the content will be added in next parts -->
+                </div>
+            </div>
+
+
+
+
+
+
+
+            
+        </div>
+    </div>
+
+
+    <!-- Add this before the closing body tag -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Sample JavaScript functions for the wallet page functionality
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Load more transactions
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function() {
+                // Simulate loading state
+                this.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Loading...';
+                this.disabled = true;
+                
+                // Simulate API call delay
+                setTimeout(() => {
+                    // Add new transaction items
+                    const transactionList = document.querySelector('.transaction-list');
+                    
+                    // Check if "Last Month" section exists
+                    let lastMonthSection = document.querySelector('.transaction-date:last-of-type');
+                    if (lastMonthSection.textContent.trim() !== 'Last Month') {
+                        // Create "Last Month" section if it doesn't exist
+                        const dateDiv = document.createElement('div');
+                        dateDiv.className = 'transaction-date';
+                        dateDiv.innerHTML = '<span>Last Month</span>';
+                        transactionList.appendChild(dateDiv);
+                    }
+                    
+                    // Sample new transactions to add
+                    const newTransactions = [
+                        {
+                            type: 'completed',
+                            icon: 'check',
+                            product: 'Coffee Table',
+                            id: 'FN-2452189',
+                            time: 'Feb 28',
+                            status: 'Completed',
+                            amount: '-$199.99'
+                        },
+                        {
+                            type: 'cancelled',
+                            icon: 'times',
+                            product: 'Wall Shelf Set',
+                            id: 'FN-2451234',
+                            time: 'Feb 25',
+                            status: 'Cancelled',
+                            amount: '+$89.99'
+                        },
+                        {
+                            type: 'refunded',
+                            icon: 'undo',
+                            product: 'Floor Lamp',
+                            id: 'FN-2450987',
+                            time: 'Feb 20',
+                            status: 'Refunded',
+                            amount: '+$149.99'
+                        }
+                    ];
+                    
+                    // Add each new transaction to the list
+                    newTransactions.forEach(tx => {
+                        const txItem = document.createElement('div');
+                        txItem.className = 'transaction-item';
+                        txItem.innerHTML = `
+                            <div class="transaction-icon ${tx.type}">
+                                <i class="fas fa-${tx.icon}"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-info">
+                                    <h4>${tx.product}</h4>
+                                    <p class="transaction-id">Order #${tx.id}</p>
+                                </div>
+                                <div class="transaction-meta">
+                                    <span class="transaction-time">${tx.time}</span>
+                                    <span class="transaction-status ${tx.type}">${tx.status}</span>
+                                    <span class="transaction-amount">${tx.amount}</span>
+                                </div>
+                            </div>
+                        `;
+                        transactionList.appendChild(txItem);
+                    });
+                    
+                    // Reset button state
+                    this.innerHTML = '<i class="fas fa-sync-alt me-2"></i> Load More Transactions';
+                    this.disabled = false;
+                    
+                    // Add animation to new items
+                    const newItems = transactionList.querySelectorAll('.transaction-item:nth-last-child(-n+3)');
+                    newItems.forEach(item => {
+                        item.style.animation = 'fadeInUp 0.5s';
+                    });
+                    
+                    // If this would be the last page in real API
+                    if (Math.random() > 0.3) {
+                        loadMoreBtn.style.display = 'none';
+                        
+                        // Show "No more transactions" message
+                        const noMoreDiv = document.createElement('div');
+                        noMoreDiv.className = 'no-more-transactions';
+                        noMoreDiv.innerHTML = 'No more transactions to load';
+                        noMoreDiv.style.animation = 'fadeIn 1s';
+                        document.querySelector('.load-more').appendChild(noMoreDiv);
+                    }
+                }, 1500);
+            });
+        }
+        
+        // Filter transactions
+        const filterItems = document.querySelectorAll('.filter-dropdown .dropdown-item');
+        filterItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active filter
+                filterItems.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update filter button text
+                document.getElementById('filterDropdown').innerHTML = `<i class="fas fa-filter me-1"></i> ${this.textContent}`;
+                
+                // In real application, this would filter the transactions based on selected filter
+                simulateFilterTransactions(this.textContent.trim());
+            });
+        });
+        
+        // Simulate filtering transactions
+        function simulateFilterTransactions(filterType) {
+            const transactionItems = document.querySelectorAll('.transaction-item');
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'loading-overlay';
+            loadingOverlay.innerHTML = `
+                <div class="spinner-container">
+                    <div class="spinner-border text-accent" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Filtering transactions...</p>
+                </div>
+            `;
+            document.querySelector('.wallet-container').appendChild(loadingOverlay);
+            
+            setTimeout(() => {
+                transactionItems.forEach(item => {
+                    const status = item.querySelector('.transaction-status').textContent.trim();
+                    
+                    if (filterType === 'All Transactions') {
+                        item.style.display = 'flex';
+                    } else if (status === filterType) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                document.querySelector('.loading-overlay').remove();
+            }, 800);
+        }
+        
+        // Search functionality
+        const searchInput = document.querySelector('.search-box input');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const transactionItems = document.querySelectorAll('.transaction-item');
+                
+                transactionItems.forEach(item => {
+                    const productName = item.querySelector('.transaction-info h4').textContent.toLowerCase();
+                    const orderId = item.querySelector('.transaction-id').textContent.toLowerCase();
+                    
+                    if (productName.includes(searchTerm) || orderId.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+    });
+</script>
+
+
+   
+</body>
+</html>
