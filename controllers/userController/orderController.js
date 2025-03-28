@@ -2171,7 +2171,7 @@ if (normalizedPaymentMethod === "wallet") {
 //           totalAmount,
 //       });
 //   } catch (error) {
-//       console.error(`16 - placeOrder Error: ${error.message}`, error.stack);
+//       console.error(`16 - placeOrder Error: ${error.mssage}`, error.stack);
 //       res.status(500).json({ success: false, error: error.message });
 //   }
 // };
