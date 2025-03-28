@@ -2196,7 +2196,6 @@ exports.instantCancelEntireOrder = async (req, res) => {
     if (!order) return res.status(404).json({ message: "Order not found or unauthorized" });
     if (order.orderStatus !== "Pending") return res.status(400).json({ message: "Only Pending orders can be cancelled instantly" });
 
-    // Refund if paid via Razorpay
     if (order.paymentStatus === "Paid" && 
         (order.paymentMethod.toLowerCase() === "razorpay" || /pay_|order_/.test(order.transactionId))) {
       const refundAmount = order.totalAmount;
@@ -2242,7 +2241,6 @@ exports.instantCancelEntireOrder = async (req, res) => {
 
 
 
-// Instant Cancel Single Product
 exports.instantCancelSingleProduct = async (req, res) => {
   try {
     const { orderId, productId } = req.params;
@@ -2256,22 +2254,19 @@ exports.instantCancelSingleProduct = async (req, res) => {
     if (productIndex === -1) return res.status(404).json({ message: "Product not found in order" });
     if (order.products[productIndex].productStatus !== "Pending") return res.status(400).json({ message: "Only Pending products can be cancelled instantly" });
 
-    // Refund logic: Prorate totalAmount based on product's contribution
     let refundAmount = 0;
     if (order.paymentStatus === "Paid" && 
         (order.paymentMethod.toLowerCase() === "razorpay" || /pay_|order_/.test(order.transactionId))) {
       const totalDiscountedPrice = order.products.reduce((sum, p) => {
         return sum + (p.price - (p.appliedOffer?.discountAmount || 0));
-      }, 0); // ₹938 (688 + 250)
+      }, 0);
       const productDiscountedPrice = order.products[productIndex].price - 
                                     (order.products[productIndex].appliedOffer?.discountAmount || 0);
       
       const remainingProducts = order.products.filter((p, idx) => idx !== productIndex && p.productStatus !== "Cancelled");
       if (remainingProducts.length === 0) {
-        // Full cancellation: Refund remaining totalAmount
         refundAmount = order.totalAmount - (order.refundedAmount || 0);
       } else {
-        // Partial cancellation: Prorate based on product's share of discounted total
         refundAmount = Math.round((productDiscountedPrice / totalDiscountedPrice) * order.totalAmount);
       }
 
@@ -2295,26 +2290,23 @@ exports.instantCancelSingleProduct = async (req, res) => {
       }
     }
 
-    // Update product status
     order.products[productIndex].productStatus = "Cancelled";
     order.products[productIndex].productCancelreason = cancelReason || "User cancelled (Pending)";
 
-    // Restore stock
     await Product.findByIdAndUpdate(productId, {
       $inc: { "variant.stock": order.products[productIndex].quantity }
     });
 
-    // Check if all products are cancelled
     const allCancelled = order.products.every((p) => p.productStatus === "Cancelled");
     if (allCancelled) {
       order.orderStatus = "Cancelled";
       order.orderCancelreason = cancelReason || "User cancelled (Pending)";
       if (order.paymentStatus === "Paid") {
         order.paymentStatus = "Refunded";
-        order.totalAmount = 0; // Full cancellation: set total to 0
+        order.totalAmount = 0; 
       }
     } else if (refundAmount > 0) {
-      order.totalAmount -= refundAmount; // Partial cancellation: adjust total
+      order.totalAmount -= refundAmount; 
     }
 
     await order.save();

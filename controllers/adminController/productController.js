@@ -10,6 +10,46 @@ const Category = require("../../models/Category");
 
 
 
+// exports.addProduct = async (req, res) => {
+//   console.log("🔍 Route Hit: Add Product");
+//   console.log("📥 Received Form Data:", req.body);
+//   console.log("📂 Uploaded Files:", req.files);
+
+//   try {
+//       const { name, brand, price, description, category, status, color, stock } = req.body;
+
+//       const productImages = req.files
+//           .filter(file => file.fieldname === "images")
+//           .map(file => file.path);
+
+//       if (!name || !brand || !price || !description || !category || !status || !color || !stock || productImages.length !== 4) {
+//           return res.status(400).json({ error: "All fields, exactly 4 product images, color, and stock are required", received: req.body });
+//       }
+
+//       const product = new Product({
+//           name,
+//           brand,
+//           price: Number(price),
+//           description,
+//           category,
+//           status,
+//           images: productImages,
+//           variant: { color, stock: Number(stock) }
+//       });
+
+//       const savedProduct = await product.save();
+//       console.log("✅ Product Added:", savedProduct);
+//       res.status(201).json({ success: true, message: "Product added successfully", product: savedProduct });
+//   } catch (error) {
+//       console.error("❌ Error in addProduct:", error.stack);
+//       res.status(400).json({ error: error.message, received: req.body });
+//   }
+// };
+
+
+
+
+
 exports.addProduct = async (req, res) => {
   console.log("🔍 Route Hit: Add Product");
   console.log("📥 Received Form Data:", req.body);
@@ -26,12 +66,21 @@ exports.addProduct = async (req, res) => {
           return res.status(400).json({ error: "All fields, exactly 4 product images, color, and stock are required", received: req.body });
       }
 
+      // Validate category
+      const categoryDoc = await Category.findById(category);
+      if (!categoryDoc) {
+          return res.status(400).json({ error: "Category not found" });
+      }
+      if (categoryDoc.isDeleted) {
+          return res.status(400).json({ error: "Cannot use a deleted category" });
+      }
+
       const product = new Product({
           name,
           brand,
           price: Number(price),
           description,
-          category,
+          category, // Validated category ID
           status,
           images: productImages,
           variant: { color, stock: Number(stock) }
@@ -45,9 +94,6 @@ exports.addProduct = async (req, res) => {
       res.status(400).json({ error: error.message, received: req.body });
   }
 };
-
-
-
 
 exports.GetaddProduct = async (req, res) => {
   try {
@@ -186,6 +232,92 @@ exports.GetaddProduct = async (req, res) => {
 
 
 
+// exports.updateProduct = async (req, res) => {
+//   console.log("🔍 Route Hit:", req.params.id);
+//   console.log("📥 Received Form Data:", req.body);
+//   console.log("📂 Uploaded Files:", req.files);
+
+//   try {
+//     const { id } = req.params;
+//     if (!id) return res.status(400).json({ error: "Product ID is required" });
+
+//     const { name, brand, price, description, category, status, color, stock } = req.body;
+//     const existingImagesFromForm = Array.isArray(req.body['existingImages[]']) 
+//       ? req.body['existingImages[]'] 
+//       : (req.body['existingImages[]'] ? [req.body['existingImages[]']] : []);
+//     const newImages = req.files ? req.files.map(file => file.path) : [];
+
+//     console.log("Existing Images from Form:", existingImagesFromForm);
+//     console.log("New Images from Upload:", newImages);
+
+//     if (!name || !brand || !price || !description || !category || !status || !color || !stock) {
+//       return res.status(400).json({ error: "All fields are required", received: req.body });
+//     }
+
+//     const product = await Product.findById(id);
+//     if (!product) return res.status(404).json({ error: "Product not found" });
+
+//     // Get old images from the database
+//     const oldImages = product.images || [];
+//     console.log("Old Images from Database:", oldImages);
+
+//     // Combine images: prioritize new images, then existing from form, then old images
+//     const updatedImages = [];
+    
+//     // Add new images first (from uploaded files)
+//     updatedImages.push(...newImages);
+    
+//     // Add existing images from form (if any)
+//     updatedImages.push(...existingImagesFromForm);
+    
+//     // Fill remaining slots with old images from database, up to 4
+//     const remainingSlots = 4 - updatedImages.length;
+//     if (remainingSlots > 0 && oldImages.length > 0) {
+//       updatedImages.push(...oldImages.slice(0, remainingSlots));
+//     }
+
+//     // Ensure exactly 4 images
+//     if (updatedImages.length < 4) {
+//       return res.status(400).json({ error: "Exactly 4 images are required; not enough images provided" });
+//     }
+//     // Cap at 4 images
+//     const finalImages = updatedImages.slice(0, 4);
+
+//     console.log("Final Images for Update:", finalImages);
+
+//     const updatedProduct = await Product.findByIdAndUpdate(
+//       id,
+//       {
+//         name,
+//         brand,
+//         price: Number(price),
+//         description,
+//         category,
+//         status,
+//         images: finalImages, // Always exactly 4 images
+//         variant: { color, stock: Number(stock) },
+//         updatedAt: new Date(),
+//       },
+//       { new: true }
+//     ).populate("category");
+
+//     console.log("✅ Product Updated:", updatedProduct);
+//     res.status(200).json({ success: true, message: "Product updated successfully", product: updatedProduct });
+//   } catch (error) {
+//     console.error("❌ Error in updateProduct:", error.stack);
+//     res.status(500).json({ error: "Internal Server Error", details: error.message });
+//   }
+// };
+
+
+
+
+
+
+
+
+
+
 exports.updateProduct = async (req, res) => {
   console.log("🔍 Route Hit:", req.params.id);
   console.log("📥 Received Form Data:", req.body);
@@ -206,6 +338,15 @@ exports.updateProduct = async (req, res) => {
 
     if (!name || !brand || !price || !description || !category || !status || !color || !stock) {
       return res.status(400).json({ error: "All fields are required", received: req.body });
+    }
+
+    // Validate category
+    const categoryDoc = await Category.findById(category);
+    if (!categoryDoc) {
+      return res.status(400).json({ error: "Category not found" });
+    }
+    if (categoryDoc.isDeleted) {
+      return res.status(400).json({ error: "Cannot use a deleted category" });
     }
 
     const product = await Product.findById(id);
@@ -246,9 +387,9 @@ exports.updateProduct = async (req, res) => {
         brand,
         price: Number(price),
         description,
-        category,
+        category, // Validated category ID
         status,
-        images: finalImages, // Always exactly 4 images
+        images: finalImages,
         variant: { color, stock: Number(stock) },
         updatedAt: new Date(),
       },
@@ -262,9 +403,6 @@ exports.updateProduct = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 };
-
-
-
 
 
 exports.getProductById = async (req, res) => {

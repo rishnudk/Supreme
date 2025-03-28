@@ -29,10 +29,7 @@ const User = require("../models/User");
 // 🔹 Authentication Routes
 // ===============================
 
-// User Login Page
-// router.get("/login", (req, res) => {
-//   res.render("user/userLogin");
-// });
+
 
 router.get("/login", authController.renderLogin);
 
@@ -51,8 +48,7 @@ router.post('/verify-signup-otp', authController.verifySignupOTP);
 
 
 
-// Handle User Signup
-// router.post("/signup", authController.signup);
+
 
 // Google Authentication
 router.get(
@@ -112,7 +108,6 @@ router.get("/verifyOtp", authController.getVerifyOtp);
 
 
 
-//  Product & Shopping Routes
  
 
 // Shop Page (Product Listing) 
@@ -146,7 +141,7 @@ router.get("/checkout", checkoutController.getCheckoutPage);
 router.post('/checkout/address/add', checkoutController.addAddress)
 router.put('/checkout/address/:id', checkoutController.updateAddress)
 router.get('/checkout/address/:id', checkoutController.getAddress)
-router.get('/checkout/addresses', checkoutController.getAddresses); // New route for list
+router.get('/checkout/addresses', checkoutController.getAddresses);
 
 
 //order
@@ -158,6 +153,8 @@ router.get("/user-orders", orderController.getUserOrders);
 
 // router.put('/order/cancel-product/:orderId/:productId', orderController.cancelSingleProduct)
 router.get("/details/:orderId", orderController.getOrderDetails);
+router.get("/order-details/:orderId",  orderController.getOrderDetails);
+
 
 
 
@@ -242,25 +239,6 @@ router.get("/cart/total",  async (req, res) => {
 
 
 
-// router.get("/order-failure/:orderId",  async (req, res) => {
-//   try {
-//     console.log('adddddddding to cart check ?? ')
-//       const orderId = req.params.orderId;
-//       const addressId = req.query.addressId || req.session.user?.lastAddressId || ""; // Use query param if available
-//       const errorMessage = req.query.error || null;
-//       console.log("order-failure - Order ID:", orderId, "Address ID:", addressId, "Error Message:", errorMessage);
-
-//       res.render("user/order-failure", { 
-//           orderId, 
-//           order,
-//           addressId, 
-//           errorMessage ,   user: req.session.user,
-//       });
-//   } catch (error) {
-//       console.error("order-failure - Error:", error.message, error.stack);
-//       res.status(500).send("Server Error");
-//   }
-// });
 
 
 
@@ -366,6 +344,5 @@ router.get("/order-failure/:orderId", async (req, res) => {
 
 
 
-router.get("/order-details/:orderId",  orderController.getOrderDetails);
 module.exports = router;
 

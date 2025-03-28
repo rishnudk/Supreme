@@ -56,15 +56,56 @@
             </table>
             
             <!-- Pagination -->
+           
             <nav>
                 <ul class="pagination">
-                    <% for(let i = 1; i <= totalPages; i++) { %>
-                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-                            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    <!-- Previous Button -->
+                    <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>">Prev</a>
+                    </li>
+            
+                    <% if (totalPages <= 5) { %>
+                        <!-- Show all pages if there are 5 or fewer pages -->
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                    <% } else { %>
+                        <!-- Show first page -->
+                        <li class="page-item <%= currentPage === 1 ? 'active' : '' %>">
+                            <a class="page-link" href="?page=1">1</a>
+                        </li>
+            
+                        <% if (currentPage > 3) { %>
+                            <!-- Show ellipsis if skipping pages -->
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        <% } %>
+            
+                        <% for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) { %>
+                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+            
+                        <% if (currentPage < totalPages - 2) { %>
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        <% } %>
+            
+                        <!-- Show last page -->
+                        <li class="page-item <%= currentPage === totalPages ? 'active' : '' %>">
+                            <a class="page-link" href="?page=<%= totalPages %>"><%= totalPages %></a>
                         </li>
                     <% } %>
+            
+                    <!-- Next Button -->
+                    <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a>
+                    </li>
                 </ul>
             </nav>
+            
+            
             
             <!-- Modal -->
             <!-- Order Details Modal -->

@@ -337,7 +337,7 @@ const orderSchema = new mongoose.Schema({
     originalAmount: { type: Number, required: true }, // Before discounts
     orderStatus: {
         type: String,
-        enum: ['Confirmed', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Return Requested', 'Returned'],
+        enum: ['Confirmed', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Return Requested', 'Returned',"Partially Delivered" ],
         default: 'Pending'
     },
     isDelivered: { type: Boolean, default: false },

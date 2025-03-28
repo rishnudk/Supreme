@@ -17,6 +17,75 @@
      rel="stylesheet">
     
 
+
+     <style>
+         .sidebar {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 1.5rem;
+        height: 100%;
+        transition: var(--transition);
+    }
+    
+    .sidebar-section {
+        margin-bottom: 2rem;
+    }
+    
+    .sidebar-title {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--secondary-color);
+    }
+    
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .sidebar-menu li {
+        margin-bottom: 0.8rem;
+    }
+    
+    .sidebar-menu a {
+        display: flex;
+        align-items: center;
+        color: var(--text-color);
+        text-decoration: none;
+        padding: 0.8rem;
+        border-radius: 12px;
+        transition: var(--transition);
+    }
+    
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        transform: translateX(5px);
+    }
+    
+    .sidebar-menu i {
+        margin-right: 10px;
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+    
+    .invite-subtitle {
+        font-size: 0.75rem;
+        color: var(--light-text);
+        margin-left: 1.8rem;
+    }
+    
+    @media (max-width: 991.98px) {
+        .sidebar {
+            margin-bottom: 2rem;
+        }
+    }
+
+
+     </style>
+
   
 </head>
 <body>
@@ -35,40 +104,56 @@
             
 
 
-            <div class="col-lg-3 mb-4">
-                <div class="card sidebar-card p-3">
-                    <div class="text-center mb-4">
-                        <h5 class="mb-0 fw-bold">My Account</h5>
-                        <p class="text-muted small mb-0">Manage your profile and orders</p>
+            <div class="col-lg-3 col-md-4">
+                <div class="sidebar">
+                    <!-- Orders Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">My Account</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/user/account">
+                                    <i class="fas fa-box"></i> Orders
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/wallet" class="active">
+                                    <i class="fas fa-wallet"></i> Wallet
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/referral">
+                                    <i class="fas fa-user-plus"></i> Invite Friends
+                                </a>
+                                <p class="invite-subtitle">Earn 100 points for every friend</p>
+                            </li>
+                          
+                        </ul>
                     </div>
                     
-                    <div class="section-title">ORDERS</div>
-                    <a href="/user/account" class="sidebar-link">
-                        <i class="fas fa-shopping-bag"></i>
-                        Orders
-                    </a>
-                    <a href="/user/wallet" class="sidebar-link">
-                        <i class="fas fa-wallet"></i>
-                        Wallet
-                    </a>
-                   
-                    
-                    
-                    <div class="sidebar-divider"></div>
-                    
-                    <div class="section-title">PROFILE</div>
-                    <a href="/user/profile" class="sidebar-link active">
-                        <i class="fas fa-user"></i>
-                        Personal Information
-                    </a>
-                    <a href="/user/address" class="sidebar-link">
-                        <i class="fas fa-book-open"></i>
-                        Address Book
-                    </a>
-                    
+                    <!-- Profile Section -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Profile</h3>
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/user/profile">
+                                    <i class="fas fa-user"></i> Personal Information
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/user/address">
+                                    <i class="fas fa-address-book"></i> Address Book
+                                </a>
+                            </li>
+                            
+                        </ul>
+                    </div>
                 </div>
             </div>
-            
+
+
+
+
+
             <!-- Main Content -->
             <div class="col-lg-9">
                 <div class="card p-4 mb-4">

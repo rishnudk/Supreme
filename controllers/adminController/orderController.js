@@ -545,19 +545,120 @@ exports.acceptReturnRequest = async (req, res) => {
 
 
 
+// exports.updateProductStatus = async (req, res) => {
+//     try {
+//         const { orderId } = req.params; // From URL params
+//         const { productStatuses } = req.body; // Array of { productId, status }
+//         console.log('Request body:', req.body);
+
+//         // Find order by _id (MongoDB ID)
+//         const order = await Order.findOne({ _id: orderId });
+//         if (!order) {
+//             return res.status(404).json({ success: false, message: 'Order not found' });
+//         }
+
+//         // Validation: Prevent changes if order is fully Cancelled or Returned
+//         if (order.orderStatus === 'Cancelled' || order.orderStatus === 'Returned') {
+//             return res.status(400).json({ success: false, message: 'Cannot update products in Cancelled or Returned orders' });
+//         }
+
+//         // Update product statuses
+//         for (const { productId, status } of productStatuses) {
+//             const product = order.products.find(p => p._id.toString() === productId);
+//             if (!product) {
+//                 console.log(`Product ${productId} not found in order`);
+//                 continue; // Skip if product not found, but don’t fail entire request
+//             }
+
+//             // Validation: Prevent invalid status transitions
+//             if (product.productStatus === 'Cancelled' || product.productStatus === 'Returned') {
+//                 console.log(`Skipping ${productId}: Already ${product.productStatus}`);
+//                 continue; // Skip if product is already Cancelled or Returned
+//             }
+//             if (product.productStatus === 'Shipped' && (status === 'Pending' || status === 'Processing')) {
+//                 console.log(`Skipping ${productId}: Cannot revert Shipped to ${status}`);
+//                 continue;
+//             }
+//             if (product.productStatus === 'Processing' && status === 'Pending') {
+//                 console.log(`Skipping ${productId}: Cannot revert Processing to Pending`);
+//                 continue;
+//             }
+
+//             // Handle cancellation and refund logic
+//             if (status === 'Cancelled' && order.paymentStatus === 'Paid' && product.productStatus !== 'Cancelled') {
+//                 const totalDiscountedPrice = order.products.reduce((sum, p) => {
+//                     return sum + ((p.price - (p.appliedOffer?.discountAmount || 0)) * p.quantity);
+//                 }, 0);
+//                 if (totalDiscountedPrice === 0) {
+//                     console.log('Total discounted price is zero - skipping refund');
+//                     product.productStatus = status;
+//                     continue;
+//                 }
+
+//                 const productDiscountedPrice = (product.price - (product.appliedOffer?.discountAmount || 0)) * product.quantity;
+//                 const refundAmount = Math.round((productDiscountedPrice / totalDiscountedPrice) * order.totalAmount);
+//                 console.log(`Refund for ${productId}: ${refundAmount}`);
+
+//                 if (refundAmount > 0) {
+//                     order.totalAmount -= refundAmount;
+//                     order.refundedAmount = (order.refundedAmount || 0) + refundAmount;
+
+//                     await Wallet.findOneAndUpdate(
+//                         { user: order.user }, // Use customer's user ID
+//                         {
+//                             $inc: { balance: refundAmount },
+//                             $push: {
+//                                 transactions: {
+//                                     type: 'credit',
+//                                     amount: refundAmount,
+//                                     description: `Refund for cancelled product in order #${order.orderID} (Razorpay)`,
+//                                     orderId: order._id
+//                                 }
+//                             }
+//                         },
+//                         { upsert: true }
+//                     );
+//                     console.log(`Wallet updated for user ${order.user} with refund: ${refundAmount}`);
+//                 }
+//             }
+
+//             // Update product status
+//             product.productStatus = status;
+//             console.log(`Updated ${productId} to ${status}`);
+//         }
+
+//         // Check if all products are Cancelled
+//         const allCancelled = order.products.every(p => p.productStatus === 'Cancelled');
+//         if (allCancelled && order.paymentStatus === 'Paid') {
+//             order.paymentStatus = 'Refunded';
+//             order.orderStatus = 'Cancelled';
+//             order.totalAmount = 0;
+//             console.log('All products cancelled - updating order to Cancelled/Refunded');
+//         }
+
+//         await order.save();
+//         res.json({ success: true, message: 'Product statuses updated successfully!' });
+
+//     } catch (error) {
+//         console.error('Error updating product status:', error);
+//         res.status(500).json({ success: false, message: 'Internal Server Error' });
+//     }
+// };
+
+
+
+
 exports.updateProductStatus = async (req, res) => {
     try {
-        const { orderId } = req.params; // From URL params
-        const { productStatuses } = req.body; // Array of { productId, status }
+        const { orderId } = req.params;
+        const { productStatuses } = req.body;
         console.log('Request body:', req.body);
 
-        // Find order by _id (MongoDB ID)
         const order = await Order.findOne({ _id: orderId });
         if (!order) {
             return res.status(404).json({ success: false, message: 'Order not found' });
         }
 
-        // Validation: Prevent changes if order is fully Cancelled or Returned
         if (order.orderStatus === 'Cancelled' || order.orderStatus === 'Returned') {
             return res.status(400).json({ success: false, message: 'Cannot update products in Cancelled or Returned orders' });
         }
@@ -567,13 +668,12 @@ exports.updateProductStatus = async (req, res) => {
             const product = order.products.find(p => p._id.toString() === productId);
             if (!product) {
                 console.log(`Product ${productId} not found in order`);
-                continue; // Skip if product not found, but don’t fail entire request
+                continue;
             }
 
-            // Validation: Prevent invalid status transitions
             if (product.productStatus === 'Cancelled' || product.productStatus === 'Returned') {
                 console.log(`Skipping ${productId}: Already ${product.productStatus}`);
-                continue; // Skip if product is already Cancelled or Returned
+                continue;
             }
             if (product.productStatus === 'Shipped' && (status === 'Pending' || status === 'Processing')) {
                 console.log(`Skipping ${productId}: Cannot revert Shipped to ${status}`);
@@ -584,7 +684,7 @@ exports.updateProductStatus = async (req, res) => {
                 continue;
             }
 
-            // Handle cancellation and refund logic
+            // Refund logic for cancellation (unchanged)
             if (status === 'Cancelled' && order.paymentStatus === 'Paid' && product.productStatus !== 'Cancelled') {
                 const totalDiscountedPrice = order.products.reduce((sum, p) => {
                     return sum + ((p.price - (p.appliedOffer?.discountAmount || 0)) * p.quantity);
@@ -604,7 +704,7 @@ exports.updateProductStatus = async (req, res) => {
                     order.refundedAmount = (order.refundedAmount || 0) + refundAmount;
 
                     await Wallet.findOneAndUpdate(
-                        { user: order.user }, // Use customer's user ID
+                        { user: order.user },
                         {
                             $inc: { balance: refundAmount },
                             $push: {
@@ -622,12 +722,25 @@ exports.updateProductStatus = async (req, res) => {
                 }
             }
 
-            // Update product status
             product.productStatus = status;
             console.log(`Updated ${productId} to ${status}`);
         }
 
-        // Check if all products are Cancelled
+        // New Logic: Update orderStatus based on product statuses
+        const productCount = order.products.length;
+        const deliveredCount = order.products.filter(p => p.productStatus === 'Delivered').length;
+
+        if (productCount > 1) { // Only apply to multi-product orders
+            if (deliveredCount > 0 && deliveredCount < productCount) {
+                order.orderStatus = 'Partially Delivered';
+                console.log('Order status set to Partially Delivered');
+            } else if (deliveredCount === productCount) {
+                order.orderStatus = 'Delivered';
+                console.log('Order status set to Delivered');
+            }
+        }
+
+        // Existing logic: Check if all products are Cancelled
         const allCancelled = order.products.every(p => p.productStatus === 'Cancelled');
         if (allCancelled && order.paymentStatus === 'Paid') {
             order.paymentStatus = 'Refunded';
@@ -644,8 +757,6 @@ exports.updateProductStatus = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
-
-
 
 
 exports.renderReturnRequestsList = async (req, res) => {
