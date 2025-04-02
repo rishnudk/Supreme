@@ -49,25 +49,55 @@
 
 
 
-        .search-container {
-            position: relative;
-            max-width: 500px;
-        }
+       /* Ensure the search container is not affected by external styles */
+.search-container.custom-search {
+    position: relative;
+    max-width: 500px;
+}
 
-        .search-input {
-            border: 1px solid var(--secondary-color);
-            border-radius: 25px;
-            padding: 0.75rem 1rem;
-            padding-right: 3rem;
-            width: 100%;
-            transition: all 0.3s;
-        }
+/* Style the input field specifically within .custom-search */
+.search-container.custom-search .search-input {
+    border: 1px solid var(--secondary-color) !important;
+    border-radius: 25px !important;
+    padding: 0.75rem 1rem !important;
+    padding-right: 3rem !important;
+    width: 100% !important;
+    transition: all 0.3s ease-in-out;
+    background-color: #fff; /* Ensure background is not overridden */
+}
 
-        .search-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--accent-color);
-            border-color: var(--accent-color);
-        }
+/* Keep focus styles consistent */
+.search-container.custom-search .search-input:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 2px var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+}
+
+/* Prevent Bootstrap styles from affecting the button */
+.search-container.custom-search .search-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--accent-color);
+    border: none !important;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+/* Style the search button icon */
+.search-container.custom-search .search-button i {
+    color: white !important;
+    font-size: 1rem;
+}
+
+/* Add hover effect */
+.search-container.custom-search .search-button:hover {
+    background: var(--secondary-color);
+}
+
 
        
 
@@ -338,12 +368,13 @@
             <div class="shop-header">
                 <div class="row align-items-center">
                     <div class="col-md-8 mb-3 mb-md-0">
-                        <div class="search-container">
+                        <div class="search-container custom-search">
                             <input type="text" id="search-input" placeholder="Search products..." class="search-input" value="<%= search %>">
                             <button id="search-button" class="search-button">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
+                        
                     </div>
                     <div class="col-md-4 d-flex justify-content-md-end">
                         <div class="sort-options">
@@ -377,13 +408,14 @@
                             <label><input type="checkbox" name="category" value="King size beds"> King size beds</label>
                             <label><input type="checkbox" name="category" value="4 Seater Dining Sets"> 4 Seater Dining Sets</label>
                             <label><input type="checkbox" name="category" value="Fabric sofa"> Fabric sofa</label>
+                            <label><input type="checkbox" name="category" value="Visitor Chairs"> Visitor Chairs</label>
                         </div>
     
                        
                         
                         
                         
-                        <div class="filter-section">
+                        <!-- <div class="filter-section">
                             <div class="filter-title">BRANDS</div>
                             <label><input type="checkbox"> Sheesham</label>
                             <label><input type="checkbox"> Royaloak</label>
@@ -391,7 +423,7 @@
                             <label><input type="checkbox"> Daroo</label>
                             <label><input type="checkbox"> Dallas</label>
                             <label><input type="checkbox"> Atlas</label>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
     
@@ -507,7 +539,7 @@
             
           
             
-            <div class="filter-section">
+            <!-- <div class="filter-section">
                 <div class="filter-title">BRANDS</div>
                 <label><input type="checkbox"> Sheesham</label>
                 <label><input type="checkbox"> Royaloak</label>
@@ -515,7 +547,7 @@
                 <label><input type="checkbox"> Daroo</label>
                 <label><input type="checkbox"> Dallas</label>
                 <label><input type="checkbox"> Atlas</label>
-            </div>
+            </div> -->
     
             <div class="d-grid gap-2 mt-4">
                 <button class="btn btn-accent" id="apply-filter-btn">Apply Filters</button>

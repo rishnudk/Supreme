@@ -6,24 +6,6 @@ const User =require('../../models/User')
 
 
 
-// exports.getAddressPage = async (req, res) => {
-//     try {
-//         if (!req.session.user) {
-//             console.log("Debug: No user in session");
-//             return res.redirect("/login"); 
-//         }
-
-//         const userId = req.session.user._id; 
-//         const addresses = await Address.find({ user: userId }); 
-
-//         res.render("user/address", { addresses, user: req.session.user });
-//     } catch (error) {
-//         console.error("Error fetching addresses:", error);
-//         res.status(500).send("Server Error");
-//     }
-// };
-
-
 
 
 

@@ -343,6 +343,49 @@ router.get("/order-failure/:orderId", async (req, res) => {
 
 
 
+// Add this route to your routes file (e.g., userRoutes.js)
+router.get('/invoice/:orderId',  async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    
+    // Fetch the order details
+    const order = await Order.findById(orderId)
+      .populate('user', 'email')
+      .populate('products.product');
+    
+    if (!order) {
+      return res.status(404).render('error', { message: 'Order not found' });
+    }
+    
+    // Check if the order belongs to the logged-in user
+    if (order.user._id.toString() !== req.session.user._id.toString()) {
+      return res.status(403).render('error', { message: 'Unauthorized access' });
+    }
+    
+    // Get user details
+    const user = await User.findById(req.session.user._id);
+    
+    // Render the invoice template
+    res.render('user/invoice', { 
+      order: order, 
+      user: user,
+      title: `Invoice #${order.orderID}` 
+    });
+    
+  } catch (error) {
+    console.error('Error generating invoice:', error);
+    res.status(500).render('error', { message: 'Failed to generate invoice' });
+  }
+});
+
+
+
+router.get('/test-error', (req, res, next) => {
+  const error = new Error('Test server error');
+  error.statusCode = 500;
+  throw error;
+});
+
 
 module.exports = router;
 

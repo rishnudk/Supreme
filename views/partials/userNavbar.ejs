@@ -7,9 +7,13 @@
     <!-- Bootstrap CSS -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Font Awesome for icons -->
+     <link rel="stylesheet" href="/css/user-navbar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Custom CSS -->
-    <style>
+
+
+
+    <!-- <style>
       /* Supreme E-commerce Header Styles */
 
 :root {
@@ -453,7 +457,12 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', handleSticky);
 });
 */
-    </style>
+    </style> -->
+
+
+
+
+
 </head>
 <body>
     <!-- Announcement Bar -->
@@ -582,29 +591,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="user-nav-item">
                       <a href="/user/wishlist" class="user-nav-link">
                         <i class="far fa-heart"></i>
-                        <span class="badge rounded-pill wishlist-count">0</span>
                       </a>
                     </div>
                   
                     <!-- Cart Dropdown -->
                     <div class="user-nav-item">
-                      <a href="/user/cart" class="user-nav-link" id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a href="/user/cart" class="user-nav-link">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="badge rounded-pill cart-count">0</span>
                       </a>
-                      <div class="dropdown-menu dropdown-menu-end cart-dropdown" aria-labelledby="cartDropdown">
-                        <div class="p-3">
-                          <div class="cart-header d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="m-0">Your Cart (0)</h6>
-                            <a href="/user/cart" class="text-decoration-none">View Cart</a>
-                          </div>
-                          <div class="cart-empty text-center py-4">
-                            <i class="fas fa-shopping-bag fa-3x mb-3"></i>
-                            <p>Your cart is currently empty</p>
-                            <a href="/user/shop" class="btn btn-primary btn-sm">Start Shopping</a>
-                          </div>
-                        </div>
-                      </div>
+                     
                     </div>
                   </div>
 

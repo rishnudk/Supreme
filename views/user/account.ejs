@@ -52,7 +52,7 @@
                                     <a href="/user/referral">
                                         <i class="fas fa-user-plus"></i> Invite Friends
                                     </a>
-                                    <p class="invite-subtitle">Earn 100 points for every friend</p>
+                                    <p class="invite-subtitle">Earn 50 points for every friend</p>
                                 </li>
                                
                             </ul>
@@ -131,7 +131,7 @@
                                       <p><i class="fas fa-truck me-2"></i>Expected by: <%= new Date(new Date(order.orderDate).setDate(new Date(order.orderDate).getDate() + 7)).toDateString() %></p>
                                       
                                       <div class="d-flex flex-wrap gap-2 mt-3">
-                                        <% if (product.productStatus !== "Cancelled" && product.productStatus !== "Delivered" && product.productStatus !== "Cancellation Requested" && product.productStatus !== "Return Requested"    && product.productStatus !== "Returned" ) { %>  
+                                        <% if (product.productStatus !== "Cancelled" && product.productStatus !== "Delivered" && order.orderStatus !== 'Delivered' && order.orderStatus !== 'Returned' && product.productStatus !== "Cancellation Requested" && product.productStatus !== "Return Requested"    && product.productStatus !== "Returned" ) { %>  
                                           <button type="button" class="btn btn-warning btn-sm cancel-product-btn"
                                             data-bs-toggle="modal" 
                                             data-bs-target="#cancelOrderModal" 
@@ -140,7 +140,7 @@
                                             <i class="fas fa-ban me-1"></i> Cancel
                                           </button>
                                         <% } %>
-                                        <% if(product.productStatus === "Delivered") { %>
+                                        <% if(product.productStatus === "Delivered" ||order.orderStatus === 'Delivered' ) { %>
                                           <a href="/user/return/<%= order._id %>/<%= product.product %>?name=<%= encodeURIComponent(product.name) %>&orderID=<%= order.orderID %>" 
                                              class="btn btn-warning btn-sm return-product-btn">
                                             <i class="fas fa-undo me-1"></i> Return

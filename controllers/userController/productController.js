@@ -1,7 +1,8 @@
 const Product = require('../../models/Product');
 const Offer = require('../../models/Offer');
 const Coupon = require('../../models/Coupon');
-const User =require('../../models/User')
+const User = require('../../models/User')
+const mongoose  = require('mongoose')
 
 
 
@@ -144,70 +145,163 @@ exports.getCart = async (req, res) => {
 
 
 
-exports.getProductById = async (req, res) => {
-    try {
-      const product = await Product.findById(req.params.id).populate("category");
+// exports.getProductById = async (req, res,next) => {
+//     try {
+//       const product = await Product.findById(req.params.id).populate("category");
   
-      if (!product) {
-        console.log("Product not found for ID:", req.params.id);
-        return res.status(404).send("Product not found");
+//       if (!product) {
+//         console.log("Product not found for ID:", req.params.id);
+//         return res.status(404).send("Product not found");
+//       }
+  
+//       // Fetch active offers for this product
+//       const currentDate = new Date();
+//       const activeOffers = await Offer.find({
+//         isActive: true,
+//         expiryDate: { $gte: currentDate },
+//         $or: [
+//           { applicableTo: "product", productId: product._id },
+//           { applicableTo: "category", categoryId: product.category?._id }
+//         ]
+//       });
+  
+//       // Fetch related products with their offers
+//       let relatedProducts = [];
+//       if (product.category && product.category._id) {
+//         const relatedProductsFetched = await Product.find({
+//           category: product.category._id,
+//           _id: { $ne: product._id },
+//           status: "Active"
+//         }).limit(4);
+  
+//         // Add offers to related products
+//         relatedProducts = relatedProductsFetched.map(relatedProduct => {
+//           const relatedOffers = activeOffers.filter(offer => 
+//             (offer.applicableTo === "product" && offer.productId?.toString() === relatedProduct._id.toString()) ||
+//             (offer.applicableTo === "category" && offer.categoryId?.toString() === relatedProduct.category?._id.toString())
+//           );
+          
+//           return {
+//             ...relatedProduct.toObject(),
+//             offers: relatedOffers
+//           };
+//         });
+//       }
+  
+//       const user = req.session.user || null;
+  
+//       // Add offers to main product
+//       const productWithOffers = {
+//         ...product.toObject(),
+//         offers: activeOffers
+//       };
+  
+//       console.log("Product with offers:", productWithOffers);
+//       console.log("Related Products with offers:", relatedProducts);
+  
+//       res.render("user/product", {
+//         product: productWithOffers,
+//         relatedProducts: relatedProducts,
+//         user: user
+//       });
+//     } catch (err) {
+//       next(err);
+//     }
+//   };
+
+
+
+
+exports.getProductById = async (req, res, next) => {
+  try {
+      const productId = req.params.id;
+
+      // Validate ObjectId format before querying
+      if (!mongoose.Types.ObjectId.isValid(productId)) {
+          const error = new Error('Invalid product ID');
+          error.statusCode = 400;
+          throw error;
       }
-  
+
+      // Find the product and populate category
+      const product = await Product.findById(productId).populate('category');
+
+      if (!product) {
+          console.log('Product not found for ID:', productId);
+          const error = new Error('Product not found');
+          error.statusCode = 404;
+          throw error;
+      }
+
       // Fetch active offers for this product
       const currentDate = new Date();
       const activeOffers = await Offer.find({
-        isActive: true,
-        expiryDate: { $gte: currentDate },
-        $or: [
-          { applicableTo: "product", productId: product._id },
-          { applicableTo: "category", categoryId: product.category?._id }
-        ]
+          isActive: true,
+          expiryDate: { $gte: currentDate },
+          $or: [
+              { applicableTo: 'product', productId: product._id },
+              { applicableTo: 'category', categoryId: product.category?._id }
+          ]
       });
-  
+
       // Fetch related products with their offers
       let relatedProducts = [];
       if (product.category && product.category._id) {
-        const relatedProductsFetched = await Product.find({
-          category: product.category._id,
-          _id: { $ne: product._id },
-          status: "Active"
-        }).limit(4);
-  
-        // Add offers to related products
-        relatedProducts = relatedProductsFetched.map(relatedProduct => {
-          const relatedOffers = activeOffers.filter(offer => 
-            (offer.applicableTo === "product" && offer.productId?.toString() === relatedProduct._id.toString()) ||
-            (offer.applicableTo === "category" && offer.categoryId?.toString() === relatedProduct.category?._id.toString())
-          );
-          
-          return {
-            ...relatedProduct.toObject(),
-            offers: relatedOffers
-          };
-        });
+          const relatedProductsFetched = await Product.find({
+              category: product.category._id,
+              _id: { $ne: product._id },
+              status: 'Active'
+          }).limit(4);
+
+          // Add offers to related products
+          relatedProducts = relatedProductsFetched.map(relatedProduct => {
+              const relatedOffers = activeOffers.filter(offer =>
+                  (offer.applicableTo === 'product' && offer.productId?.toString() === relatedProduct._id.toString()) ||
+                  (offer.applicableTo === 'category' && offer.categoryId?.toString() === relatedProduct.category?._id.toString())
+              );
+
+              return {
+                  ...relatedProduct.toObject(),
+                  offers: relatedOffers
+              };
+          });
       }
-  
+
       const user = req.session.user || null;
-  
+
       // Add offers to main product
       const productWithOffers = {
-        ...product.toObject(),
-        offers: activeOffers
+          ...product.toObject(),
+          offers: activeOffers
       };
-  
-      console.log("Product with offers:", productWithOffers);
-      console.log("Related Products with offers:", relatedProducts);
-  
-      res.render("user/product", {
-        product: productWithOffers,
-        relatedProducts: relatedProducts,
-        user: user
+
+      console.log('Product with offers:', productWithOffers);
+      console.log('Related Products with offers:', relatedProducts);
+
+      res.render('user/product', {
+          product: productWithOffers,
+          relatedProducts: relatedProducts,
+          user: user
       });
-    } catch (error) {
-      console.error("Error in getProductById:", error);
-      res.status(500).send("Server Error");
-    }
-  };
+  } catch (err) {
+      // Handle specific Mongoose CastError
+      if (err.name === 'CastError') {
+          const error = new Error('Invalid product ID');
+          error.statusCode = 400;
+          return next(error);
+      }
+      // Pass other errors to the global error handler
+      next(err);
+  }
+};
+
+
+
+
+
+
+
+
 
 
 module.exports = exports;

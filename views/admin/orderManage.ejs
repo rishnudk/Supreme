@@ -1319,54 +1319,67 @@ document.addEventListener('DOMContentLoaded', function() {
             }));
             console.log('Order ID for request:', orderId, 'Product statuses:', productStatuses);
 
-            try {
-                console.log('Sending PUT request to:', `/admin/${orderId}/update-product-status`);
-                const response = await fetch(`/admin/${orderId}/update-product-status`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ productStatuses })
-                });
-                console.log('Response received:', response.status, response.statusText);
+          
 
-                const result = await response.json();
-                if (!response.ok) {
-                    console.error('Failed response:', { status: response.status, statusText: response.statusText, data: result });
+
+            try {
+            console.log('Sending PUT request to:', `/admin/${orderId}/update-product-status`);
+            const response = await fetch(`/admin/${orderId}/update-product-status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productStatuses })
+            });
+            console.log('Response received:', response.status, response.statusText);
+
+            const result = await response.json();
+            if (!response.ok) {
+                console.error('Failed response:', { status: response.status, statusText: response.statusText, data: result });
+                // Error handling with SweetAlert
+                if (response.status === 404) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Order Not Found',
+                        text: result.message || 'The specified order could not be found.',
+                    });
+                } else if (response.status === 400) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Invalid Request',
+                        text: result.message || 'Cannot update products in Cancelled or Returned orders.',
+                    });
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: result.message || 'Failed to update product statuses.',
                     });
-                    return;
                 }
-
-                // Fetch updated order data
-                const updatedOrderResponse = await fetch(`/admin/order/${orderId}`);
-                const updatedOrderData = await updatedOrderResponse.json();
-                if (!updatedOrderResponse.ok) {
-                    throw new Error('Failed to fetch updated order');
-                }
-
-                console.log('Product statuses updated successfully:', result);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: result.message,
-                    timer: 1500,
-                    showConfirmButton: false
-                }).then(() => {
-                    const updatedOrder = updatedOrderData.order;
-                    populateOrderModal(updatedOrder); // Update modal
-                    updateTableRow(updatedOrder); // Update table
-                    bootstrap.Modal.getInstance(orderDetailsModal).hide();
-                });
-            } catch (error) {
-                console.error('Error saving product status:', error.message, error.stack);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An unexpected error occurred.',
-                });
+                return;
             }
+
+            // Success handling with SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: result.message || 'Product statuses updated successfully!',
+                timer: 2000, // Auto-close after 2 seconds
+                showConfirmButton: false
+            }).then(() => {
+                // Optionally reload the page or update UI
+                location.reload();
+            });
+
+        } catch (error) {
+            console.error('Fetch error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Network Error',
+                text: 'An unexpected error occurred. Please try again later.',
+            });
+        }
+
+
+
         });
     }
 });

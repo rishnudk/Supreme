@@ -1363,93 +1363,93 @@ exports.submitReturnRequest = async (req, res) => {
 };
 
 
+//og
+// exports.getOrderDetails = async (req, res) => {
+//   try {
+//     const orderId = req.params.orderId;
+//     console.log("Fetching order details for Order ID:", orderId);
 
-exports.getOrderDetails = async (req, res) => {
-  try {
-    const orderId = req.params.orderId;
-    console.log("Fetching order details for Order ID:", orderId);
+//     const order = await Order.findById(orderId)
+//       .populate("products.product")
+//       .populate("user", "name email")
+//       .populate("products.appliedOffer.offer") // Populate offer details
+//       .populate("appliedCoupon.coupon") // Populate coupon details
+//       .lean();
 
-    const order = await Order.findById(orderId)
-      .populate("products.product")
-      .populate("user", "name email")
-      .populate("products.appliedOffer.offer") // Populate offer details
-      .populate("appliedCoupon.coupon") // Populate coupon details
-      .lean();
+//     if (!order || order.user._id.toString() !== req.session.user._id) {
+//       console.log("Order not found or unauthorized for ID:", orderId);
+//       return res
+//         .status(404)
+//         .send("Order not found or you are not authorized to view it");
+//     }
 
-    if (!order || order.user._id.toString() !== req.session.user._id) {
-      console.log("Order not found or unauthorized for ID:", orderId);
-      return res
-        .status(404)
-        .send("Order not found or you are not authorized to view it");
-    }
+//     const response = {
+//       _id: order._id,
+//       orderID: order.orderID,
+//       user: order.user,
+//       orderDate: order.orderDate,
+//       totalAmount: order.totalAmount,
+//       originalAmount: order.originalAmount, // Before discounts
+//       subtotal: order.originalAmount - 15, // Before shipping, after discounts
+//       shipping: 15,
+//       tax: 0,
+//       orderStatus: order.orderStatus,
+//       paymentMethod: order.paymentMethod,
+//       paymentStatus: order.paymentStatus,
+//       transactionId: order.transactionId || "N/A",
+//       shippingAddress: order.shippingAddress,
+//       addressId: order.addressId || "",
+//       offerDiscount: order.totalOfferDiscount, // Total offer discount
+//       couponCode: order.appliedCoupon?.code || "N/A",
+//       couponDiscount: order.appliedCoupon?.discountAmount || 0,
+//       products: order.products.map((p) => ({
+//         _id: p.product._id,
+//         name: p.name, // From Order, not Product
+//         price: p.price, // From Order, not Product
+//         image: p.image, // From Order
+//         quantity: p.quantity,
+//         productStatus: p.productStatus,
+//         offerName: p.appliedOffer?.offer?.name || "None", // Offer name if applied
+//         offerDiscount: p.appliedOffer?.discountAmount || 0, // Per-product discount
+//       })),
+//       timeline: [
+//         {
+//           title: "Order Placed",
+//           date: order.orderDate,
+//           text: "Your order has been received.",
+//           completed: true,
+//         },
+//         {
+//           title: "Order Processing",
+//           date: order.orderStatus === "Processing" ? order.updatedAt : null, // Example, adjust if you track this
+//           text: "Your order is being prepared for shipping.",
+//           completed: order.orderStatus !== "Pending",
+//         },
+//         {
+//           title: "Order Shipped",
+//           date: order.orderStatus === "Shipped" ? order.updatedAt : null, // Example, adjust if you track this
+//           text: "Your order has been shipped.",
+//           completed: order.orderStatus === "Shipped" || order.orderStatus === "Delivered",
+//         },
+//         {
+//           title: "Order Delivered",
+//           date: order.deliveredAt,
+//           text: "Your order has been delivered.",
+//           completed: order.orderStatus === "Delivered",
+//         },
+//       ],
+//     };
 
-    const response = {
-      _id: order._id,
-      orderID: order.orderID,
-      user: order.user,
-      orderDate: order.orderDate,
-      totalAmount: order.totalAmount,
-      originalAmount: order.originalAmount, // Before discounts
-      subtotal: order.originalAmount - 15, // Before shipping, after discounts
-      shipping: 15,
-      tax: 0,
-      orderStatus: order.orderStatus,
-      paymentMethod: order.paymentMethod,
-      paymentStatus: order.paymentStatus,
-      transactionId: order.transactionId || "N/A",
-      shippingAddress: order.shippingAddress,
-      addressId: order.addressId || "",
-      offerDiscount: order.totalOfferDiscount, // Total offer discount
-      couponCode: order.appliedCoupon?.code || "N/A",
-      couponDiscount: order.appliedCoupon?.discountAmount || 0,
-      products: order.products.map((p) => ({
-        _id: p.product._id,
-        name: p.name, // From Order, not Product
-        price: p.price, // From Order, not Product
-        image: p.image, // From Order
-        quantity: p.quantity,
-        productStatus: p.productStatus,
-        offerName: p.appliedOffer?.offer?.name || "None", // Offer name if applied
-        offerDiscount: p.appliedOffer?.discountAmount || 0, // Per-product discount
-      })),
-      timeline: [
-        {
-          title: "Order Placed",
-          date: order.orderDate,
-          text: "Your order has been received.",
-          completed: true,
-        },
-        {
-          title: "Order Processing",
-          date: order.orderStatus === "Processing" ? order.updatedAt : null, // Example, adjust if you track this
-          text: "Your order is being prepared for shipping.",
-          completed: order.orderStatus !== "Pending",
-        },
-        {
-          title: "Order Shipped",
-          date: order.orderStatus === "Shipped" ? order.updatedAt : null, // Example, adjust if you track this
-          text: "Your order has been shipped.",
-          completed: order.orderStatus === "Shipped" || order.orderStatus === "Delivered",
-        },
-        {
-          title: "Order Delivered",
-          date: order.deliveredAt,
-          text: "Your order has been delivered.",
-          completed: order.orderStatus === "Delivered",
-        },
-      ],
-    };
-
-    console.log("getOrderDetails - Response object sent to EJS:", response);
-    res.render("user/orderDetails", {
-      order: response,
-      user: req.session.user,
-    });
-  } catch (error) {
-    console.error("Error fetching order details:", error.message, error.stack);
-    res.status(500).send("Internal Server Error");
-  }
-};
+//     console.log("getOrderDetails - Response object sent to EJS:", response);
+//     res.render("user/orderDetails", {
+//       order: response,
+//       user: req.session.user,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching order details:", error.message, error.stack);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
 
 
 
@@ -1686,6 +1686,78 @@ exports.getOrderDetails = async (req, res) => {
 // };
 
 
+
+
+exports.getOrderDetails = async (req, res) => {
+  try {
+    console.log('cheksssssssssssssssssssssss')
+    const orderId = req.params.orderId;
+    console.log("Fetching order details for Order ID:", orderId);
+
+    const order = await Order.findById(orderId)
+      .populate("products.product")
+      .populate("user", "name email")
+      .populate("products.appliedOffer.offer")
+      .populate("appliedCoupon.coupon")
+      .lean();
+
+
+      console.log("Raw order data from DB:", order);
+
+    if (!order || order.user._id.toString() !== req.session.user._id) {
+      console.log("Order not found or unauthorized for ID:", orderId);
+      return res.status(404).send("Order not found or you are not authorized to view it");
+    }
+
+    const response = {
+      _id: order._id,
+      orderID: order.orderID,
+      user: order.user,
+      orderDate: order.orderDate,
+      totalAmount: order.totalAmount,
+      originalAmount: order.originalAmount,
+      shippingCost: order.shippingCost || 15, // Use schema field, default to 15 if not set
+      subtotal: order.originalAmount - order.totalOfferDiscount - (order.appliedCoupon?.discountAmount || 0), // Correct calculation
+      tax: 0,
+      orderStatus: order.orderStatus,
+      paymentMethod: order.paymentMethod,
+      paymentStatus: order.paymentStatus,
+      transactionId: order.transactionId || "N/A",
+      shippingAddress: order.shippingAddress,
+      addressId: order.addressId || "",
+      totalOfferDiscount: order.totalOfferDiscount, // Keep schema name
+      appliedCoupon: {
+        code: order.appliedCoupon?.code || "N/A",
+        discountAmount: order.appliedCoupon?.discountAmount || 0
+      },
+      refundedAmount: order.refundedAmount || 0, // Add refunded amount
+      products: order.products.map((p) => ({
+        _id: p.product._id,
+        name: p.name,
+        price: p.price,
+        image: p.image,
+        quantity: p.quantity,
+        productStatus: p.productStatus,
+        offerName: p.appliedOffer?.offer?.name || "None",
+        offerDiscount: p.appliedOffer?.discountAmount || 0
+      })),
+      timeline: [
+        { title: "Order Placed", date: order.orderDate, text: "Your order has been received.", completed: true },
+        { title: "Order Processing", date: order.orderStatus === "Processing" ? order.updatedAt : null, text: "Your order is being prepared for shipping.", completed: order.orderStatus !== "Pending" },
+        { title: "Order Shipped", date: order.orderStatus === "Shipped" ? order.updatedAt : null, text: "Your order has been shipped.", completed: order.orderStatus === "Shipped" || order.orderStatus === "Delivered" },
+        { title: "Order Delivered", date: order.deliveredAt, text: "Your order has been delivered.", completed: order.orderStatus === "Delivered" }
+      ]
+    };
+
+    res.render("user/orderDetails", {
+      order: response,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.error("Error fetching order details:", error.message, error.stack);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 
 
@@ -2241,18 +2313,220 @@ exports.instantCancelEntireOrder = async (req, res) => {
 
 
 
+// exports.instantCancelSingleProduct = async (req, res) => {
+//   try {
+//     const { orderId, productId } = req.params;
+//     const { cancelReason } = req.body;
+//     const userId = new mongoose.Types.ObjectId(req.session.user._id);
+
+//     const order = await Order.findOne({ _id: orderId, user: userId });
+//     if (!order) return res.status(404).json({ message: "Order not found or unauthorized" });
+
+//     const productIndex = order.products.findIndex((p) => p.product.toString() === productId);
+//     if (productIndex === -1) return res.status(404).json({ message: "Product not found in order" });
+//     if (order.products[productIndex].productStatus !== "Pending") return res.status(400).json({ message: "Only Pending products can be cancelled instantly" });
+
+//     let refundAmount = 0;
+//     if (order.paymentStatus === "Paid" && 
+//         (order.paymentMethod.toLowerCase() === "razorpay" || /pay_|order_/.test(order.transactionId))) {
+//       const totalDiscountedPrice = order.products.reduce((sum, p) => {
+//         return sum + (p.price - (p.appliedOffer?.discountAmount || 0));
+//       }, 0);
+//       const productDiscountedPrice = order.products[productIndex].price - 
+//                                     (order.products[productIndex].appliedOffer?.discountAmount || 0);
+      
+//       const remainingProducts = order.products.filter((p, idx) => idx !== productIndex && p.productStatus !== "Cancelled");
+//       if (remainingProducts.length === 0) {
+//         refundAmount = order.totalAmount - (order.refundedAmount || 0);
+//       } else {
+//         refundAmount = Math.round((productDiscountedPrice / totalDiscountedPrice) * order.totalAmount);
+//       }
+
+//       if (refundAmount > 0) {
+//         await Wallet.findOneAndUpdate(
+//           { user: userId },
+//           {
+//             $inc: { balance: refundAmount },
+//             $push: {
+//               transactions: {
+//                 type: "credit",
+//                 amount: refundAmount,
+//                 description: `Refund for cancelled product in order #${order.orderID} (Razorpay)`,
+//                 orderId: order._id
+//               }
+//             }
+//           },
+//           { upsert: true }
+//         );
+//         order.refundedAmount = (order.refundedAmount || 0) + refundAmount;
+//       }
+//     }
+
+//     order.products[productIndex].productStatus = "Cancelled";
+//     order.products[productIndex].productCancelreason = cancelReason || "User cancelled (Pending)";
+
+//     await Product.findByIdAndUpdate(productId, {
+//       $inc: { "variant.stock": order.products[productIndex].quantity }
+//     });
+
+//     const allCancelled = order.products.every((p) => p.productStatus === "Cancelled");
+//     if (allCancelled) {
+//       order.orderStatus = "Cancelled";
+//       order.orderCancelreason = cancelReason || "User cancelled (Pending)";
+//       if (order.paymentStatus === "Paid") {
+//         order.paymentStatus = "Refunded";
+//         order.totalAmount = 0; 
+//       }
+//     } else if (refundAmount > 0) {
+//       order.totalAmount -= refundAmount; 
+//     }
+
+//     await order.save();
+//     res.json({ message: "Product cancelled successfully" });
+//   } catch (error) {
+//     console.error("Error instant cancelling product:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+
+
+
+
+
+// exports.instantCancelSingleProduct = async (req, res) => {
+//   try {
+//     const { orderId, productId } = req.params;
+//     const { cancelReason } = req.body;
+//     const userId = new mongoose.Types.ObjectId(req.session.user._id);
+
+//     console.log("DEBUG: Starting cancellation - Order ID:", orderId, "Product ID:", productId, "User ID:", userId);
+
+//     const order = await Order.findOne({ _id: orderId, user: userId });
+//     if (!order) return res.status(404).json({ message: "Order not found or unauthorized" });
+//     console.log("DEBUG: Order found -", JSON.stringify(order, null, 2));
+
+//     const productIndex = order.products.findIndex((p) => p.product.toString() === productId);
+//     if (productIndex === -1) return res.status(404).json({ message: "Product not found in order" });
+//     if (order.products[productIndex].productStatus !== "Pending") return res.status(400).json({ message: "Only Pending products can be cancelled instantly" });
+//     console.log("DEBUG: Product to cancel -", order.products[productIndex]);
+
+//     let refundAmount = 0;
+//     if (order.paymentStatus === "Paid" && 
+//         (order.paymentMethod.toLowerCase() === "razorpay" || /pay_|order_/.test(order.transactionId))) {
+//       const totalDiscountedPrice = order.products.reduce((sum, p) => {
+//         return sum + (p.price - (p.appliedOffer?.discountAmount || 0));
+//       }, 0);
+//       const productDiscountedPrice = order.products[productIndex].price - 
+//                                     (order.products[productIndex].appliedOffer?.discountAmount || 0);
+      
+//       console.log("DEBUG: Total Discounted Price:", totalDiscountedPrice);
+//       console.log("DEBUG: Product Discounted Price:", productDiscountedPrice);
+
+//       const remainingProducts = order.products.filter((p, idx) => idx !== productIndex && p.productStatus !== "Cancelled");
+//       console.log("DEBUG: Remaining Products Count:", remainingProducts.length, "Details:", remainingProducts);
+
+//       const effectiveTotal = order.totalAmount; // Use current totalAmount
+//       if (remainingProducts.length === 0) {
+//         refundAmount = order.totalAmount - (order.refundedAmount || 0);
+//         console.log("DEBUG: All products canceled, full refund - Refund Amount:", refundAmount);
+//       } else {
+//         refundAmount = Math.round((productDiscountedPrice / totalDiscountedPrice) * effectiveTotal);
+//         refundAmount = Math.min(refundAmount, productDiscountedPrice); // Cap at product value
+//         console.log("DEBUG: Partial refund calculated - Refund Amount:", refundAmount);
+//       }
+
+//       console.log("DEBUG: Order Total Amount Before Refund:", order.totalAmount);
+//       console.log("DEBUG: Refunded Amount So Far:", order.refundedAmount || 0);
+
+//       if (refundAmount > 0) {
+//         await Wallet.findOneAndUpdate(
+//           { user: userId },
+//           {
+//             $inc: { balance: refundAmount },
+//             $push: {
+//               transactions: {
+//                 type: "credit",
+//                 amount: refundAmount,
+//                 description: `Refund for cancelled product in order #${order.orderID} (Razorpay)`,
+//                 orderId: order._id
+//               }
+//             }
+//           },
+//           { upsert: true }
+//         );
+//         order.refundedAmount = (order.refundedAmount || 0) + refundAmount;
+//         console.log("DEBUG: Wallet updated - Refund Amount Added:", refundAmount);
+//       }
+//     }
+
+//     order.products[productIndex].productStatus = "Cancelled";
+//     order.products[productIndex].productCancelreason = cancelReason || "User cancelled (Pending)";
+//     console.log("DEBUG: Product status updated to Cancelled");
+
+//     await Product.findByIdAndUpdate(productId, {
+//       $inc: { "variant.stock": order.products[productIndex].quantity }
+//     });
+//     console.log("DEBUG: Product stock incremented");
+
+//     const allCancelled = order.products.every((p) => p.productStatus === "Cancelled");
+//     console.log("DEBUG: All products cancelled?", allCancelled);
+
+//     if (allCancelled) {
+//       order.orderStatus = "Cancelled";
+//       order.orderCancelreason = cancelReason || "User cancelled (Pending)";
+//       if (order.paymentStatus === "Paid") {
+//         order.paymentStatus = "Refunded";
+//         order.totalAmount = 0; 
+//       }
+//       console.log("DEBUG: Entire order cancelled - New Total Amount:", order.totalAmount);
+//     } else if (refundAmount > 0) {
+//       order.totalAmount -= refundAmount; 
+//       console.log("DEBUG: Partial cancellation - Updated Total Amount:", order.totalAmount);
+//     }
+
+//     console.log("DEBUG: Total Amount Before Save:", order.totalAmount);
+//     order.markModified("totalAmount"); // Ensure Mongoose detects the change
+//     await order.save();
+//     const savedOrder = await Order.findOne({ _id: orderId });
+//     console.log("DEBUG: Total Amount After Save:", savedOrder.totalAmount);
+//     if (savedOrder.totalAmount !== order.totalAmount) {
+//       console.error("DEBUG: Save failed - Expected:", order.totalAmount, "Got:", savedOrder.totalAmount);
+//       throw new Error("Failed to update totalAmount in database");
+//     }
+
+//     res.json({ message: "Product cancelled successfully" });
+//   } catch (error) {
+//     console.error("Error instant cancelling product:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+
+
+
+
+
+
+
+
+
 exports.instantCancelSingleProduct = async (req, res) => {
   try {
     const { orderId, productId } = req.params;
     const { cancelReason } = req.body;
     const userId = new mongoose.Types.ObjectId(req.session.user._id);
 
+    console.log("DEBUG: Starting cancellation - Order ID:", orderId, "Product ID:", productId, "User ID:", userId);
+
     const order = await Order.findOne({ _id: orderId, user: userId });
     if (!order) return res.status(404).json({ message: "Order not found or unauthorized" });
+    console.log("DEBUG: Order found -", JSON.stringify(order, null, 2));
 
     const productIndex = order.products.findIndex((p) => p.product.toString() === productId);
     if (productIndex === -1) return res.status(404).json({ message: "Product not found in order" });
     if (order.products[productIndex].productStatus !== "Pending") return res.status(400).json({ message: "Only Pending products can be cancelled instantly" });
+    console.log("DEBUG: Product to cancel -", order.products[productIndex]);
 
     let refundAmount = 0;
     if (order.paymentStatus === "Paid" && 
@@ -2263,12 +2537,24 @@ exports.instantCancelSingleProduct = async (req, res) => {
       const productDiscountedPrice = order.products[productIndex].price - 
                                     (order.products[productIndex].appliedOffer?.discountAmount || 0);
       
+      console.log("DEBUG: Total Discounted Price:", totalDiscountedPrice);
+      console.log("DEBUG: Product Discounted Price:", productDiscountedPrice);
+
       const remainingProducts = order.products.filter((p, idx) => idx !== productIndex && p.productStatus !== "Cancelled");
+      console.log("DEBUG: Remaining Products Count:", remainingProducts.length, "Details:", remainingProducts);
+
+      const effectiveTotal = order.totalAmount;
       if (remainingProducts.length === 0) {
         refundAmount = order.totalAmount - (order.refundedAmount || 0);
+        console.log("DEBUG: All products canceled, full refund - Refund Amount:", refundAmount);
       } else {
-        refundAmount = Math.round((productDiscountedPrice / totalDiscountedPrice) * order.totalAmount);
+        refundAmount = Math.round((productDiscountedPrice / totalDiscountedPrice) * effectiveTotal);
+        refundAmount = Math.min(refundAmount, productDiscountedPrice);
+        console.log("DEBUG: Partial refund calculated - Refund Amount:", refundAmount);
       }
+
+      console.log("DEBUG: Order Total Amount Before Refund:", order.totalAmount);
+      console.log("DEBUG: Refunded Amount So Far:", order.refundedAmount || 0);
 
       if (refundAmount > 0) {
         await Wallet.findOneAndUpdate(
@@ -2287,29 +2573,53 @@ exports.instantCancelSingleProduct = async (req, res) => {
           { upsert: true }
         );
         order.refundedAmount = (order.refundedAmount || 0) + refundAmount;
+        console.log("DEBUG: Wallet updated - Refund Amount Added:", refundAmount);
       }
     }
 
     order.products[productIndex].productStatus = "Cancelled";
     order.products[productIndex].productCancelreason = cancelReason || "User cancelled (Pending)";
+    console.log("DEBUG: Product status updated to Cancelled");
 
     await Product.findByIdAndUpdate(productId, {
       $inc: { "variant.stock": order.products[productIndex].quantity }
     });
+    console.log("DEBUG: Product stock incremented");
 
     const allCancelled = order.products.every((p) => p.productStatus === "Cancelled");
+    console.log("DEBUG: All products cancelled?", allCancelled);
+
+    const updateFields = {
+      [`products.${productIndex}.productStatus`]: "Cancelled",
+      [`products.${productIndex}.productCancelreason`]: cancelReason || "User cancelled (Pending)",
+      refundedAmount: order.refundedAmount // Ensure cumulative refund
+    };
+
     if (allCancelled) {
-      order.orderStatus = "Cancelled";
-      order.orderCancelreason = cancelReason || "User cancelled (Pending)";
+      updateFields.orderStatus = "Cancelled";
+      updateFields.orderCancelreason = cancelReason || "User cancelled (Pending)";
       if (order.paymentStatus === "Paid") {
-        order.paymentStatus = "Refunded";
-        order.totalAmount = 0; 
+        updateFields.paymentStatus = "Refunded";
+        updateFields.totalAmount = 0;
       }
+      console.log("DEBUG: Entire order cancelled - New Total Amount:", 0);
     } else if (refundAmount > 0) {
-      order.totalAmount -= refundAmount; 
+      updateFields.totalAmount = order.totalAmount - refundAmount;
+      console.log("DEBUG: Partial cancellation - Updated Total Amount:", updateFields.totalAmount);
     }
 
-    await order.save();
+    console.log("DEBUG: Update Fields:", updateFields);
+    const updatedOrder = await Order.findOneAndUpdate(
+      { _id: orderId, user: userId },
+      { $set: updateFields },
+      { new: true }
+    );
+    if (!updatedOrder) {
+      throw new Error("Failed to update order in database");
+    }
+    console.log("DEBUG: Total Amount After Update:", updatedOrder.totalAmount);
+    console.log("DEBUG: Refunded Amount After Update:", updatedOrder.refundedAmount);
+
     res.json({ message: "Product cancelled successfully" });
   } catch (error) {
     console.error("Error instant cancelling product:", error);

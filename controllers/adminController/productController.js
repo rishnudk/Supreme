@@ -51,9 +51,6 @@ const Category = require("../../models/Category");
 
 
 exports.addProduct = async (req, res) => {
-  console.log("🔍 Route Hit: Add Product");
-  console.log("📥 Received Form Data:", req.body);
-  console.log("📂 Uploaded Files:", req.files);
 
   try {
       const { name, brand, price, description, category, status, color, stock } = req.body;
@@ -94,6 +91,8 @@ exports.addProduct = async (req, res) => {
       res.status(400).json({ error: error.message, received: req.body });
   }
 };
+
+
 
 exports.GetaddProduct = async (req, res) => {
   try {

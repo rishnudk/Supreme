@@ -287,6 +287,14 @@
                 height: 16px;
             }
         }
+
+
+
+
+
+
+
+        
     </style>
 
 
@@ -295,128 +303,6 @@
     <%- include('../partials/userNavbar') %>
 
 
-<!-- 
-    
-    <div class="container">
-        <div class="order-container">
-            <div class="order-header">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <h4>Order Details</h4>
-                        <div class="d-flex align-items-center mt-2">
-                            <span class="order-id me-3">Order #<%= order.orderID %></span>
-                            <span class="status-badge <%= order.orderStatus === 'Shipped' || order.orderStatus === 'Delivered' ? 'status-shipped' : 'status-pending' %>">
-                                <%= order.orderStatus %>
-                            </span>
-                        </div>
-                        <p class="text-muted mb-0 mt-1">Placed on <%= order.orderDate.toLocaleDateString() %></p>
-                    </div>
-                    <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                        <% if ((order.paymentMethod === 'razorpay' || order.paymentMethod === 'cod') && order.paymentStatus === 'Pending') { %>
-                            <button onclick="payNow('<%= order._id %>', '<%= order.shippingAddress %>')" class="btn btn-track me-2">Pay Now</button>
-                        <% } %>
-                        
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="mb-4">
-                        <h5 class="info-title">Order Status</h5>
-                        <div class="timeline">
-                            <% order.timeline.forEach(item => { %>
-                                <div class="timeline-item <%= item.completed ? 'completed' : (item.date ? 'current' : 'pending') %>">
-                                    <div class="timeline-marker"></div>
-                                    <div class="timeline-content">
-                                        <h6 class="timeline-title"><%= item.title %></h6>
-                                        <p class="timeline-date"><%= item.date ? item.date.toLocaleString() : 'Pending' %></p>
-                                        <p class="timeline-text"><%= item.text %></p>
-                                    </div>
-                                </div>
-                            <% }); %>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <h5 class="info-title">Products</h5>
-                        <% order.products.forEach(product => { %>
-                            <div class="product-card">
-                                <div class="d-flex flex-column flex-md-row">
-                                    <div class="me-md-3 mb-3 mb-md-0 text-center">
-                                        <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <div>
-                                                <h6 class="product-name"><%= product.name %></h6>
-                                                <p class="product-price mb-1">₹<%= product.price.toFixed(2) %></p>
-                                                <p class="product-quantity mb-1">Quantity: <%= product.quantity %></p>
-                                                <p class="mb-0"><span class="status-badge <%= product.productStatus === 'Shipped' || product.productStatus === 'Delivered' ? 'status-shipped' : 'status-pending' %>"><%= product.productStatus %></span></p>
-                                            </div>
-                                            <div class="d-none d-md-block">
-                                                <% if (product.productStatus === 'Delivered') { %>
-                                                    <button class="btn btn-sm btn-return">Return</button>
-                                                <% } %>
-                                            </div>
-                                        </div>
-                                        <div class="d-md-none text-end mt-2">
-                                            <% if (product.productStatus === 'Delivered') { %>
-                                                <button class="btn btn-sm btn-return">Return</button>
-                                            <% } %>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <% }); %>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="shipping-info">
-                        <h5 class="info-title">Shipping Address</h5>
-                        <p class="mb-1"><strong><%= order.shippingAddress.fullName %></strong></p>
-                        <p class="mb-1"><%= order.shippingAddress.address %></p>
-                        <p class="mb-1"><%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.pincode %></p>
-                        <p class="mb-1"><%= order.shippingAddress.country %></p>
-                        <p class="mb-0">Phone: <%= order.shippingAddress.phone %></p>
-                    </div>
-
-                    <div class="payment-info">
-                        <h5 class="info-title">Payment Information</h5>
-                        <div class="mb-3">
-                            <p class="mb-1"><strong>Payment Method:</strong></p>
-                            <span class="payment-method-badge"><%= order.paymentMethod %></span>
-                        </div>
-                        <p class="mb-1"><strong>Transaction ID:</strong></p>
-                        <p class="mb-0"><%= order.transactionId %></p>
-                    </div>
-
-                    <div class="order-summary">
-                        <h5 class="info-title">Order Summary</h5>
-                        <div class="summary-row">
-                            <span>Subtotal</span>
-                            <span>₹<%= order.subtotal.toFixed(2) %></span>
-                        </div>
-                        <div class="summary-row">
-                            <span>Shipping</span>
-                            <span>₹<%= order.shipping.toFixed(2) %></span>
-                        </div>
-                        <div class="summary-row">
-                            <span>Tax</span>
-                            <span>₹<%= order.tax.toFixed(2) %></span>
-                        </div>
-                        <div class="summary-row summary-total">
-                            <span>Total</span>
-                            <span>₹<%= order.totalAmount.toFixed(2) %></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
- -->
 
 
  <div class="container">
@@ -512,6 +398,13 @@
                             data-status="<%= product.productStatus %>">
                             <i class="fas fa-undo me-1"></i> Return
                           </button>
+                        <% } %>
+
+
+                        <% if (order.orderStatus === 'Delivered' || order.orderStatus === 'Shipped' || order.orderStatus === 'Processing' || order.orderStatus === 'Confirmed') { %>
+                          <a href="/user/invoice/<%= order._id %>" class="btn btn-secondary">
+                            <i class="fas fa-file-invoice me-1"></i> Invoice
+                          </a>
                         <% } %>
                       </div>
                       
@@ -614,7 +507,12 @@
 
 
         </div>
-  
+
+
+    
+
+
+
         <div class="col-lg-4">
           <!-- Shipping Information -->
           <div class="shipping-info">
@@ -625,7 +523,7 @@
             <p class="mb-1"><%= order.shippingAddress.country %></p>
             <p class="mb-0">Phone: <%= order.shippingAddress.phone %></p>
           </div>
-  
+        
           <!-- Payment Information -->
           <div class="payment-info">
             <h5 class="info-title">Payment Information</h5>
@@ -636,20 +534,20 @@
             <p class="mb-1"><strong>Transaction ID:</strong></p>
             <p class="mb-0"><%= order.transactionId %></p>
           </div>
-  
+        
           <!-- Discounts Information -->
           <div class="discount-info">
             <h5 class="info-title">Discounts</h5>
             <div class="summary-row">
               <span>Total Offer Discount</span>
-              <span>-₹<%= order.offerDiscount.toFixed(2) %></span>
+              <span>-₹<%= order.totalOfferDiscount.toFixed(2) %></span>
             </div>
             <div class="summary-row">
-              <span>Coupon (<%= order.couponCode %>)</span>
-              <span>-₹<%= order.couponDiscount.toFixed(2) %></span>
+              <span>Coupon (<%= order.appliedCoupon.code || 'None' %>)</span>
+              <span>-₹<%= order.appliedCoupon.discountAmount.toFixed(2) %></span>
             </div>
           </div>
-  
+        
           <!-- Order Summary -->
           <div class="order-summary">
             <h5 class="info-title">Order Summary</h5>
@@ -659,11 +557,11 @@
             </div>
             <div class="summary-row">
               <span>Total Offer Discount</span>
-              <span>-₹<%= order.offerDiscount.toFixed(2) %></span>
+              <span>-₹<%= order.totalOfferDiscount.toFixed(2) %></span>
             </div>
             <div class="summary-row">
               <span>Coupon Discount</span>
-              <span>-₹<%= order.couponDiscount.toFixed(2) %></span>
+              <span>-₹<%= order.appliedCoupon.discountAmount.toFixed(2) %></span>
             </div>
             <div class="summary-row">
               <span>Subtotal</span>
@@ -671,7 +569,7 @@
             </div>
             <div class="summary-row">
               <span>Shipping</span>
-              <span>₹<%= order.shipping.toFixed(2) %></span>
+              <span>₹<%= order.shippingCost.toFixed(2) %></span> <!-- Fixed from order.shipping -->
             </div>
             <div class="summary-row">
               <span>Tax</span>
@@ -681,8 +579,19 @@
               <span>Total</span>
               <span>₹<%= order.totalAmount.toFixed(2) %></span>
             </div>
+            <% if (order.refundedAmount > 0) { %>
+            <div class="summary-row">
+              <span>Refunded</span>
+              <span>₹<%= order.refundedAmount.toFixed(2) %></span>
+            </div>
+            <% } %>
           </div>
         </div>
+
+        
+
+    
+
       </div>
     </div>
   </div>

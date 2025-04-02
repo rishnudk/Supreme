@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .error-container {
+            max-width: 800px;
+            padding: 3rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .error-code {
+            font-size: 9rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #FF3366, #FF9933);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 1rem;
+            position: relative;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-code::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, rgba(255, 51, 102, 0.7), transparent);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        .error-message {
+            font-size: 1.25rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .error-illustration {
+            margin: 2rem 0;
+            height: 180px;
+        }
+        
+        .error-illustration svg {
+            height: 100%;
+            width: auto;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #FF3366, #FF9933);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 51, 102, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .alert-success {
+            background-color: rgba(40, 199, 111, 0.2);
+            border-left: 4px solid #28c76f;
+            color: #1f9d57;
+        }
+        
+        .alert-danger {
+            background-color: rgba(234, 84, 85, 0.2);
+            border-left: 4px solid #ea5455;
+            color: #d63031;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 2rem;
+                margin: 0 1rem;
+            }
+            
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .error-illustration {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Page Not Found</h2>
+        <p class="error-message">Oops! It seems like you've ventured into uncharted territory. The page you're looking for might have been moved, deleted, or never existed.</p>
+        
+        <div class="error-illustration">
+            <svg class="float" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+                <path d="M415.7,174.2c-32.4-76.1-132.2-94.4-202.3-59.4C142.4,150.2,117,207.1,97.2,260c-38.9,104.1-26.9,232.9,54.9,317.6c75.4,77.9,199.5,91.7,303.1,56.3c64.7-22.1,131.9-80.4,131.8-151.7c-0.1-40.6-26.2-76.4-58.1-100.4C482.4,346.9,442,236.3,415.7,174.2z" fill="#FF9933" opacity="0.1"/>
+                <ellipse cx="400" cy="350" rx="180" ry="30" fill="#eee"/>
+                <path d="M394,290c30.9,0,56-25.1,56-56s-25.1-56-56-56s-56,25.1-56,56S363.1,290,394,290z" fill="#FF3366"/>
+                <path d="M394,290v60" stroke="#FF3366" stroke-width="10" stroke-linecap="round"/>
+                <path d="M364,320h60" stroke="#FF3366" stroke-width="10" stroke-linecap="round"/>
+                <path d="M314,350h160" stroke="#FF3366" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+        </div>
+        
+        <div id="alerts">
+            <!-- Alert placeholders, will be filled by JavaScript -->
+        </div>
+        
+        <div class="actions">
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+            <a href="/user/shop" class="btn btn-secondary">
+                <i class="fas fa-shopping-cart"></i> Go to Shop
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Check for flash messages from URL parameters
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMsg = urlParams.get('success_msg');
+            const errorMsg = urlParams.get('error_msg');
+            
+            const alertsContainer = document.getElementById('alerts');
+            
+            // Display success message if exists
+            if (successMsg) {
+                const successAlert = document.createElement('div');
+                successAlert.className = 'alert alert-success';
+                successAlert.textContent = successMsg;
+                alertsContainer.appendChild(successAlert);
+            }
+            
+            // Display error message if exists
+            if (errorMsg) {
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'alert alert-danger';
+                errorAlert.textContent = errorMsg;
+                alertsContainer.appendChild(errorAlert);
+            }
+        });
+    </script>
+</body>
+</html>

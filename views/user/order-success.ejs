@@ -5,8 +5,170 @@
     <title>Order Success</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .illustration { max-width: 300px; margin: 20px auto; }
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+
+
+       <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary-color: #2196F3;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f9f9f9;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 0;
+        }
+        .success-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+        }
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        .success-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+        .success-title {
+            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .order-number {
+            background-color: #f0f8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary-color);
+        }
+        .order-id {
+            font-weight: bold;
+            color: var(--primary-dark);
+            font-size: 18px;
+        }
+        .message {
+            color: var(--text-light);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        .timeline-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 30px;
+        }
+        .timeline-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            margin-bottom: 8px;
+        }
+        .timeline-label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        .buttons {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #1976D2;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-dark);
+            border: 2px solid #ddd;
+        }
+        .btn-outline:hover {
+            border-color: var(--text-dark);
+            background-color: #f5f5f5;
+        }
+        .email-notice {
+            margin-top: 30px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        .footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .footer a {
+            color: var(--text-light);
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+        @media (max-width: 767px) {
+            .success-container {
+                margin: 20px;
+                padding: 25px;
+            }
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -14,64 +176,83 @@
 
     <%- include('../partials/userNavbar') %>
 
-
-    <div class="container text-center py-5">
-        <!-- Dynamic SVG generation instead of using image file -->
-        <div id="success-icon" class="mb-4" style="height: 120px; display: flex; justify-content: center; align-items: center;">
-            <!-- Dynamic SVG will be inserted here -->
+    <div class="success-container">
+        <!-- Success Icon -->
+        <div class="success-icon">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="54" fill="#F0F8F0" />
+                <circle cx="60" cy="60" r="45" fill="#4CAF50" />
+                <path d="M40 62L55 77L85 47" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
         </div>
         
-        <h2 class="text-success">Order Placed Successfully!</h2>
-        <p class="text-muted">Your order #<%= order.orderID %> has been confirmed. You'll receive an update soon.</p>
-        <div class="mt-4">
-            <a href="/user/shop" class="btn btn-primary me-3">Continue Shopping</a>
-            <a href="/user/order-details/<%= order._id %>" class="btn btn-outline-secondary">View Order Details</a>
+        <!-- Success Message -->
+        <h1 class="success-title">Thank you for your order!</h1>
+        <div class="order-number">
+            <p>Order <span class="order-id">#<%= order.orderID %></span> has been successfully placed</p>
+        </div>
+        <p class="message">We're already processing your order. You'll receive a confirmation email shortly with all the details.</p>
+        
+        <!-- Order Timeline -->
+        <div class="timeline">
+            <div class="timeline-step">
+                <div class="timeline-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="timeline-label">Order Placed</div>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-icon" style="background-color: #e0e0e0;">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="timeline-label">Processing</div>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-icon" style="background-color: #e0e0e0;">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <div class="timeline-label">Shipped</div>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-icon" style="background-color: #e0e0e0;">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="timeline-label">Delivered</div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="buttons">
+            <a href="/user/shop" class="btn btn-primary">
+                <i class="fas fa-store me-2"></i> Continue Shopping
+            </a>
+            <a href="/user/order-details/<%= order._id %>" class="btn btn-outline">
+                <i class="fas fa-list-alt me-2"></i> View Order Details
+            </a>
+        </div>
+        
+        <!-- Additional Information -->
+        <p class="email-notice">
+            <i class="fas fa-envelope me-1"></i> A confirmation email has been sent to your registered email address.
+        </p>
+        
+        <!-- Footer Links -->
+        <div class="footer">
+            <a href="/user/account">My Orders</a>
+            <a href='#'>Shipping Policy</a>
+            <a href="#">Returns & Refunds</a>
         </div>
     </div>
 
-    <%- include('../partials/userFooter') %>    
-
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
-        // Generate order success SVG icon dynamically
+        // Optional: Add animation to the success checkmark
         document.addEventListener('DOMContentLoaded', function() {
-            const successIcon = document.getElementById('success-icon');
-            
-            // Create SVG element dynamically
-            const svgNS = "http://www.w3.org/2000/svg";
-            const svg = document.createElementNS(svgNS, "svg");
-            svg.setAttribute("width", "120");
-            svg.setAttribute("height", "120");
-            svg.setAttribute("viewBox", "0 0 120 120");
-            
-            // Create circle background
-            const circle = document.createElementNS(svgNS, "circle");
-            circle.setAttribute("cx", "60");
-            circle.setAttribute("cy", "60");
-            circle.setAttribute("r", "54");
-            circle.setAttribute("fill", "#d4edda");
-            circle.setAttribute("stroke", "#28a745");
-            circle.setAttribute("stroke-width", "2");
-            
-            // Create check mark
-            const checkGroup = document.createElementNS(svgNS, "g");
-            checkGroup.setAttribute("stroke", "#28a745");
-            checkGroup.setAttribute("stroke-width", "8");
-            checkGroup.setAttribute("stroke-linecap", "round");
-            checkGroup.setAttribute("stroke-linejoin", "round");
-            checkGroup.setAttribute("fill", "none");
-            
-            const check = document.createElementNS(svgNS, "path");
-            check.setAttribute("d", "M35,60 L50,75 L85,40");
-            
-            // Add elements to SVG
-            checkGroup.appendChild(check);
-            svg.appendChild(circle);
-            svg.appendChild(checkGroup);
-            
-            // Add SVG to container
-            successIcon.appendChild(svg);
+            const icon = document.querySelector('.success-icon');
+            icon.style.opacity = 0;
+            setTimeout(() => {
+                icon.style.transition = 'opacity 0.5s ease-in';
+                icon.style.opacity = 1;
+            }, 300);
         });
     </script>
 </body>

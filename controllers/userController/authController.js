@@ -40,40 +40,6 @@ exports.getSignupPage = (req, res) => {
   res.render("usersignup");
 };
 
-// exports.signup
-//  = async (req, res) => {
-//     try {
-//         const { name, email, password, confirmPassword, phone, referral } = req.body;
-
-//         if (password !== confirmPassword) {
-//             req.flash("error_msg", "Passwords do not match");
-//             return res.redirect("/signup");
-//         }
-
-//         const existingUser = await User.findOne({ email });
-//         if (existingUser) {
-//             req.flash("error_msg", "Email already registered");
-//             return res.redirect("/signup");
-//         }
-
-//         const hashedPassword = await bcrypt.hash(password, 10);
-
-//         req.session.user = {
-//             name: name,
-//             email: email,
-//             password:password,
-//             phone:phone,
-//         };
-
-//         return res.redirect("/user/home");
-
-//     } catch (error) {
-//         console.error(error);
-//         req.flash("error_msg", "Error signing up. Please try again.");
-//         return res.redirect("/signup");
-//     }
-// };
-
 
 
 
@@ -350,137 +316,6 @@ exports.isAuthenticated = (req, res, next) => {
   res.redirect("/user/login");
 };
 
-// exports.sendSignupOTP = async (req, res) => {
-//     try {
-//         const { email } = req.body;
-
-//         // Generate 6-digit OTP
-//         const otp = Math.floor(100000 + Math.random() * 900000);
-//         otpStorage[email] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 }; // Store for 5 mins
-//         console.log(otp)
-
-//         // Send OTP via email
-//         await transporter.sendMail({
-//             from: process.env.EMAIL,
-//             to: email,
-//             subject: "Your OTP for Signup",
-//             text: `Your OTP is ${otp}. It is valid for 5 minutes.`
-//         });
-
-//         res.status(200).json({ message: "OTP sent successfully" });
-//     } catch (error) {
-//         res.status(500).json({ error: "Error sending OTP" });
-//     }
-// };
-
-// exports.verifySignupOTP = async (req, res) => {
-//     try {
-//         const { email, otp, name, password, phone } = req.body;
-
-//         // Check if OTP exists and is valid
-//         if (!otpStorage[email] || otpStorage[email].expiresAt < Date.now()) {
-//             return res.status(400).json({ error: "OTP expired. Please request a new one." });
-//         }
-
-//         if (otpStorage[email].otp !== otp) {
-//             return res.status(400).json({ error: "Invalid OTP. Try again." });
-//         }
-//         console.log("Email:", email);
-//         console.log("Stored OTP Data:", otpStore[email]); // Check what is stored
-// console.log("Received OTP:", otp);
-// console.log("Expiration Time:", otpStorage[email] ? otpStorage[email].expiresAt : "No OTP found");
-// console.log("Current Time:", Date.now());
-
-//         // OTP is valid, create user
-//         const newUser = new User({ name, email, password, phone });
-//         await newUser.save();
-
-//         // Clear OTP after successful verification
-//         delete otpStorage[email];
-
-//         res.status(200).json({ message: "Account created successfully", redirect: "/user/home" });
-//     } catch (error) {
-//         res.status(500).json({ error: "Error verifying OTP" });
-//     }
-// };
-
-
-
-
-
-//og
-
-
-// exports.sendSignupOTP = async (req, res) => {
-//   try {
-//     const { email } = req.body;
-
-//     const otp = Math.floor(100000 + Math.random() * 900000);
-
-//     req.session.storedOtpData = {
-//       otp: String(otp),
-//       expiresAt: Date.now() + 5 * 60 * 1000,
-//     };
-
-//     console.log(`Generated OTP for ${email}:`, otp);
-
-//     await transporter.sendMail({
-//       from: process.env.EMAIL,
-//       to: email,
-//       subject: "Your OTP for Signup",
-//       text: `Your OTP is ${otp}. It is valid for 5 minutes.`,
-//     });
-
-//     res.status(200).json({ message: "OTP sent successfully" });
-//   } catch (error) {
-//     console.error("Error sending OTP:", error);
-//     res.status(500).json({ error: "Error sending OTP" });
-//   }
-// };
-
-
-
-// exports.verifySignupOTP = async (req, res) => {
-//   try {
-//     const { email, otp, name, password, phone } = req.body;
-
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(400).json({ error: "Email already registered" });
-//     }
-
-//     console.log("Received Request Body:", req.body);
-//     console.log("otppppppp");
-
-//     const storedOtpData = req.session.storedOtpData;
-
-//     if (!storedOtpData || storedOtpData.expiresAt < Date.now()) {
-//       return res
-//         .status(400)
-//         .json({ error: "OTP expired. Please request a new one." });
-//     }
-
-//     if (storedOtpData.otp !== String(otp)) {
-//       return res.status(400).json({ error: "Invalid OTP. Try again." });
-//     }
-
-//     const newUser = new User({ name, email, password, phone });
-//     await newUser.save();
-
-//     req.session.user = newUser;
-//     req.session.userId = newUser._id;
-
-//     res.status(200).json({
-//       message: "Account created successfully!",
-//       redirect: "/user/home",
-//     });
-
-
-//   } catch (error) {
-//     console.error("Error verifying OTP:", error);
-//     res.status(500).json({ error: "Error verifying OTP" });
-//   }
-// };
 
 
 exports.sendSignupOTP = async (req, res) => {
@@ -540,13 +375,7 @@ exports.verifySignupOTP = async (req, res) => {
       }
 
       await newUser.save();
-      // req.session.user = {
-      //     id: newUser._id,
-      //     name: newUser.name,
-      //     email: newUser.email,
-      //     referralCode: newUser.referralCode,
-      //     wallet: newUser.wallet,
-      // };
+     
       req.session.user=newUser
 
       res.status(200).json({

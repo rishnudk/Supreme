@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Supreme Furniture</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .error-container {
+            max-width: 800px;
+            padding: 3rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .error-code {
+            font-size: 7rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #FF3366, #FF9933);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 1rem;
+            position: relative;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-code::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, rgba(255, 51, 102, 0.7), transparent);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .error-message {
+            font-size: 1.5rem;
+            color: #444;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        
+        .error-details {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+        
+        .error-illustration {
+            margin: 2rem 0;
+            height: 160px;
+        }
+        
+        .error-illustration svg {
+            height: 100%;
+            width: auto;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #FF3366, #FF9933);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 51, 102, 0.4);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .alert-success {
+            background-color: rgba(40, 199, 111, 0.2);
+            border-left: 4px solid #28c76f;
+            color: #1f9d57;
+        }
+        
+        .alert-danger {
+            background-color: rgba(234, 84, 85, 0.2);
+            border-left: 4px solid #ea5455;
+            color: #d63031;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 2rem;
+                margin: 0 1rem;
+            }
+            
+            .error-code {
+                font-size: 5rem;
+            }
+            
+            .error-message {
+                font-size: 1.25rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .error-illustration {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code"><%= status %></h1>
+        <p class="error-message"><%= message %></p>
+        
+        <div class="error-illustration">
+            <svg class="float" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+                <path d="M415.7,174.2c-32.4-76.1-132.2-94.4-202.3-59.4C142.4,150.2,117,207.1,97.2,260c-38.9,104.1-26.9,232.9,54.9,317.6c75.4,77.9,199.5,91.7,303.1,56.3c64.7-22.1,131.9-80.4,131.8-151.7c-0.1-40.6-26.2-76.4-58.1-100.4C482.4,346.9,442,236.3,415.7,174.2z" fill="#FF9933" opacity="0.1"/>
+                <ellipse cx="400" cy="380" rx="180" ry="30" fill="#eee"/>
+                <g transform="translate(320, 200)">
+                    <rect x="0" y="0" width="160" height="120" rx="10" fill="#FF3366"/>
+                    <rect x="20" y="20" width="120" height="30" rx="5" fill="white" opacity="0.6"/>
+                    <rect x="20" y="70" width="50" height="30" rx="5" fill="white" opacity="0.6"/>
+                    <rect x="90" y="70" width="50" height="30" rx="5" fill="white" opacity="0.6"/>
+                    <path d="M80 140 L100 120 L60 120 Z" fill="#FF3366"/>
+                </g>
+                <path d="M460 140 A100 100 0 0 1 460 340" stroke="#FF9933" stroke-width="10" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+        
+        <div id="alerts">
+            <% if (success_msg && success_msg.length > 0) { %>
+                <div class="alert alert-success"><%= success_msg %></div>
+            <% } %>
+            <% if (error_msg && error_msg.length > 0) { %>
+                <div class="alert alert-danger"><%= error_msg %></div>
+            <% } %>
+        </div>
+        
+        <div class="actions">
+            <a href="/user/home" class="btn btn-primary">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+            <a href="javascript:history.back()" class="btn btn-secondary" style="background: white; color: #333; border: 1px solid #ddd; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                <i class="fas fa-arrow-left"></i> Go Back
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Check for flash messages from URL parameters
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMsg = urlParams.get('success_msg');
+            const errorMsg = urlParams.get('error_msg');
+            
+            const alertsContainer = document.getElementById('alerts');
+            
+            // Only add from URL if not already displayed from server-side
+            if (successMsg && !document.querySelector('.alert-success')) {
+                const successAlert = document.createElement('div');
+                successAlert.className = 'alert alert-success';
+                successAlert.textContent = successMsg;
+                alertsContainer.appendChild(successAlert);
+            }
+            
+            if (errorMsg && !document.querySelector('.alert-danger')) {
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'alert alert-danger';
+                errorAlert.textContent = errorMsg;
+                alertsContainer.appendChild(errorAlert);
+            }
+        });
+    </script>
+</body>
+</html>

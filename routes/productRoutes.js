@@ -13,7 +13,6 @@ const { adminAuth } = require("../middlewares/authMiddleware");
 router.get("/",adminAuth, adminProductController.getProducts);
 router.get("/add",adminAuth, adminProductController.GetaddProduct);
 router.get("/edit/:id",adminAuth, adminProductController.getProductById);
-// router.put("/update/:id", upload, adminProductController.updateProduct);
 
 
 router.put("/update/:id", upload,adminAuth,  adminProductController.updateProduct)

@@ -99,6 +99,70 @@ exports.getOrderById = async (req, res) => {
 
 
 
+// exports.updateOrderStatus = async (req, res) => {
+//     try {
+//         const { orderId, newStatus } = req.body;
+//         console.log('Request body:', req.body);
+
+//         const order = await Order.findOne({ _id: orderId });
+//         if (!order) {
+//             return res.status(404).json({ success: false, message: "Order not found" });
+//         }
+
+//         const currentStatus = order.orderStatus;
+
+//         // Final states: no changes allowed
+//         if (['Returned', 'Cancelled', 'Delivered'].includes(currentStatus)) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: `Cannot change status from ${currentStatus} - it is a final state`
+//             });
+//         }
+
+//         // Intermediate states with restrictions
+//         if (currentStatus === 'Shipped' && ['Processing', 'Pending'].includes(newStatus)) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: 'Cannot revert Shipped order to Processing or Pending'
+//             });
+//         }
+//         if (currentStatus === 'Processing' && newStatus === 'Pending') {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: 'Cannot revert Processing order to Pending'
+//             });
+//         }
+//         if (currentStatus === 'Cancellation Requested' && !['Cancelled', 'Cancellation Requested', 'Processing'].includes(newStatus)) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: 'Cancellation Requested order can only be set to Cancelled, Cancellation Requested, or Processing'
+//             });
+//         }
+//         if (currentStatus === 'Return Requested' && !['Returned', 'Return Requested', 'Shipped'].includes(newStatus)) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: 'Return Requested order can only be set to Returned, Return Requested, or Shipped'
+//             });
+//         }
+
+//         // Only update orderStatus, leave productStatus alone
+//         order.orderStatus = newStatus;
+
+//         // Optional: Update isDelivered based on all products
+//         const allDelivered = order.products.every(p => p.productStatus === 'Delivered');
+//         order.isDelivered = allDelivered;
+
+//         await order.save();
+//         res.json({ success: true, message: "Order status updated successfully!" });
+
+//     } catch (error) {
+//         console.error("Error updating order status:", error);
+//         res.status(500).json({ success: false, message: "Internal Server Error" });
+//     }
+// };
+
+
+
 exports.updateOrderStatus = async (req, res) => {
     try {
         const { orderId, newStatus } = req.body;
@@ -145,7 +209,42 @@ exports.updateOrderStatus = async (req, res) => {
             });
         }
 
-        // Only update orderStatus, leave productStatus alone
+        // Refund logic for "Cancelled" or "Returned"
+        if (
+            (newStatus === 'Cancelled' || newStatus === 'Returned') &&
+            order.paymentStatus === 'Paid' &&
+            currentStatus !== newStatus
+        ) {
+            const refundAmount = order.totalAmount;
+            console.log(`Refund for order ${orderId} (${newStatus}): ${refundAmount}`);
+
+            if (refundAmount > 0) {
+                order.totalAmount -= refundAmount; // Subtract refund instead of setting to 0
+                order.refundedAmount = (order.refundedAmount || 0) + refundAmount;
+                order.paymentStatus = 'Refunded';
+
+                await Wallet.findOneAndUpdate(
+                    { user: order.user },
+                    {
+                        $inc: { balance: refundAmount },
+                        $push: {
+                            transactions: {
+                                type: 'credit',
+                                amount: refundAmount,
+                                description: `Refund for ${newStatus.toLowerCase()} order #${order.orderID} (Razorpay)`,
+                                orderId: order._id
+                            }
+                        }
+                    },
+                    { upsert: true }
+                );
+                console.log(`Wallet updated for user ${order.user} with refund: ${refundAmount}`);
+            } else {
+                console.log('Refund amount is zero - skipping wallet update');
+            }
+        }
+
+        // Update orderStatus
         order.orderStatus = newStatus;
 
         // Optional: Update isDelivered based on all products
@@ -161,288 +260,6 @@ exports.updateOrderStatus = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
-// exports.acceptReturnRequest = async (req, res) => {
-//     try {
-//         const { orderId, productId } = req.body;
-
-//         console.log('Accepting return request:', { orderId, productId });
-
-//         if (!orderId || !productId) {
-//             return res.status(400).json({ success: false, message: 'Order ID and Product ID are required' });
-//         }
-
-//         const order = await Order.findById(orderId).populate('user');
-//         if (!order) {
-//             return res.status(404).json({ success: false, message: 'Order not found' });
-//         }
-
-//         if (order.orderStatus !== 'Return Requested') {
-//             return res.status(400).json({ success: false, message: 'No return request pending for this order' });
-//         }
-
-//         const productIndex = order.products.findIndex(p => p.product.toString() === productId);
-//         if (productIndex === -1 || order.products[productIndex].productStatus !== 'Return Requested') {
-//             return res.status(404).json({ success: false, message: 'Product not found or not requested for return' });
-//         }
-
-//         const product = order.products[productIndex];
-//         const originalProductCost = product.price * product.quantity; // 999 * 3 = 2997
-//         const totalOriginalCost = order.products.reduce((sum, p) => sum + (p.price * p.quantity), 0); // 2997
-
-//         // Prorate refund based on totalAmount
-//         const productShare = originalProductCost / totalOriginalCost; // 1 (single product)
-//         const refundAmount = Math.round(order.totalAmount * productShare); // 1154 * 1 = 1154
-
-//         // Update order
-//         order.products[productIndex].productStatus = 'Returned';
-//         order.orderStatus = 'Returned';
-//         order.return.approved = true;
-//         order.return.approvedAt = new Date();
-//         order.refundStatus = 'Processed';
-//         await order.save();
-
-//         // Update or create wallet
-//         let wallet = await Wallet.findOne({ user: order.user._id });
-//         if (!wallet) {
-//             wallet = new Wallet({ user: order.user._id });
-//         }
-
-//         wallet.balance += refundAmount;
-//         wallet.transactions.push({
-//             type: 'credit',
-//             amount: refundAmount,
-//             description: `Refund for returned product (Order #${order.orderID})`,
-//             orderId: order._id,
-//             date: new Date()
-//         });
-//         await wallet.save();
-
-//         console.log('Return accepted and wallet updated:', {
-//             userId: order.user._id,
-//             refundAmount,
-//             originalProductCost,
-//             totalOriginalCost,
-//             totalAmount: order.totalAmount,
-//             productShare,
-//             orderId: order.orderID
-//         });
-
-//         res.json({
-//             success: true,
-//             message: 'Return accepted and refund processed',
-//             refundAmount
-//         });
-//     } catch (error) {
-//         console.error('Error accepting return request:', error);
-//         res.status(500).json({ success: false, message: 'Server error: ' + error.message });
-//     }
-// };
-
-
-
-
-
-
-
-
-
-
-
-// exports.acceptReturnRequest = async (req, res) => {
-//     const session = await mongoose.startSession();
-//     session.startTransaction();
-
-//     try {
-//         const { orderId, productId } = req.body;
-
-//         console.log('Accepting return request:', { orderId, productId });
-
-//         if (!orderId || !productId) {
-//             return res.status(400).json({ success: false, message: 'Order ID and Product ID are required' });
-//         }
-
-//         const order = await Order.findById(orderId).populate('user').session(session);
-//         if (!order) {
-//             return res.status(404).json({ success: false, message: 'Order not found' });
-//         }
-
-//         if (order.orderStatus !== 'Return Requested') {
-//             return res.status(400).json({ success: false, message: 'No return request pending for this order' });
-//         }
-
-//         const productIndex = order.products.findIndex(p => p.product.toString() === productId);
-//         if (productIndex === -1 || order.products[productIndex].productStatus !== 'Return Requested') {
-//             return res.status(404).json({ success: false, message: 'Product not found or not requested for return' });
-//         }
-
-//         const product = order.products[productIndex];
-//         const originalProductCost = product.price * product.quantity;
-//         const totalOriginalCost = order.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
-//         const productShare = originalProductCost / totalOriginalCost;
-//         const refundAmount = Math.round(order.totalAmount * productShare);
-
-//         // Update product status
-//         order.products[productIndex].productStatus = 'Returned';
-
-//         // Check if all products are returned
-//         const allReturned = order.products.every(p => p.productStatus === 'Returned');
-//         if (allReturned) {
-//             order.orderStatus = 'Returned';
-//             order.return.approved = true;
-//             order.return.approvedAt = new Date();
-//             order.refundStatus = 'Refunded';
-//         } else {
-//             order.refundStatus = 'Processed'; // Partial refund processed
-//         }
-
-//         // Update or create wallet
-//         let wallet = await Wallet.findOne({ user: order.user._id }).session(session);
-//         if (!wallet) {
-//             wallet = new Wallet({ user: order.user._id });
-//         }
-
-//         wallet.balance += refundAmount;
-//         wallet.transactions.push({
-//             type: 'credit',
-//             amount: refundAmount,
-//             description: `Refund for returned product (Order #${order.orderID}, Product: ${product.name})`,
-//             orderId: order._id,
-//             date: new Date()
-//         });
-
-//         // Save changes atomically
-//         await order.save({ session });
-//         await wallet.save({ session });
-
-//         await session.commitTransaction();
-
-//         console.log('Return accepted and wallet updated:', {
-//             userId: order.user._id,
-//             refundAmount,
-//             originalProductCost,
-//             totalOriginalCost,
-//             totalAmount: order.totalAmount,
-//             productShare,
-//             orderId: order.orderID
-//         });
-
-//         res.json({
-//             success: true,
-//             message: 'Return accepted and refund processed',
-//             refundAmount
-//         });
-//     } catch (error) {
-//         await session.abortTransaction();
-//         console.error('Error accepting return request:', error);
-//         res.status(500).json({ success: false, message: 'Server error: ' + error.message });
-//     } finally {
-//         session.endSession();
-//     }
-// };
-
-
-
-
-// exports.acceptReturnRequest = async (req, res) => {
-//     try {
-//         const { orderId, productId } = req.body;
-
-//         console.log('1 - Accepting return request:', { orderId, productId });
-
-//         if (!orderId || !productId) {
-//             return res.status(400).json({ success: false, message: 'Order ID and Product ID are required' });
-//         }
-
-//         const order = await Order.findById(orderId).populate('user');
-//         if (!order) {
-//             return res.status(404).json({ success: false, message: 'Order not found' });
-//         }
-
-//         if (order.orderStatus !== 'Return Requested' && order.orderStatus !== 'Returned') {
-//             return res.status(400).json({ success: false, message: 'No return request pending for this order' });
-//         }
-
-//         const productIndex = order.products.findIndex(p => p.product.toString() === productId);
-//         if (productIndex === -1 || order.products[productIndex].productStatus !== 'Return Requested') {
-//             return res.status(404).json({ success: false, message: 'Product not found or not requested for return' });
-//         }
-
-//         const product = order.products[productIndex];
-
-//         // Calculate refund
-//         const originalProductCost = product.price * product.quantity;
-//         const offerDiscount = product.appliedOffer.discountAmount || 0;
-//         const amountBeforeCoupon = originalProductCost - offerDiscount;
-//         const totalOriginalCost = order.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
-//         const productShare = originalProductCost / totalOriginalCost;
-//         const couponDiscount = (order.appliedCoupon?.discountAmount || 0) * productShare;
-//         const deliveryChargeShare = (order.deliveryCharge || 15) * productShare;
-//         let refundAmount = Math.round(amountBeforeCoupon - couponDiscount - deliveryChargeShare);
-
-//         if (refundAmount < 0) refundAmount = 0;
-
-//         // Check total refunded
-//         let wallet = await Wallet.findOne({ user: order.user._id });
-//         if (!wallet) wallet = new Wallet({ user: order.user._id });
-
-//         const totalRefundedSoFar = wallet.transactions
-//             .filter(t => t.orderId.toString() === order._id.toString())
-//             .reduce((sum, t) => sum + t.amount, 0);
-//         const maxRefundable = order.totalAmount - (order.deliveryCharge || 15);
-//         console.log('Refund check:', { totalRefundedSoFar, maxRefundable, proposedRefund: refundAmount });
-
-//         if (totalRefundedSoFar >= maxRefundable) {
-//             refundAmount = 0;
-//             console.log('No refund: Max already reached');
-//         } else if (totalRefundedSoFar + refundAmount > maxRefundable) {
-//             refundAmount = maxRefundable - totalRefundedSoFar;
-//             console.log('Adjusted refund:', refundAmount);
-//         }
-
-//         // Update order
-//         order.products[productIndex].productStatus = 'Returned';
-//         const allReturned = order.products.every(p => p.productStatus === 'Returned');
-//         if (allReturned) {
-//             order.orderStatus = 'Returned';
-//             order.return.approved = true;
-//             order.return.approvedAt = new Date();
-//             order.refundStatus = 'Refunded';
-//         } else {
-//             order.refundStatus = 'Processed';
-//         }
-
-//         wallet.balance += refundAmount;
-//         if (refundAmount > 0) {
-//             wallet.transactions.push({
-//                 type: 'credit',
-//                 amount: refundAmount,
-//                 description: `Refund for returned product (Order #${order.orderID}, ${product.name})`,
-//                 orderId: order._id,
-//                 date: new Date()
-//             });
-//         }
-
-//         await order.save();
-//         await wallet.save();
-
-//         console.log('Final:', { product: product.name, refundAmount, totalRefunded: totalRefundedSoFar + refundAmount });
-
-//         res.json({
-//             success: true,
-//             message: 'Return accepted and refund processed',
-//             refundAmount
-//         });
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).json({ success: false, message: 'Server error: ' + error.message });
-//     }
-// };
 
 
 
@@ -648,6 +465,140 @@ exports.acceptReturnRequest = async (req, res) => {
 
 
 
+// exports.updateProductStatus = async (req, res) => {
+//     try {
+//         const { orderId } = req.params;
+//         const { productStatuses } = req.body;
+//         console.log('Request body:', req.body);
+
+//         const order = await Order.findOne({ _id: orderId });
+//         if (!order) {
+//             return res.status(404).json({ success: false, message: 'Order not found' });
+//         }
+
+//         if (order.orderStatus === 'Cancelled' || order.orderStatus === 'Returned') {
+//             return res.status(400).json({ success: false, message: 'Cannot update products in Cancelled or Returned orders' });
+//         }
+
+//         // Update product statuses
+//         for (const { productId, status } of productStatuses) {
+//             const product = order.products.find(p => p._id.toString() === productId);
+//             if (!product) {
+//                 console.log(`Product ${productId} not found in order`);
+//                 continue;
+//             }
+
+//             if (product.productStatus === 'Cancelled' || product.productStatus === 'Returned') {
+//                 console.log(`Skipping ${productId}: Already ${product.productStatus}`);
+//                 continue;
+//             }
+//             if (product.productStatus === 'Shipped' && (status === 'Pending' || status === 'Processing')) {
+//                 console.log(`Skipping ${productId}: Cannot revert Shipped to ${status}`);
+//                 continue;
+//             }
+//             if (product.productStatus === 'Processing' && status === 'Pending') {
+//                 console.log(`Skipping ${productId}: Cannot revert Processing to Pending`);
+//                 continue;
+//             }
+
+//             // Refund logic for cancellation (unchanged)
+//             if (status === 'Cancelled' && order.paymentStatus === 'Paid' && product.productStatus !== 'Cancelled') {
+//                 const totalDiscountedPrice = order.products.reduce((sum, p) => {
+//                     return sum + ((p.price - (p.appliedOffer?.discountAmount || 0)) * p.quantity);
+//                 }, 0);
+//                 if (totalDiscountedPrice === 0) {
+//                     console.log('Total discounted price is zero - skipping refund');
+//                     product.productStatus = status;
+//                     continue;
+//                 }
+
+//                 const productDiscountedPrice = (product.price - (product.appliedOffer?.discountAmount || 0)) * product.quantity;
+//                 const refundAmount = Math.round((productDiscountedPrice / totalDiscountedPrice) * order.totalAmount);
+//                 console.log(`Refund for ${productId}: ${refundAmount}`);
+
+//                 if (refundAmount > 0) {
+//                     order.totalAmount -= refundAmount;
+//                     order.refundedAmount = (order.refundedAmount || 0) + refundAmount;
+
+//                     await Wallet.findOneAndUpdate(
+//                         { user: order.user },
+//                         {
+//                             $inc: { balance: refundAmount },
+//                             $push: {
+//                                 transactions: {
+//                                     type: 'credit',
+//                                     amount: refundAmount,
+//                                     description: `Refund for cancelled product in order #${order.orderID} (Razorpay)`,
+//                                     orderId: order._id
+//                                 }
+//                             }
+//                         },
+//                         { upsert: true }
+//                     );
+//                     console.log(`Wallet updated for user ${order.user} with refund: ${refundAmount}`);
+//                 }
+//             }
+
+//             product.productStatus = status;
+//             console.log(`Updated ${productId} to ${status}`);
+//         }
+
+//         // New Logic: Update orderStatus based on product statuses
+//         const productCount = order.products.length;
+//         const deliveredCount = order.products.filter(p => p.productStatus === 'Delivered').length;
+
+//         if (productCount > 1) { // Only apply to multi-product orders
+//             if (deliveredCount > 0 && deliveredCount < productCount) {
+//                 order.orderStatus = 'Partially Delivered';
+//                 console.log('Order status set to Partially Delivered');
+//             } else if (deliveredCount === productCount) {
+//                 order.orderStatus = 'Delivered';
+//                 console.log('Order status set to Delivered');
+//             }
+//         }
+
+//         // Existing logic: Check if all products are Cancelled
+//         const allCancelled = order.products.every(p => p.productStatus === 'Cancelled');
+//         if (allCancelled && order.paymentStatus === 'Paid') {
+//             order.paymentStatus = 'Refunded';
+//             order.orderStatus = 'Cancelled';
+//             order.totalAmount = 0;
+//             console.log('All products cancelled - updating order to Cancelled/Refunded');
+//         }
+
+//         await order.save();
+//         res.json({ success: true, message: 'Product statuses updated successfully!' });
+
+//     } catch (error) {
+//         console.error('Error updating product status:', error);
+//         res.status(500).json({ success: false, message: 'Internal Server Error' });
+//     }
+// };
+
+
+
+
+exports.renderReturnRequestsList = async (req, res) => {
+    try {
+        // Fetch orders with return requests
+        const returnRequests = await Order.find({ 
+            orderStatus: 'Return Requested',
+            'return.requested': true 
+        })
+        .populate('user', 'name') // Populate username
+        .populate('products.product') // Populate product details
+        .lean();
+
+        res.render('admin/return-requests', { returnRequests });
+    } catch (error) {
+        console.error('Error rendering return requests list:', error);
+        res.status(500).render('admin/error', { message: 'Server Error' });
+    }
+};
+
+
+
+
 exports.updateProductStatus = async (req, res) => {
     try {
         const { orderId } = req.params;
@@ -684,11 +635,16 @@ exports.updateProductStatus = async (req, res) => {
                 continue;
             }
 
-            // Refund logic for cancellation (unchanged)
-            if (status === 'Cancelled' && order.paymentStatus === 'Paid' && product.productStatus !== 'Cancelled') {
+            // Refund logic for "Cancelled" or "Returned"
+            if (
+                (status === 'Cancelled' || status === 'Returned') &&
+                order.paymentStatus === 'Paid' &&
+                product.productStatus !== status // Prevent duplicate refunds
+            ) {
                 const totalDiscountedPrice = order.products.reduce((sum, p) => {
                     return sum + ((p.price - (p.appliedOffer?.discountAmount || 0)) * p.quantity);
                 }, 0);
+
                 if (totalDiscountedPrice === 0) {
                     console.log('Total discounted price is zero - skipping refund');
                     product.productStatus = status;
@@ -697,7 +653,7 @@ exports.updateProductStatus = async (req, res) => {
 
                 const productDiscountedPrice = (product.price - (product.appliedOffer?.discountAmount || 0)) * product.quantity;
                 const refundAmount = Math.round((productDiscountedPrice / totalDiscountedPrice) * order.totalAmount);
-                console.log(`Refund for ${productId}: ${refundAmount}`);
+                console.log(`Refund for ${productId} (${status}): ${refundAmount}`);
 
                 if (refundAmount > 0) {
                     order.totalAmount -= refundAmount;
@@ -711,7 +667,7 @@ exports.updateProductStatus = async (req, res) => {
                                 transactions: {
                                     type: 'credit',
                                     amount: refundAmount,
-                                    description: `Refund for cancelled product in order #${order.orderID} (Razorpay)`,
+                                    description: `Refund for ${status.toLowerCase()} product in order #${order.orderID} (Razorpay)`,
                                     orderId: order._id
                                 }
                             }
@@ -726,11 +682,13 @@ exports.updateProductStatus = async (req, res) => {
             console.log(`Updated ${productId} to ${status}`);
         }
 
-        // New Logic: Update orderStatus based on product statuses
+        // Update orderStatus based on product statuses
         const productCount = order.products.length;
         const deliveredCount = order.products.filter(p => p.productStatus === 'Delivered').length;
+        const cancelledCount = order.products.filter(p => p.productStatus === 'Cancelled').length;
+        const returnedCount = order.products.filter(p => p.productStatus === 'Returned').length;
 
-        if (productCount > 1) { // Only apply to multi-product orders
+        if (productCount > 1) { // Multi-product orders
             if (deliveredCount > 0 && deliveredCount < productCount) {
                 order.orderStatus = 'Partially Delivered';
                 console.log('Order status set to Partially Delivered');
@@ -740,13 +698,12 @@ exports.updateProductStatus = async (req, res) => {
             }
         }
 
-        // Existing logic: Check if all products are Cancelled
-        const allCancelled = order.products.every(p => p.productStatus === 'Cancelled');
-        if (allCancelled && order.paymentStatus === 'Paid') {
+        // Check if all products are Cancelled or Returned
+        if (cancelledCount + returnedCount === productCount && order.paymentStatus === 'Paid') {
             order.paymentStatus = 'Refunded';
-            order.orderStatus = 'Cancelled';
+            order.orderStatus = cancelledCount === productCount ? 'Cancelled' : 'Returned';
             order.totalAmount = 0;
-            console.log('All products cancelled - updating order to Cancelled/Refunded');
+            console.log(`All products ${order.orderStatus.toLowerCase()} - updating order to ${order.orderStatus}/Refunded`);
         }
 
         await order.save();
@@ -757,30 +714,6 @@ exports.updateProductStatus = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
-
-
-exports.renderReturnRequestsList = async (req, res) => {
-    try {
-        // Fetch orders with return requests
-        const returnRequests = await Order.find({ 
-            orderStatus: 'Return Requested',
-            'return.requested': true 
-        })
-        .populate('user', 'name') // Populate username
-        .populate('products.product') // Populate product details
-        .lean();
-
-        res.render('admin/return-requests', { returnRequests });
-    } catch (error) {
-        console.error('Error rendering return requests list:', error);
-        res.status(500).render('admin/error', { message: 'Server Error' });
-    }
-};
-
-
-
-
-
 
 
 

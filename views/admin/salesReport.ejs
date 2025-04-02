@@ -272,9 +272,9 @@
                     </ul>
                 </div>
                 
-                <button class="btn btn-custom">
+                <!-- <button class="btn btn-custom">
                     <i class="bi bi-sliders"></i> Advanced Filters
-                </button>
+                </button> -->
             </div>
         </div>
         
@@ -445,12 +445,12 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Detailed Sales Report</h5>
-                <div class="input-group" style="width: 250px;">
+                <!-- <div class="input-group" style="width: 250px;">
                     <input type="text" class="form-control" placeholder="Search...">
                     <button class="btn btn-outline-secondary" type="button">
                         <i class="bi bi-search"></i>
                     </button>
-                </div>
+                </div> -->
             </div>
 
 
@@ -611,7 +611,6 @@
                 updateSummary(data.report);
                 document.querySelector('.breadcrumb-item.active').textContent = 
                     `Sales Report: ${start.format('MMM D, YYYY')} - ${end.format('MMM D, YYYY')}`;
-                // Sync URL for server-side consistency (like old script)
                 window.history.pushState({}, '', url.replace('&format=json', ''));
             } catch (error) {
                 console.error('Fetch Error:', error);
@@ -637,8 +636,8 @@
             return {
                 labels,
                 datasets: [
-                    { label: 'Sales ($)', data: salesData, borderColor: '#4cc9f0', backgroundColor: 'rgba(76, 201, 240, 0.1)', borderWidth: 2, tension: 0.3, fill: true },
-                    { label: 'Discounts ($)', data: discountData, borderColor: '#f72585', backgroundColor: 'rgba(247, 37, 133, 0.1)', borderWidth: 2, tension: 0.3, fill: true }
+                    { label: 'Sales (₹)', data: salesData, borderColor: '#4cc9f0', backgroundColor: 'rgba(76, 201, 240, 0.1)', borderWidth: 2, tension: 0.3, fill: true },
+                    { label: 'Discounts (₹)', data: discountData, borderColor: '#f72585', backgroundColor: 'rgba(247, 37, 133, 0.1)', borderWidth: 2, tension: 0.3, fill: true }
                 ]
             };
         }
@@ -668,7 +667,6 @@
             document.getElementById('totalOfferDiscount').textContent = `$${(report.totalOfferDiscount || 0).toFixed(2)}`;
         }
     
-        // Old script logic: Full page reload for quick select
         document.getElementById('quickDateSelect').addEventListener('change', function(e) {
             const quickSelect = e.target.value;
             if (quickSelect !== 'custom') {
@@ -685,7 +683,6 @@
             }
         });
     
-        // Old script logic: Full page reload for custom range
         $('#dateRangePicker').on('apply.daterangepicker', function(ev, picker) {
             document.getElementById('quickDateSelect').value = 'custom';
             const start = picker.startDate.format('YYYY-MM-DD');
@@ -699,7 +696,7 @@
                 url += `&startDate=${startDate}&endDate=${endDate}`;
             }
             console.log('Navigating to:', url);
-            window.location.href = url; // Triggers full server-side refresh like old script
+            window.location.href = url; 
         }
     
         document.querySelectorAll('[data-graph-period]').forEach(button => {
@@ -708,7 +705,7 @@
                 document.querySelectorAll('[data-graph-period]').forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
                 const picker = $('#dateRangePicker').data('daterangepicker');
-                fetchAndUpdateData(picker.startDate, picker.endDate, period); // Only updates graph
+                fetchAndUpdateData(picker.startDate, picker.endDate, period); 
             });
         });
     
@@ -724,44 +721,7 @@
 
 
         
-        // document.getElementById('downloadPdf').addEventListener('click', function(e) {
-        //     e.preventDefault();
-        //     const picker = $('#dateRangePicker').data('daterangepicker');
-        //     const start = picker.startDate.format('YYYY-MM-DD');
-        //     const end = picker.endDate.format('YYYY-MM-DD');
-        //     const quickSelect = document.getElementById('quickDateSelect').value;
-        //     let url = `/admin/salesReport?quickSelect=${quickSelect}&download=pdf`;
-        //     if (quickSelect === 'custom') {
-        //         url += `&startDate=${start}&endDate=${end}`;
-        //     }
-        //     window.location.href = url;
-        // });
-    
-
-
-
-
-
-
-
-
-
-        // document.getElementById('downloadExcel').addEventListener('click', function(e) {
-        //     e.preventDefault();
-        //     const picker = $('#dateRangePicker').data('daterangepicker');
-        //     const start = picker.startDate.format('YYYY-MM-DD');
-        //     const end = picker.endDate.format('YYYY-MM-DD');
-        //     const quickSelect = document.getElementById('quickDateSelect').value;
-        //     let url = `/admin/salesReport?quickSelect=${quickSelect}&download=excel`;
-        //     if (quickSelect === 'custom') {
-        //         url += `&startDate=${start}&endDate=${end}`;
-        //     }
-        //     window.location.href = url;
-        // });
-    
-
-
-
+       
 
         document.addEventListener('DOMContentLoaded', function () {
     const pdfButton = document.getElementById('downloadPdf');
