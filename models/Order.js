@@ -455,7 +455,12 @@ const orderSchema = new mongoose.Schema({
     transactionId: { type: String, default: null },
     totalAmount: { type: Number, required: true },
     originalAmount: { type: Number, required: true },
-    shippingCost: { type: Number, default: 0, min: 0 }, // New field
+    shippingCost: { type: Number, default: 0, min: 0 }, 
+    gstAmount: { 
+        type: Number,
+        default: 0,
+        min: 0
+    },
     orderStatus: {
         type: String,
         enum: ['Confirmed', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Return Requested', 'Returned', "Partially Delivered"],
@@ -497,15 +502,28 @@ const orderSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+
+
 orderSchema.pre('save', function(next) {
-    if (this.isNew || this.isModified('products') || this.isModified('appliedCoupon') || this.isModified('totalOfferDiscount')) {
+    if (this.isNew || this.isModified('products') || this.isModified('appliedCoupon') || 
+        this.isModified('totalOfferDiscount') || this.isModified('shippingCost')) {
+        
+        // Calculate total offer discount
         this.totalOfferDiscount = this.products.reduce((sum, product) => {
             return sum + (product.appliedOffer?.discountAmount || 0);
         }, 0);
         
-        this.totalAmount = this.originalAmount - 
+        // Calculate base amount after discounts
+        const baseAmount = this.originalAmount - 
                           (this.totalOfferDiscount + 
-                           (this.appliedCoupon?.discountAmount || 0)) + 
+                          (this.appliedCoupon?.discountAmount || 0));
+        
+        // Calculate GST (12% of base amount)
+        this.gstAmount = baseAmount * 0.12;
+        
+        // Calculate total amount including GST and shipping
+        this.totalAmount = baseAmount + 
+                          this.gstAmount + 
                           (this.shippingCost || 0);
     }
     

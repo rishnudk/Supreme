@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const fs = require('fs')
+const fs = require("fs");
 
 const Cart = require("../../models/Cart");
 const mongoose = require("mongoose");
@@ -1148,32 +1148,95 @@ exports.getSalesReport = async (req, res) => {
       .sort({ orderDate: -1 });
 
     // Calculate top selling products
+    // const topProductsAggregation = await Order.aggregate([
+    //   { $match: { ...dateFilter, orderStatus: { $nin: ["Cancelled"] } } },
+    //   { $unwind: "$products" },
+    //   {
+    //     $group: {
+    //       _id: "$products.product",
+    //       totalSold: { $sum: "$products.quantity" },
+    //       totalRevenue: {
+    //         $sum: { $multiply: ["$products.price", "$products.quantity"] },
+    //       },
+    //     },
+    //   },
+    //   { $sort: { totalSold: -1 } },
+    //   { $limit: 10 },
+    //   {
+    //     $lookup: {
+    //       from: "products",
+    //       localField: "_id",
+    //       foreignField: "_id",
+    //       as: "productDetails",
+    //     },
+    //   },
+    //   { $unwind: "$productDetails" },
+    // ]);
+
     const topProductsAggregation = await Order.aggregate([
       { $match: { ...dateFilter, orderStatus: { $nin: ["Cancelled"] } } },
       { $unwind: "$products" },
       {
-        $group: {
-          _id: "$products.product",
-          totalSold: { $sum: "$products.quantity" },
-          totalRevenue: {
-            $sum: { $multiply: ["$products.price", "$products.quantity"] },
-          },
-        },
-      },
-      { $sort: { totalSold: -1 } },
-      { $limit: 10 },
-      {
         $lookup: {
           from: "products",
-          localField: "_id",
+          localField: "products.product",
           foreignField: "_id",
           as: "productDetails",
         },
       },
       { $unwind: "$productDetails" },
+      {
+        $group: {
+          _id: "$productDetails._id", // Group by Product ID
+          name: { $first: "$productDetails.name" }, // Get Product Name
+          totalSold: { $sum: "$products.quantity" },
+          totalRevenue: {
+            $sum: {
+              $multiply: ["$products.quantity", "$productDetails.price"],
+            },
+          },
+        },
+      },
+      { $sort: { totalSold: -1 } },
+      { $limit: 10 },
     ]);
 
     // Calculate top selling categories
+
+    // const topCategoriesAggregation = await Order.aggregate([
+    //   { $match: { ...dateFilter, orderStatus: { $nin: ["Cancelled"] } } },
+    //   { $unwind: "$products" },
+    //   {
+    //     $lookup: {
+    //       from: "products",
+    //       localField: "products.product",
+    //       foreignField: "_id",
+    //       as: "productDetails",
+    //     },
+    //   },
+    //   { $unwind: "$productDetails" },
+    //   {
+    //     $group: {
+    //       _id: "$productDetails.category",
+    //       totalSold: { $sum: "$products.quantity" },
+    //       totalRevenue: {
+    //         $sum: { $multiply: ["$products.price", "$products.quantity"] },
+    //       },
+    //     },
+    //   },
+    //   { $sort: { totalSold: -1 } },
+    //   { $limit: 10 },
+    //   {
+    //     $lookup: {
+    //       from: "categories",
+    //       localField: "_id",
+    //       foreignField: "_id",
+    //       as: "categoryDetails",
+    //     },
+    //   },
+    //   { $unwind: "$categoryDetails" },
+    // ]);
+
     const topCategoriesAggregation = await Order.aggregate([
       { $match: { ...dateFilter, orderStatus: { $nin: ["Cancelled"] } } },
       { $unwind: "$products" },
@@ -1187,28 +1250,56 @@ exports.getSalesReport = async (req, res) => {
       },
       { $unwind: "$productDetails" },
       {
+        $lookup: {
+          from: "categories",
+          localField: "productDetails.category",
+          foreignField: "_id",
+          as: "categoryDetails",
+        },
+      },
+      { $unwind: "$categoryDetails" }, // Ensure category details exist
+      {
         $group: {
-          _id: "$productDetails.category",
-          totalSold: { $sum: "$products.quantity" },
+          _id: "$categoryDetails._id", // Group by category ID
+          name: { $first: "$categoryDetails.name" }, // Get category name
+          totalSold: { $sum: "$products.quantity" }, // Count total items sold
           totalRevenue: {
-            $sum: { $multiply: ["$products.price", "$products.quantity"] },
+            $sum: {
+              $multiply: ["$products.quantity", "$productDetails.price"],
+            },
           },
         },
       },
       { $sort: { totalSold: -1 } },
       { $limit: 10 },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "_id",
-          foreignField: "_id",
-          as: "categoryDetails",
-        },
-      },
-      { $unwind: "$categoryDetails" },
     ]);
 
     // Calculate top selling brands
+    // const topBrandsAggregation = await Order.aggregate([
+    //   { $match: { ...dateFilter, orderStatus: { $nin: ["Cancelled"] } } },
+    //   { $unwind: "$products" },
+    //   {
+    //     $lookup: {
+    //       from: "products",
+    //       localField: "products.product",
+    //       foreignField: "_id",
+    //       as: "productDetails",
+    //     },
+    //   },
+    //   { $unwind: "$productDetails" },
+    //   {
+    //     $group: {
+    //       _id: "$productDetails.brand",
+    //       totalSold: { $sum: "$products.quantity" },
+    //       totalRevenue: {
+    //         $sum: { $multiply: ["$products.price", "$products.quantity"] },
+    //       },
+    //     },
+    //   },
+    //   { $sort: { totalSold: -1 } },
+    //   { $limit: 10 },
+    // ]);
+
     const topBrandsAggregation = await Order.aggregate([
       { $match: { ...dateFilter, orderStatus: { $nin: ["Cancelled"] } } },
       { $unwind: "$products" },
@@ -1220,13 +1311,15 @@ exports.getSalesReport = async (req, res) => {
           as: "productDetails",
         },
       },
-      { $unwind: "$productDetails" },
+      { $unwind: "$productDetails" }, // Extract single product object
       {
         $group: {
-          _id: "$productDetails.brand",
+          _id: "$productDetails.brand", // Group by brand name
           totalSold: { $sum: "$products.quantity" },
           totalRevenue: {
-            $sum: { $multiply: ["$products.price", "$products.quantity"] },
+            $sum: {
+              $multiply: ["$productDetails.price", "$products.quantity"],
+            }, // Fix price reference
           },
         },
       },
@@ -1256,27 +1349,27 @@ exports.getSalesReport = async (req, res) => {
         0
       ),
       topProducts: topProductsAggregation.map((item) => ({
-        productId: item._id,
-        name: item.productDetails.name,
-        totalSold: item.totalSold,
+        name: item.name,
+        sales: item.totalSold, // Use "sales" to match your template
         totalRevenue: item.totalRevenue,
       })),
       topCategories: topCategoriesAggregation.map((item) => ({
-        categoryId: item._id,
-        name: item.categoryDetails.name,
-        totalSold: item.totalSold,
+        name: item.name,
+        sales: item.totalSold, // Correctly mapped for frontend
         totalRevenue: item.totalRevenue,
       })),
       topBrands: topBrandsAggregation.map((item) => ({
-        brand: item._id,
+        brand: item._id || "Unknown", // Handle missing brand names
         totalSold: item.totalSold,
         totalRevenue: item.totalRevenue,
       })),
+
       orders: orders.map((order) => {
         const subtotal = order.products.reduce(
           (sum, p) => sum + p.price * p.quantity,
           0
         );
+
         return {
           orderId: order.orderID,
           date: order.orderDate,
@@ -1336,177 +1429,280 @@ exports.getSalesReport = async (req, res) => {
       return res.json({ report: reportData });
     }
 
-
-
-
-
-
-    
     if (download === "pdf") {
-        const doc = new PDFDocument({ size: "A4", margin: 30 });
-    
-        res.setHeader("Content-Type", "application/pdf");
-        res.setHeader("Content-Disposition", "attachment; filename=Supreme_sales_report.pdf");
-        doc.pipe(res);
-    
-        // ✅ Define Logo Path
-        const logoPath = path.join(process.cwd(), "public/images/logoxxx.jpg");
-    
-        try {
-            doc.image(logoPath, { width: 80, align: "left" }); // ✅ Add Logo
-        } catch (error) {
-            console.log("Error loading logo:", error);
-        }
-    
-        doc.fillColor("#003366").fontSize(20).text("Supreme - Sales Report", { align: "center" });
-        doc.moveDown();
-        
-        doc.fillColor("#000000").fontSize(12).text(
-            `Period: ${new Date(dateFilter.orderDate.$gte).toLocaleDateString()} - ${new Date(dateFilter.orderDate.$lte).toLocaleDateString()}`,
-            { align: "center" }
+      const doc = new PDFDocument({ size: "A4", margin: 30 });
+
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        "attachment; filename=Supreme_sales_report.pdf"
+      );
+      doc.pipe(res);
+
+      // ✅ Define Logo Path
+      const logoPath = path.join(process.cwd(), "public/images/logoxxx.jpg");
+
+      try {
+        doc.image(logoPath, { width: 80, align: "left" }); // ✅ Add Logo
+      } catch (error) {
+        console.log("Error loading logo:", error);
+      }
+
+      doc
+        .fillColor("#003366")
+        .fontSize(20)
+        .text("Supreme - Sales Report", { align: "center" });
+      doc.moveDown();
+
+      doc
+        .fillColor("#000000")
+        .fontSize(12)
+        .text(
+          `Period: ${new Date(
+            dateFilter.orderDate.$gte
+          ).toLocaleDateString()} - ${new Date(
+            dateFilter.orderDate.$lte
+          ).toLocaleDateString()}`,
+          { align: "center" }
         );
-        doc.moveDown(2); // Add more space
-    
-        // 🔹 Summary Section
-        doc.fillColor("#FF5733").fontSize(14).text("Summary", { underline: true });
-        doc.fillColor("#000000")
-            .fontSize(12)
-            .text(`Total Orders: ${reportData.totalOrders || 0}`)
-            .text(`Total Amount: INR ${(reportData.totalAmount || 0).toFixed(2)}`)
-            .text(`Total Discount: INR ${(reportData.totalDiscount || 0).toFixed(2)}`)
-            .text(`Coupon Discount: INR ${(reportData.totalCouponDiscount || 0).toFixed(2)}`)
-            .text(`Offer Discount: INR ${(reportData.totalOfferDiscount || 0).toFixed(2)}`);
-        doc.moveDown(2); // Extra spacing
-    
-        // 🔹 Top Selling Products
-        doc.fillColor("#3366FF").fontSize(14).text("Top Selling Products", { underline: true });
-        reportData.topProducts.forEach((product, index) => {
-            doc.fillColor("#000000").fontSize(10).text(`${index + 1}. ${product.name}: ${product.totalSold} units, Revenue: INR ${product.totalRevenue.toFixed(2)}`);
-        });
-        doc.moveDown();
-    
-        // 🔹 Top Selling Categories
-        doc.fillColor("#FF3366").fontSize(14).text("Top Selling Categories", { underline: true });
-        reportData.topCategories.forEach((category, index) => {
-            doc.fillColor("#000000").fontSize(10).text(`${index + 1}. ${category.name}: ${category.totalSold} units, Revenue: INR ${category.totalRevenue.toFixed(2)}`);
-        });
-        doc.moveDown();
-    
-        // 🔹 Top Selling Brands
-        doc.fillColor("#33CC33").fontSize(14).text("Top Selling Brands", { underline: true });
-        reportData.topBrands.forEach((brand, index) => {
-            doc.fillColor("#000000").fontSize(10).text(`${index + 1}. ${brand.brand}: ${brand.totalSold} units, Revenue: INR ${brand.totalRevenue.toFixed(2)}`);
-        });
-        doc.moveDown(2);
-    
-        // 🔹 Orders Table Header
-        const tableTop = doc.y;
-        const rowHeight = 33;
-        const colWidths = [70, 50, 100, 60, 70, 70, 80, 90];
-        const colPositions = [30, 110, 190, 290, 360, 430, 500, 630];
-    
-        doc.fillColor("#000000").fontSize(10).font("Helvetica-Bold");
-        colPositions.forEach((pos, i) => {
-            doc.text(["Order ID", "Date", "Customer", "Products", "Subtotal", "Discount", "Coupon", "Total"][i], pos, tableTop, { width: colWidths[i], align: "left" });
-        });
-    
-        doc.moveDown();
-        doc.lineWidth(1).strokeColor("black");
-        doc.moveTo(30, tableTop + rowHeight).lineTo(690, tableTop + rowHeight).stroke();
-    
-        let yPosition = tableTop + rowHeight + 5;
-    
-        doc.font("Helvetica");
-        reportData.allOrders.forEach(order => {
-            if (yPosition > 700) {
-                doc.addPage();
-                yPosition = 30;
-                colPositions.forEach((pos, i) => {
-                    doc.text(["Order ID", "Date", "Customer", "Products", "Subtotal", "Discount", "Coupon", "Total"][i], pos, yPosition, { width: colWidths[i], align: "left" });
-                });
-                doc.moveDown();
-                doc.moveTo(30, yPosition + rowHeight).lineTo(690, yPosition + rowHeight).stroke();
-                yPosition += rowHeight + 5;
-            }
-    
-            const dateStr = new Date(order.date).toLocaleDateString();
-            colPositions.forEach((pos, i) => {
-                const data = [
-                    `#${order.orderId || "N/A"}`,
-                    dateStr,
-                    order.user?.name || "Unknown",
-                    `${order.products.length}`,
-                    `INR ${(order.originalAmount || 0).toFixed(2)}`,
-                    `INR ${(order.offerDiscount || 0).toFixed(2)}`,
-                    `${order.couponCode}${order.couponDiscount ? ` (-INR ${order.couponDiscount.toFixed(2)})` : ""}`,
-                    `INR ${(order.totalAmount || 0).toFixed(2)}`
-                ][i];
-                doc.text(data, pos, yPosition, { width: colWidths[i], align: "left" });
-            });
-    
-            doc.moveTo(30, yPosition + rowHeight - 5).lineTo(690, yPosition + rowHeight - 5).stroke();
-            yPosition += rowHeight;
-        });
-    
-        doc.end();
-        return;
-    } 
-    
-        
-        
-        
-        else if (download === 'excel') {
-            const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet('Supreme - Sales Report');
+      doc.moveDown(2); // Add more space
 
-            worksheet.columns = [
-                { header: 'Order ID', key: 'orderId', width: 15 },
-                { header: 'Date', key: 'date', width: 20 },
-                { header: 'Customer', key: 'customer', width: 20 },
-                { header: 'Products', key: 'products', width: 15 },
-                { header: 'Original Amount', key: 'originalAmount', width: 15 },
-                { header: 'Final Amount', key: 'totalAmount', width: 15 },
-                { header: 'Coupon Code', key: 'couponCode', width: 15 },
-                { header: 'Coupon Discount', key: 'couponDiscount', width: 15 },
-                { header: 'Offer Discount', key: 'offerDiscount', width: 15 },
-                { header: 'Payment Method', key: 'paymentMethod', width: 20 },
-                { header: 'Status', key: 'status', width: 15 }
-            ];
+      // 🔹 Summary Section
+      doc
+        .fillColor("#FF5733")
+        .fontSize(14)
+        .text("Summary", { underline: true });
+      doc
+        .fillColor("#000000")
+        .fontSize(12)
+        .text(`Total Orders: ${reportData.totalOrders || 0}`)
+        .text(`Total Amount: INR ${(reportData.totalAmount || 0).toFixed(2)}`)
+        .text(
+          `Total Discount: INR ${(reportData.totalDiscount || 0).toFixed(2)}`
+        )
+        .text(
+          `Coupon Discount: INR ${(reportData.totalCouponDiscount || 0).toFixed(
+            2
+          )}`
+        )
+        .text(
+          `Offer Discount: INR ${(reportData.totalOfferDiscount || 0).toFixed(
+            2
+          )}`
+        );
+      doc.moveDown(2); // Extra spacing
 
-            const excelData = reportData.allOrders.map(order => ({
-                orderId: order.orderId || 'N/A',
-                date: new Date(order.date).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-                customer: order.user?.name || 'Unknown',
-                products: `${order.products.length} item${order.products.length !== 1 ? 's' : ''}`,
-                originalAmount: order.originalAmount || 0,
-                totalAmount: order.totalAmount || 0,
-                couponCode: order.couponCode,
-                couponDiscount: order.couponDiscount || 0,
-                offerDiscount: order.offerDiscount || 0,
-                paymentMethod: order.paymentMethod,
-                status: order.status
-            }));
+      // 🔹 Top Selling Products
+      doc
+        .fillColor("#3366FF")
+        .fontSize(14)
+        .text("Top Selling Products", { underline: true });
+      reportData.topProducts.forEach((product, index) => {
+        doc
+          .fillColor("#000000")
+          .fontSize(10)
+          .text(
+            `${index + 1}. ${product.name}: ${
+              product.totalSold
+            } units, Revenue: INR ${product.totalRevenue.toFixed(2)}`
+          );
+      });
+      doc.moveDown();
 
-            worksheet.addRows(excelData);
+      // 🔹 Top Selling Categories
+      doc
+        .fillColor("#FF3366")
+        .fontSize(14)
+        .text("Top Selling Categories", { underline: true });
+      reportData.topCategories.forEach((category, index) => {
+        doc
+          .fillColor("#000000")
+          .fontSize(10)
+          .text(
+            `${index + 1}. ${category.name}: ${
+              category.totalSold
+            } units, Revenue: INR ${category.totalRevenue.toFixed(2)}`
+          );
+      });
+      doc.moveDown();
 
-            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            res.setHeader('Content-Disposition', 'attachment; filename=Supreme  sales-report.xlsx');
-            await workbook.xlsx.write(res);
-            return res.end();
+      // 🔹 Top Selling Brands
+      doc
+        .fillColor("#33CC33")
+        .fontSize(14)
+        .text("Top Selling Brands", { underline: true });
+      reportData.topBrands.forEach((brand, index) => {
+        doc
+          .fillColor("#000000")
+          .fontSize(10)
+          .text(
+            `${index + 1}. ${brand.brand}: ${
+              brand.totalSold
+            } units, Revenue: INR ${brand.totalRevenue.toFixed(2)}`
+          );
+      });
+      doc.moveDown(2);
+
+      // 🔹 Orders Table Header
+      const tableTop = doc.y;
+      const rowHeight = 33;
+      const colWidths = [70, 50, 100, 60, 70, 70, 80, 90];
+      const colPositions = [30, 110, 190, 290, 360, 430, 500, 630];
+
+      doc.fillColor("#000000").fontSize(10).font("Helvetica-Bold");
+      colPositions.forEach((pos, i) => {
+        doc.text(
+          [
+            "Order ID",
+            "Date",
+            "Customer",
+            "Products",
+            "Subtotal",
+            "Discount",
+            "Coupon",
+            "Total",
+          ][i],
+          pos,
+          tableTop,
+          { width: colWidths[i], align: "left" }
+        );
+      });
+
+      doc.moveDown();
+      doc.lineWidth(1).strokeColor("black");
+      doc
+        .moveTo(30, tableTop + rowHeight)
+        .lineTo(690, tableTop + rowHeight)
+        .stroke();
+
+      let yPosition = tableTop + rowHeight + 5;
+
+      doc.font("Helvetica");
+      reportData.allOrders.forEach((order) => {
+        if (yPosition > 700) {
+          doc.addPage();
+          yPosition = 30;
+          colPositions.forEach((pos, i) => {
+            doc.text(
+              [
+                "Order ID",
+                "Date",
+                "Customer",
+                "Products",
+                "Subtotal",
+                "Discount",
+                "Coupon",
+                "Total",
+              ][i],
+              pos,
+              yPosition,
+              { width: colWidths[i], align: "left" }
+            );
+          });
+          doc.moveDown();
+          doc
+            .moveTo(30, yPosition + rowHeight)
+            .lineTo(690, yPosition + rowHeight)
+            .stroke();
+          yPosition += rowHeight + 5;
         }
 
-        res.render('admin/salesReport', {
-            report: reportData,
-            startDate: dateFilter.orderDate.$gte.toISOString().split('T')[0],
-            endDate: dateFilter.orderDate.$lte.toISOString().split('T')[0],
-            quickSelect: quickSelect || 'last30days',
-            currentPage: page,
-            limit: limit,
-            totalOrders: totalOrders
+        const dateStr = new Date(order.date).toLocaleDateString();
+        colPositions.forEach((pos, i) => {
+          const data = [
+            `#${order.orderId || "N/A"}`,
+            dateStr,
+            order.user?.name || "Unknown",
+            `${order.products.length}`,
+            `INR ${(order.originalAmount || 0).toFixed(2)}`,
+            `INR ${(order.offerDiscount || 0).toFixed(2)}`,
+            `${order.couponCode}${
+              order.couponDiscount
+                ? ` (-INR ${order.couponDiscount.toFixed(2)})`
+                : ""
+            }`,
+            `INR ${(order.totalAmount || 0).toFixed(2)}`,
+          ][i];
+          doc.text(data, pos, yPosition, {
+            width: colWidths[i],
+            align: "left",
+          });
         });
 
-    } catch (error) {
-        console.error('Controller Error:', error);
-        res.status(500).send('Server Error');
+        doc
+          .moveTo(30, yPosition + rowHeight - 5)
+          .lineTo(690, yPosition + rowHeight - 5)
+          .stroke();
+        yPosition += rowHeight;
+      });
+
+      doc.end();
+      return;
+    } else if (download === "excel") {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Supreme - Sales Report");
+
+      worksheet.columns = [
+        { header: "Order ID", key: "orderId", width: 15 },
+        { header: "Date", key: "date", width: 20 },
+        { header: "Customer", key: "customer", width: 20 },
+        { header: "Products", key: "products", width: 15 },
+        { header: "Original Amount", key: "originalAmount", width: 15 },
+        { header: "Final Amount", key: "totalAmount", width: 15 },
+        { header: "Coupon Code", key: "couponCode", width: 15 },
+        { header: "Coupon Discount", key: "couponDiscount", width: 15 },
+        { header: "Offer Discount", key: "offerDiscount", width: 15 },
+        { header: "Payment Method", key: "paymentMethod", width: 20 },
+        { header: "Status", key: "status", width: 15 },
+      ];
+
+      const excelData = reportData.allOrders.map((order) => ({
+        orderId: order.orderId || "N/A",
+        date: new Date(order.date).toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        customer: order.user?.name || "Unknown",
+        products: `${order.products.length} item${
+          order.products.length !== 1 ? "s" : ""
+        }`,
+        originalAmount: order.originalAmount || 0,
+        totalAmount: order.totalAmount || 0,
+        couponCode: order.couponCode,
+        couponDiscount: order.couponDiscount || 0,
+        offerDiscount: order.offerDiscount || 0,
+        paymentMethod: order.paymentMethod,
+        status: order.status,
+      }));
+
+      worksheet.addRows(excelData);
+
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+      res.setHeader(
+        "Content-Disposition",
+        "attachment; filename=Supreme  sales-report.xlsx"
+      );
+      await workbook.xlsx.write(res);
+      return res.end();
     }
+
+    res.render("admin/salesReport", {
+      report: reportData,
+      startDate: dateFilter.orderDate.$gte.toISOString().split("T")[0],
+      endDate: dateFilter.orderDate.$lte.toISOString().split("T")[0],
+      quickSelect: quickSelect || "last30days",
+      currentPage: page,
+      limit: limit,
+      totalOrders: totalOrders,
+    });
+  } catch (error) {
+    console.error("Controller Error:", error);
+    res.status(500).send("Server Error");
+  }
 };

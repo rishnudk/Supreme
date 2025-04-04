@@ -404,6 +404,61 @@ console.log("Razorpay initialized with:", {
 
 
 
+// before gst
+// exports.verifyPaymentFromExisting = async (req, res) => {
+//     try {
+//         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
+//         const userId = req.session.user?._id;
+
+//         console.log("verifyPaymentFromExisting11 - Request body:", req.body);
+//         console.log("verifyPaymentFromExisting12 - User ID:", userId);
+
+//         if (!orderId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+//             console.log("verifyPaymentFromExisting13 - Missing fields");
+//             return res.status(400).json({ message: "Missing required fields" });
+//         }
+
+//         const order = await Order.findById(orderId);
+//         if (!order || order.user.toString() !== userId) {
+//             console.log("verifyPaymentFromExisting14 - Order not found or unauthorized");
+//             return res.status(404).json({ message: "Order not found or unauthorized" });
+//         }
+
+//         const body = razorpay_order_id + "|" + razorpay_payment_id;
+//         const expectedSignature = crypto
+//             .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+//             .update(body.toString())
+//             .digest("hex");
+
+//         if (expectedSignature === razorpay_signature) {
+//             console.log("verifyPaymentFromExisting15 - Signature verified");
+
+//             // Update order payment status
+//             order.paymentStatus = "Paid";
+//             order.transactionId = razorpay_payment_id;
+//             if (order.paymentMethod === "COD") {
+//                 order.paymentMethod = "Razorpay"; // Switch COD to Razorpay if paid online
+//             }
+//             await order.save();
+//             console.log("verifyPaymentFromExisting16 - Order updated:", order);
+
+//             res.status(200).json({
+//                 success: true,
+//                 message: "Payment verified successfully",
+//                 orderId: order._id,
+//             });
+//         } else {
+//             console.log("verifyPaymentFromExisting 17- Signature verification failed");
+//             return res.status(400).json({ message: "Payment verification failed" });
+//         }
+//     } catch (error) {
+//         console.error("verifyPaymentFromExisting18 - Error:", error.message, error.stack);
+//         res.status(500).json({ message: error.message || "Server error" });
+//     }
+// };
+
+
+
 
 exports.verifyPaymentFromExisting = async (req, res) => {
     try {
@@ -446,9 +501,11 @@ exports.verifyPaymentFromExisting = async (req, res) => {
                 success: true,
                 message: "Payment verified successfully",
                 orderId: order._id,
+                totalAmount: order.totalAmount, // Added for client-side reference
+                gstAmount: order.gstAmount // Added for client-side reference
             });
         } else {
-            console.log("verifyPaymentFromExisting 17- Signature verification failed");
+            console.log("verifyPaymentFromExisting17 - Signature verification failed");
             return res.status(400).json({ message: "Payment verification failed" });
         }
     } catch (error) {
@@ -459,11 +516,49 @@ exports.verifyPaymentFromExisting = async (req, res) => {
 
 
 
+
+
+// before gst
+
+// exports.verifyPayment = async (req, res) => {
+//     try {
+//         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
+
+//         // Verify Razorpay signature (simplified, use your actual verification logic)
+//         const crypto = require("crypto");
+//         const generatedSignature = crypto
+//             .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+//             .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+//             .digest("hex");
+
+//         if (generatedSignature !== razorpay_signature) {
+//             return res.status(400).json({ success: false, message: "Invalid payment signature" });
+//         }
+
+//         // Update order
+//         const order = await Order.findById(orderId);
+//         if (!order) {
+//             return res.status(404).json({ success: false, message: "Order not found" });
+//         }
+
+//         order.paymentStatus = "Paid";
+//         order.orderStatus = "Pending";
+//         await order.save();
+
+//         res.json({ success: true, message: "Payment verified" });
+//     } catch (error) {
+//         console.error("Verify Payment Error:", error);
+//         res.status(500).json({ success: false, message: "Server error" });
+//     }
+// };
+
+
+
 exports.verifyPayment = async (req, res) => {
     try {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
 
-        // Verify Razorpay signature (simplified, use your actual verification logic)
+        // Verify Razorpay signature
         const crypto = require("crypto");
         const generatedSignature = crypto
             .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -482,16 +577,21 @@ exports.verifyPayment = async (req, res) => {
 
         order.paymentStatus = "Paid";
         order.orderStatus = "Pending";
+        order.transactionId = razorpay_payment_id; // Added to track payment
         await order.save();
 
-        res.json({ success: true, message: "Payment verified" });
+        res.json({
+            success: true,
+            message: "Payment verified",
+            orderId: order._id,
+            totalAmount: order.totalAmount, // Added for client-side reference
+            gstAmount: order.gstAmount // Added for client-side reference
+        });
     } catch (error) {
         console.error("Verify Payment Error:", error);
         res.status(500).json({ success: false, message: "Server error" });
     }
 };
-
-
 
 
 
@@ -573,6 +673,7 @@ exports.createOrderFromExisting = async (req, res) => {
             currency: razorpayOrder.currency,
             key: process.env.RAZORPAY_KEY_ID,
             totalAmount: order.totalAmount,
+            gstAmount: order.gstAmount
         });
     } catch (error) {
         console.error("createOrderFromExisting 9 - Error details:", {

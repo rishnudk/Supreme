@@ -12,7 +12,423 @@
  <!-- Bootstrap Icons -->
  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css"
      rel="stylesheet">
- <link rel="stylesheet" href="/css/address.css">
+ <!-- <link rel="stylesheet" href="/css/address.css"> -->
+
+
+
+ <style>
+
+
+/* Address Book Page Styles */
+.account-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 15px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 15px;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.sidebar-section {
+  margin-bottom: 25px;
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 10px;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  margin-bottom: 10px;
+}
+
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  color: #555;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-menu a:hover {
+  background-color: #f1f1f1;
+  color: #111;
+}
+
+.sidebar-menu a.active {
+  background-color: #e9ecef;
+  color: #000;
+  font-weight: 500;
+}
+
+.sidebar-menu a i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.invite-subtitle {
+  font-size: 12px;
+  color: #888;
+  margin: 0 0 0 30px;
+  padding: 0;
+}
+
+/* Address Book Container Styles */
+.addresses-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.addresses-container h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0;
+}
+
+/* Address Card Styles */
+.address-card {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  transition: all 0.2s ease;
+  height: 100%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  background-color: #fff;
+}
+
+.address-card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: #ddd;
+}
+
+.address-type {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.address-type-home {
+  background-color: #e7f5ff;
+  color: #1971c2;
+}
+
+.address-type-work {
+  background-color: #fff9db;
+  color: #e6a700;
+}
+
+.default-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: #ebfbee;
+  color: #2b8a3e;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.address-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 25px 0 15px;
+  color: #333;
+}
+
+.address-details {
+  color: #666;
+  margin-bottom: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.address-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.address-actions .btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.btn-accent {
+  background-color: #228be6;
+  border-color: #228be6;
+  color: #fff;
+}
+
+.btn-accent:hover {
+  background-color: #1c7ed6;
+  border-color: #1c7ed6;
+  color: #fff;
+}
+
+.btn-outline-accent {
+  color: #228be6;
+  border-color: #228be6;
+  background-color: transparent;
+}
+
+.btn-outline-accent:hover {
+  background-color: #e7f5ff;
+  color: #1971c2;
+  border-color: #1971c2;
+}
+
+.btn-icon {
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-delete {
+  color: #e03131;
+  border-color: #e03131;
+}
+
+.btn-delete:hover {
+  background-color: #ffe3e3;
+  color: #c92a2a;
+  border-color: #c92a2a;
+}
+
+/* Modal Styles */
+.modal-content {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.modal-header {
+  border-bottom: 1px solid #eaeaea;
+  padding: 15px 20px;
+}
+
+.modal-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  border-top: 1px solid #eaeaea;
+  padding: 15px 20px;
+}
+
+/* Form Styles */
+.form-floating > .form-control {
+  padding: 1rem 0.75rem;
+}
+
+.form-floating > .form-control:focus {
+  border-color: #228be6;
+  box-shadow: 0 0 0 0.25rem rgba(34, 139, 230, 0.25);
+}
+
+.form-floating > label {
+  padding: 1rem 0.75rem;
+}
+
+.form-check-input:checked {
+  background-color: #228be6;
+  border-color: #228be6;
+}
+
+/* Custom buttons for modals */
+.modal .btn-primary {
+  background-color: #228be6;
+  border-color: #228be6;
+}
+
+.modal .btn-primary:hover {
+  background-color: #1c7ed6;
+  border-color: #1c7ed6;
+}
+
+.modal .btn-outline-primary {
+  color: #228be6;
+  border-color: #228be6;
+}
+
+.modal .btn-outline-primary:hover {
+  background-color: #e7f5ff;
+  color: #1971c2;
+  border-color: #1971c2;
+}
+
+.modal .btn-danger {
+  background-color: #e03131;
+  border-color: #e03131;
+}
+
+.modal .btn-danger:hover {
+  background-color: #c92a2a;
+  border-color: #c92a2a;
+}
+
+/* Alert styling */
+.alert-info {
+  background-color: #e7f5ff;
+  border-color: #d0ebff;
+  color: #1971c2;
+}
+
+/* Responsive styles */
+@media (max-width: 991.98px) {
+  .address-card {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .addresses-container h2 {
+    font-size: 20px;
+  }
+  
+  .address-card {
+    padding: 15px;
+  }
+  
+  .address-name {
+    font-size: 16px;
+    margin-top: 30px;
+  }
+  
+  .btn {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+  
+  .address-actions {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .address-actions .btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .account-container {
+    margin: 20px auto;
+  }
+  
+  .page-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+  
+  .addresses-container {
+    padding: 15px;
+  }
+  
+  .d-flex.justify-content-between.align-items-center {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start !important;
+  }
+  
+  .d-flex.justify-content-between.align-items-center .btn {
+    width: 100%;
+  }
+  
+  .modal-dialog {
+    margin: 1rem;
+  }
+}
+
+/* Animation for modal */
+.modal.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+}
+
+.modal.fade .modal-dialog {
+  transform: translateY(-20px);
+}
+
+.modal.show .modal-dialog {
+  transform: translateY(0);
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1060;
+}
+
+.toast {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  overflow: hidden;
+  border-left: 4px solid #228be6;
+}
+
+.toast-success {
+  border-left-color: #40c057;
+}
+
+.toast-error {
+  border-left-color: #e03131;
+}
+
+.toast-header {
+  border-bottom: 1px solid #eaeaea;
+  background-color: #fff;
+}
+
+.toast-body {
+  padding: 12px;
+}
+
+ </style>
 </head>
 
 <body>

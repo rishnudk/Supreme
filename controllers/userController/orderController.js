@@ -1688,74 +1688,150 @@ exports.submitReturnRequest = async (req, res) => {
 
 
 
+
+
+
+// before gst
+
+// exports.getOrderDetails = async (req, res) => {
+//   try {
+//     console.log('cheksssssssssssssssssssssss')
+//     const orderId = req.params.orderId;
+//     console.log("Fetching order details for Order ID:", orderId);
+
+//     const order = await Order.findById(orderId)
+//       .populate("products.product")
+//       .populate("user", "name email")
+//       .populate("products.appliedOffer.offer")
+//       .populate("appliedCoupon.coupon")
+//       .lean();
+
+
+//       console.log("Raw order data from DB:", order);
+
+//     if (!order || order.user._id.toString() !== req.session.user._id) {
+//       console.log("Order not found or unauthorized for ID:", orderId);
+//       return res.status(404).send("Order not found or you are not authorized to view it");
+//     }
+
+//     const response = {
+//       _id: order._id,
+//       orderID: order.orderID,
+//       user: order.user,
+//       orderDate: order.orderDate,
+//       totalAmount: order.totalAmount,
+//       originalAmount: order.originalAmount,
+//       shippingCost: order.shippingCost || 15, // Use schema field, default to 15 if not set
+//       subtotal: order.originalAmount - order.totalOfferDiscount - (order.appliedCoupon?.discountAmount || 0), // Correct calculation
+//       tax: 0,
+//       orderStatus: order.orderStatus,
+//       paymentMethod: order.paymentMethod,
+//       paymentStatus: order.paymentStatus,
+//       transactionId: order.transactionId || "N/A",
+//       shippingAddress: order.shippingAddress,
+//       addressId: order.addressId || "",
+//       totalOfferDiscount: order.totalOfferDiscount, // Keep schema name
+//       appliedCoupon: {
+//         code: order.appliedCoupon?.code || "N/A",
+//         discountAmount: order.appliedCoupon?.discountAmount || 0
+//       },
+//       refundedAmount: order.refundedAmount || 0, // Add refunded amount
+//       products: order.products.map((p) => ({
+//         _id: p.product._id,
+//         name: p.name,
+//         price: p.price,
+//         image: p.image,
+//         quantity: p.quantity,
+//         productStatus: p.productStatus,
+//         offerName: p.appliedOffer?.offer?.name || "None",
+//         offerDiscount: p.appliedOffer?.discountAmount || 0
+//       })),
+//       timeline: [
+//         { title: "Order Placed", date: order.orderDate, text: "Your order has been received.", completed: true },
+//         { title: "Order Processing", date: order.orderStatus === "Processing" ? order.updatedAt : null, text: "Your order is being prepared for shipping.", completed: order.orderStatus !== "Pending" },
+//         { title: "Order Shipped", date: order.orderStatus === "Shipped" ? order.updatedAt : null, text: "Your order has been shipped.", completed: order.orderStatus === "Shipped" || order.orderStatus === "Delivered" },
+//         { title: "Order Delivered", date: order.deliveredAt, text: "Your order has been delivered.", completed: order.orderStatus === "Delivered" }
+//       ]
+//     };
+
+//     res.render("user/orderDetails", {
+//       order: response,
+//       user: req.session.user
+//     });
+//   } catch (error) {
+//     console.error("Error fetching order details:", error.message, error.stack);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+
 exports.getOrderDetails = async (req, res) => {
   try {
-    console.log('cheksssssssssssssssssssssss')
-    const orderId = req.params.orderId;
-    console.log("Fetching order details for Order ID:", orderId);
+      console.log('cheksssssssssssssssssssssss');
+      const orderId = req.params.orderId;
+      console.log("Fetching order details for Order ID:", orderId);
 
-    const order = await Order.findById(orderId)
-      .populate("products.product")
-      .populate("user", "name email")
-      .populate("products.appliedOffer.offer")
-      .populate("appliedCoupon.coupon")
-      .lean();
-
+      const order = await Order.findById(orderId)
+          .populate("products.product")
+          .populate("user", "name email")
+          .populate("products.appliedOffer.offer")
+          .populate("appliedCoupon.coupon")
+          .lean();
 
       console.log("Raw order data from DB:", order);
 
-    if (!order || order.user._id.toString() !== req.session.user._id) {
-      console.log("Order not found or unauthorized for ID:", orderId);
-      return res.status(404).send("Order not found or you are not authorized to view it");
-    }
+      if (!order || order.user._id.toString() !== req.session.user._id) {
+          console.log("Order not found or unauthorized for ID:", orderId);
+          return res.status(404).send("Order not found or you are not authorized to view it");
+      }
 
-    const response = {
-      _id: order._id,
-      orderID: order.orderID,
-      user: order.user,
-      orderDate: order.orderDate,
-      totalAmount: order.totalAmount,
-      originalAmount: order.originalAmount,
-      shippingCost: order.shippingCost || 15, // Use schema field, default to 15 if not set
-      subtotal: order.originalAmount - order.totalOfferDiscount - (order.appliedCoupon?.discountAmount || 0), // Correct calculation
-      tax: 0,
-      orderStatus: order.orderStatus,
-      paymentMethod: order.paymentMethod,
-      paymentStatus: order.paymentStatus,
-      transactionId: order.transactionId || "N/A",
-      shippingAddress: order.shippingAddress,
-      addressId: order.addressId || "",
-      totalOfferDiscount: order.totalOfferDiscount, // Keep schema name
-      appliedCoupon: {
-        code: order.appliedCoupon?.code || "N/A",
-        discountAmount: order.appliedCoupon?.discountAmount || 0
-      },
-      refundedAmount: order.refundedAmount || 0, // Add refunded amount
-      products: order.products.map((p) => ({
-        _id: p.product._id,
-        name: p.name,
-        price: p.price,
-        image: p.image,
-        quantity: p.quantity,
-        productStatus: p.productStatus,
-        offerName: p.appliedOffer?.offer?.name || "None",
-        offerDiscount: p.appliedOffer?.discountAmount || 0
-      })),
-      timeline: [
-        { title: "Order Placed", date: order.orderDate, text: "Your order has been received.", completed: true },
-        { title: "Order Processing", date: order.orderStatus === "Processing" ? order.updatedAt : null, text: "Your order is being prepared for shipping.", completed: order.orderStatus !== "Pending" },
-        { title: "Order Shipped", date: order.orderStatus === "Shipped" ? order.updatedAt : null, text: "Your order has been shipped.", completed: order.orderStatus === "Shipped" || order.orderStatus === "Delivered" },
-        { title: "Order Delivered", date: order.deliveredAt, text: "Your order has been delivered.", completed: order.orderStatus === "Delivered" }
-      ]
-    };
+      const response = {
+          _id: order._id,
+          orderID: order.orderID,
+          user: order.user,
+          orderDate: order.orderDate,
+          totalAmount: order.totalAmount,
+          originalAmount: order.originalAmount,
+          shippingCost: order.shippingCost || 15, // Use schema field, default to 15 if not set
+          gstAmount: order.gstAmount || 0, // Added GST field
+          subtotal: order.originalAmount - order.totalOfferDiscount - (order.appliedCoupon?.discountAmount || 0), // Pre-GST subtotal
+          orderStatus: order.orderStatus,
+          paymentMethod: order.paymentMethod,
+          paymentStatus: order.paymentStatus,
+          transactionId: order.transactionId || "N/A",
+          shippingAddress: order.shippingAddress,
+          addressId: order.addressId || "",
+          totalOfferDiscount: order.totalOfferDiscount,
+          appliedCoupon: {
+              code: order.appliedCoupon?.code || "N/A",
+              discountAmount: order.appliedCoupon?.discountAmount || 0
+          },
+          refundedAmount: order.refundedAmount || 0,
+          products: order.products.map((p) => ({
+              _id: p.product._id,
+              name: p.name,
+              price: p.price,
+              image: p.image,
+              quantity: p.quantity,
+              productStatus: p.productStatus,
+              offerName: p.appliedOffer?.offer?.name || "None",
+              offerDiscount: p.appliedOffer?.discountAmount || 0
+          })),
+          timeline: [
+              { title: "Order Placed", date: order.orderDate, text: "Your order has been received.", completed: true },
+              { title: "Order Processing", date: order.orderStatus === "Processing" ? order.updatedAt : null, text: "Your order is being prepared for shipping.", completed: order.orderStatus !== "Pending" },
+              { title: "Order Shipped", date: order.orderStatus === "Shipped" ? order.updatedAt : null, text: "Your order has been shipped.", completed: order.orderStatus === "Shipped" || order.orderStatus === "Delivered" },
+              { title: "Order Delivered", date: order.deliveredAt, text: "Your order has been delivered.", completed: order.orderStatus === "Delivered" }
+          ]
+      };
 
-    res.render("user/orderDetails", {
-      order: response,
-      user: req.session.user
-    });
+      res.render("user/orderDetails", {
+          order: response,
+          user: req.session.user
+      });
   } catch (error) {
-    console.error("Error fetching order details:", error.message, error.stack);
-    res.status(500).send("Internal Server Error");
+      console.error("Error fetching order details:", error.message, error.stack);
+      res.status(500).send("Internal Server Error");
   }
 };
 
@@ -1764,6 +1840,272 @@ exports.getOrderDetails = async (req, res) => {
 
 
 
+
+
+
+
+// before gst
+
+// exports.placeOrder = async (req, res) => {
+//   try {
+//       console.log(`1 - Received Order Data:`, req.body);
+
+//       if (!req.session.user) {
+//           console.log(`2 - User not authenticated`);
+//           return res.status(401).json({ success: false, error: "User not authenticated" });
+//       }
+
+//       const userId = req.session.user._id;
+//       console.log(`3 - User ID: ${userId}`);
+
+//       const cart = await Cart.findOne({ user: userId }).populate({
+//           path: "items.product",
+//           populate: { path: "category" },
+//       });
+
+//       if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) {
+//           console.log(`4 - Cart is empty`);
+//           return res.status(400).json({ success: false, error: "Your cart is empty" });
+//       }
+
+//       for (const item of cart.items) {
+//           if (!item.product) {
+//               return res.status(404).json({
+//                   success: false,
+//                   error: `Product not found in cart`,
+//               });
+//           }
+//           if (item.product.status === "Inactive") {
+//               return res.status(404).json({
+//                   success: false,
+//                   error: `Product "${item.product.name}" is not available for now`,
+//               });
+//           }
+//           if (item.product.category && item.product.category.isDeleted) {
+//               return res.status(404).json({
+//                   success: false,
+//                   error: `Category for "${item.product.name}" is not available`,
+//               });
+//           }
+//           if (item.product.variant.stock < item.quantity) {
+//               console.log(`Stock insufficient for ${item.product.name}`);
+//               return res.status(400).json({
+//                   success: false,
+//                   error: `Insufficient stock for ${item.product.name}. Only ${item.product.variant.stock} left.`,
+//               });
+//           }
+//       }
+
+//       const { addressId, paymentMethod } = req.body;
+//       const normalizedPaymentMethod = paymentMethod.toLowerCase().trim(); // Define here
+//       if (!addressId || !paymentMethod) {
+//           console.log(`5 - Missing fields: addressId=${addressId}, paymentMethod=${paymentMethod}`);
+//           return res.status(400).json({ success: false, error: "Missing required fields" });
+//       }
+
+//       const validPaymentMethods = ["cod", "razorpay", "wallet"];
+//       if (!validPaymentMethods.includes(normalizedPaymentMethod)) {
+//           console.log(`6 - Invalid payment method: ${paymentMethod}`);
+//           return res.status(400).json({ success: false, error: "Invalid payment method" });
+//       }
+
+//       const userAddress = await Address.findById(addressId);
+//       if (!userAddress) {
+//           console.log(`7 - Invalid address ID: ${addressId}`);
+//           return res.status(400).json({ success: false, error: "Invalid address selected" });
+//       }
+
+//       const shippingAddress = {
+//           fullName: userAddress.fullName,
+//           phone: userAddress.phone,
+//           address: userAddress.address,
+//           city: userAddress.city,
+//           state: userAddress.state,
+//           country: userAddress.country,
+//           pincode: userAddress.pincode,
+//       };
+
+//       let subtotal = 0;
+//       let offerDiscount = 0;
+//       const itemOffers = new Map();
+
+//       for (const item of cart.items) {
+//           const originalPrice = item.product.price * item.quantity;
+//           subtotal += originalPrice;
+
+//           const offers = await Offer.find({
+//               isActive: true,
+//               expiryDate: { $gte: new Date() },
+//               $or: [
+//                   { applicableTo: "product", productId: item.product._id },
+//                   { applicableTo: "category", categoryId: item.product.category },
+//               ],
+//           });
+
+//           if (offers.length > 0) {
+//               const bestOffer = offers.reduce((max, offer) =>
+//                   offer.discountValue > max.discountValue ? offer : max, offers[0]);
+//               const itemDiscount = Math.round(originalPrice * (bestOffer.discountValue / 100));
+//               offerDiscount += itemDiscount;
+//               itemOffers.set(item.product._id.toString(), {
+//                   offerId: bestOffer._id,
+//                   discountAmount: itemDiscount,
+//               });
+//           }
+//       }
+
+//       const shippingCost = 15;
+//       let afterOfferSubtotal = subtotal - offerDiscount;
+//       let couponDiscount = 0;
+//       let coupon = null;
+
+//       if (req.session.appliedCoupon) {
+//           coupon = await Coupon.findOne({
+//               code: req.session.appliedCoupon,
+//               isActive: true,
+//               expiryDate: { $gte: new Date() },
+//               minOrderValue: { $lte: subtotal },
+//           });
+
+//           if (coupon) {
+//               const couponUsage = await CouponUsage.findOne({ user: userId, coupon: coupon._id });
+//               if (couponUsage) {
+//                   return res.status(400).json({
+//                       success: false,
+//                       error: "You have already used this coupon",
+//                   });
+//               }
+//               couponDiscount = Math.round(afterOfferSubtotal * (coupon.discountValue / 100));
+//           } else {
+//               req.session.appliedCoupon = null;
+//           }
+//       }
+
+//       console.log(`7.0 - Subtotal: ${subtotal}, Offer Discount: ${offerDiscount}, Coupon Discount: ${couponDiscount}, Shipping: ${shippingCost}`);
+//       const totalAmount = Math.max(0, (afterOfferSubtotal - couponDiscount) + shippingCost);
+//       console.log(`7.1 - Calculated totalAmount: ${totalAmount}`);
+//       console.log(`7.2 - Payment method: "${normalizedPaymentMethod}"`);
+//       console.log(`111Checking COD Restriction: Method=${normalizedPaymentMethod}, Total=${totalAmount}`);
+
+
+//       if (normalizedPaymentMethod === "cod" && totalAmount > 1000) {
+//           console.log(`8 - COD not allowed for order above Rs 1000: Total=${totalAmount}`);
+//           return res.status(400).json({
+//               success: false,
+//               error: "Cash on Delivery is not available for orders above Rs 1000",
+//           });
+//       }
+//       console.log(`222Checking COD Restriction: Method=${normalizedPaymentMethod}, Total=${totalAmount}`);
+
+//       const products = cart.items.map(item => ({
+//           product: item.product._id,
+//           name: item.product.name,
+//           price: item.product.price,
+//           quantity: item.quantity,
+//           image: item.product.images[0],
+//           productStatus: "Pending",
+//           appliedOffer: itemOffers.get(item.product._id.toString()) || { offer: null, discountAmount: 0 },
+//       }));
+
+//       const generateOrderID = () => Math.floor(100000 + Math.random() * 900000);
+
+//       const newOrder = new Order({
+//           user: userId,
+//           shippingAddress,
+//           paymentMethod: normalizedPaymentMethod, // Use normalized value
+//           paymentStatus: normalizedPaymentMethod === "cod" ? "Pending" : "Pending",
+//           products,
+//           totalAmount,
+//           originalAmount: subtotal + shippingCost,
+//           deliveryCharge: shippingCost,
+//           orderID: generateOrderID(),
+//           appliedCoupon: coupon ? { coupon: coupon._id, code: coupon.code, discountAmount: couponDiscount } : undefined,
+//           totalOfferDiscount: offerDiscount,
+//       });
+
+
+
+
+// // Wallet Payment Logic
+// if (normalizedPaymentMethod === "wallet") {
+//   let wallet = await Wallet.findOne({ user: userId });
+//   if (!wallet) {
+//       wallet = new Wallet({ user: userId, balance: 0 });
+//       await wallet.save();
+//   }
+
+//   console.log(`9 - Wallet balance check: Balance=${wallet.balance}, Required=${totalAmount}`);
+//   if (wallet.balance < totalAmount) {
+//       console.log(`10 - Insufficient wallet balance`);
+//       return res.status(400).json({
+//           success: false,
+//           error: "Insufficient wallet balance",
+//           requiredAmount: totalAmount,
+//           currentBalance: wallet.balance
+//       });
+//   }
+
+//   // Deduct from wallet
+//   wallet.balance -= totalAmount;
+//   wallet.transactions.push({
+//       type: "debit",
+//       amount: totalAmount,
+//       description: `Payment for order #${newOrder.orderID}`,
+//       orderId: newOrder._id,
+//       date: new Date()
+//   });
+//   await wallet.save();
+//   newOrder.paymentStatus = "Paid"; // Mark as paid immediately
+//   console.log(`11 - Wallet payment processed: New balance=${wallet.balance}`);
+// }
+
+
+//       if (normalizedPaymentMethod === "razorpay") {
+//           const amountInPaise = Math.round(totalAmount * 100);
+//           const shortOrderId = newOrder._id.toString().slice(-8);
+//           const shortTimestamp = Date.now().toString().slice(-6);
+//           const receipt = `ord_${shortOrderId}_${shortTimestamp}`;
+
+//           const options = {
+//               amount: amountInPaise,
+//               currency: "INR",
+//               receipt: receipt,
+//           };
+
+
+
+//           const razorpayOrder = await razorpay.orders.create(options);
+//           newOrder.transactionId = razorpayOrder.id;
+//           razorpayOrderId = razorpayOrder.id;
+//           console.log(`11 - Razorpay order created: ${razorpayOrder.id}`);
+//       }
+
+//       await newOrder.save();
+//       console.log(`12 - Order saved: ${newOrder._id}, TransactionId: ${newOrder.transactionId || "N/A"}`);
+
+//       if (coupon) await CouponUsage.create({ user: userId, coupon: coupon._id });
+
+//       await Promise.all(cart.items.map(async (item) => {
+//           await Product.findByIdAndUpdate(item.product._id, {
+//               $inc: { "variant.stock": -item.quantity },
+//           });
+//       }));
+
+//       await Cart.findOneAndDelete({ user: userId });
+//       req.session.appliedCoupon = null;
+
+//       res.json({
+//           success: true,
+//           message: "Order placed successfully",
+//           orderId: newOrder._id,
+//           totalAmount,
+//           razorpayOrderId: normalizedPaymentMethod === "razorpay" ? razorpayOrderId : undefined,
+//       });
+//   } catch (error) {
+//       console.error(`16 - placeOrder Error: ${error.message}`, error.stack);
+//       res.status(500).json({ success: false, error: error.message });
+//   }
+// };
 
 
 
@@ -1818,7 +2160,7 @@ exports.placeOrder = async (req, res) => {
       }
 
       const { addressId, paymentMethod } = req.body;
-      const normalizedPaymentMethod = paymentMethod.toLowerCase().trim(); // Define here
+      const normalizedPaymentMethod = paymentMethod.toLowerCase().trim();
       if (!addressId || !paymentMethod) {
           console.log(`5 - Missing fields: addressId=${addressId}, paymentMethod=${paymentMethod}`);
           return res.status(400).json({ success: false, error: "Missing required fields" });
@@ -1902,12 +2244,14 @@ exports.placeOrder = async (req, res) => {
           }
       }
 
-      console.log(`7.0 - Subtotal: ${subtotal}, Offer Discount: ${offerDiscount}, Coupon Discount: ${couponDiscount}, Shipping: ${shippingCost}`);
-      const totalAmount = Math.max(0, (afterOfferSubtotal - couponDiscount) + shippingCost);
+      const baseAmount = afterOfferSubtotal - couponDiscount; // Amount before GST and shipping
+      const gstAmount = Math.round(baseAmount * 0.12); // 12% GST
+      const totalAmount = Math.max(0, baseAmount + gstAmount + shippingCost); // Final total including GST
+
+      console.log(`7.0 - Subtotal: ${subtotal}, Offer Discount: ${offerDiscount}, Coupon Discount: ${couponDiscount}, GST: ${gstAmount}, Shipping: ${shippingCost}, Total: ${totalAmount}`);
       console.log(`7.1 - Calculated totalAmount: ${totalAmount}`);
       console.log(`7.2 - Payment method: "${normalizedPaymentMethod}"`);
       console.log(`111Checking COD Restriction: Method=${normalizedPaymentMethod}, Total=${totalAmount}`);
-
 
       if (normalizedPaymentMethod === "cod" && totalAmount > 1000) {
           console.log(`8 - COD not allowed for order above Rs 1000: Total=${totalAmount}`);
@@ -1933,54 +2277,51 @@ exports.placeOrder = async (req, res) => {
       const newOrder = new Order({
           user: userId,
           shippingAddress,
-          paymentMethod: normalizedPaymentMethod, // Use normalized value
+          paymentMethod: normalizedPaymentMethod,
           paymentStatus: normalizedPaymentMethod === "cod" ? "Pending" : "Pending",
           products,
           totalAmount,
-          originalAmount: subtotal + shippingCost,
-          deliveryCharge: shippingCost,
+          originalAmount: subtotal, // Before discounts, GST, and shipping
+          shippingCost, // Renamed from deliveryCharge to match schema
+          gstAmount, // Added GST field
           orderID: generateOrderID(),
           appliedCoupon: coupon ? { coupon: coupon._id, code: coupon.code, discountAmount: couponDiscount } : undefined,
           totalOfferDiscount: offerDiscount,
       });
 
+      // Wallet Payment Logic
+      if (normalizedPaymentMethod === "wallet") {
+          let wallet = await Wallet.findOne({ user: userId });
+          if (!wallet) {
+              wallet = new Wallet({ user: userId, balance: 0 });
+              await wallet.save();
+          }
 
+          console.log(`9 - Wallet balance check: Balance=${wallet.balance}, Required=${totalAmount}`);
+          if (wallet.balance < totalAmount) {
+              console.log(`10 - Insufficient wallet balance`);
+              return res.status(400).json({
+                  success: false,
+                  error: "Insufficient wallet balance",
+                  requiredAmount: totalAmount,
+                  currentBalance: wallet.balance
+              });
+          }
 
+          wallet.balance -= totalAmount;
+          wallet.transactions.push({
+              type: "debit",
+              amount: totalAmount,
+              description: `Payment for order #${newOrder.orderID}`,
+              orderId: newOrder._id,
+              date: new Date()
+          });
+          await wallet.save();
+          newOrder.paymentStatus = "Paid";
+          console.log(`11 - Wallet payment processed: New balance=${wallet.balance}`);
+      }
 
-// Wallet Payment Logic
-if (normalizedPaymentMethod === "wallet") {
-  let wallet = await Wallet.findOne({ user: userId });
-  if (!wallet) {
-      wallet = new Wallet({ user: userId, balance: 0 });
-      await wallet.save();
-  }
-
-  console.log(`9 - Wallet balance check: Balance=${wallet.balance}, Required=${totalAmount}`);
-  if (wallet.balance < totalAmount) {
-      console.log(`10 - Insufficient wallet balance`);
-      return res.status(400).json({
-          success: false,
-          error: "Insufficient wallet balance",
-          requiredAmount: totalAmount,
-          currentBalance: wallet.balance
-      });
-  }
-
-  // Deduct from wallet
-  wallet.balance -= totalAmount;
-  wallet.transactions.push({
-      type: "debit",
-      amount: totalAmount,
-      description: `Payment for order #${newOrder.orderID}`,
-      orderId: newOrder._id,
-      date: new Date()
-  });
-  await wallet.save();
-  newOrder.paymentStatus = "Paid"; // Mark as paid immediately
-  console.log(`11 - Wallet payment processed: New balance=${wallet.balance}`);
-}
-
-
+      let razorpayOrderId;
       if (normalizedPaymentMethod === "razorpay") {
           const amountInPaise = Math.round(totalAmount * 100);
           const shortOrderId = newOrder._id.toString().slice(-8);
@@ -1992,8 +2333,6 @@ if (normalizedPaymentMethod === "wallet") {
               currency: "INR",
               receipt: receipt,
           };
-
-
 
           const razorpayOrder = await razorpay.orders.create(options);
           newOrder.transactionId = razorpayOrder.id;
@@ -2020,6 +2359,7 @@ if (normalizedPaymentMethod === "wallet") {
           message: "Order placed successfully",
           orderId: newOrder._id,
           totalAmount,
+          gstAmount, // Added for client-side reference
           razorpayOrderId: normalizedPaymentMethod === "razorpay" ? razorpayOrderId : undefined,
       });
   } catch (error) {
@@ -2027,8 +2367,6 @@ if (normalizedPaymentMethod === "wallet") {
       res.status(500).json({ success: false, error: error.message });
   }
 };
-
-
 
 
 
@@ -2258,6 +2596,9 @@ if (normalizedPaymentMethod === "wallet") {
 
 
 // Instant Cancel Entire Order
+
+
+
 exports.instantCancelEntireOrder = async (req, res) => {
   try {
     const { orderId } = req.params;

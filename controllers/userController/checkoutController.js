@@ -433,6 +433,171 @@ const User =require('../../models/User')
 
 
 
+// before gst
+// exports.getCheckoutPage = async (req, res) => {
+//     try {
+//         if (!req.session.user) {
+//             return res.redirect("/user/login");
+//         }
+//         const userId = new mongoose.Types.ObjectId(req.session.user._id);
+//         console.log(`1 - User ID: ${userId}`);
+
+//         // Fetch the two latest addresses
+//         const latestAddresses = await Address.find({ user: userId })
+//             .sort({ createdAt: -1 }) // Newest first
+//             .limit(2)
+//             .lean();
+//         console.log(`2 - Latest Addresses: ${latestAddresses.length}`);
+
+//         // Fetch the default address
+//         const defaultAddress = await Address.findOne({ user: userId, isDefault: true }).lean();
+//         console.log(`3 - Default Address: ${defaultAddress ? defaultAddress._id : 'None'}`);
+
+//         // Combine, avoiding duplicates
+//         let addresses = [...latestAddresses];
+//         if (defaultAddress) {
+//             const isDefaultInLatest = latestAddresses.some(addr => addr._id.toString() === defaultAddress._id.toString());
+//             if (!isDefaultInLatest) {
+//                 addresses.push(defaultAddress);
+//             }
+//         }
+//         console.log(`4 - Final Addresses: ${addresses.length}`);
+
+//         const cart = await Cart.findOne({ user: userId }).populate("items.product");
+//         if (!cart || cart.items.length === 0) {
+//             return res.redirect('/user/cart');
+//         }
+
+//         const validItems = cart.items.filter(item => item.product.variant.stock >= item.quantity);
+//         if (validItems.length < cart.items.length) {
+//             cart.items = validItems;
+//             await cart.save();
+//             console.log(`5 - Removed out-of-stock items from cart. Updated items: ${cart.items.length}`);
+//             if (cart.items.length === 0) {
+//                 return res.redirect('/user/cart');
+//             }
+//         }
+
+//         console.log(`6 - Cart items: ${cart.items.length}`);
+
+//         let subtotal = 0;
+//         let offerDiscount = 0;
+//         for (const item of cart.items) {
+//             const originalPrice = item.product.price * item.quantity;
+//             subtotal += originalPrice;
+
+//             const offers = await Offer.find({
+//                 isActive: true,
+//                 expiryDate: { $gte: new Date() },
+//                 $or: [
+//                     { applicableTo: "product", productId: item.product._id },
+//                     { applicableTo: "category", categoryId: item.product.category }
+//                 ]
+//             });
+
+//             if (offers.length > 0) {
+//                 const bestOffer = offers.reduce((max, offer) => 
+//                     offer.discountValue > max.discountValue ? offer : max, offers[0]);
+//                 const itemDiscount = Math.round(originalPrice * (bestOffer.discountValue / 100));
+//                 offerDiscount += itemDiscount;
+//                 console.log(`7 - Offer applied to ${item.product.name}: ${bestOffer.discountValue}% off, Discount: ₹${itemDiscount}`);
+//             }
+//         }
+
+//         let afterOfferSubtotal = subtotal - offerDiscount;
+//         let shippingCost = subtotal > 0 ? 15 : 0;
+//         let couponDiscount = 0;
+//         let couponCode = req.query.coupon || req.session.appliedCoupon || '';
+//         let couponError = null;
+
+//         if (req.query.removeCoupon) {
+//             req.session.appliedCoupon = null;
+//             couponCode = '';
+//             console.log(`8 - Coupon removed`);
+//         }
+
+//         if (couponCode) {
+//             const coupon = await Coupon.findOne({
+//                 code: couponCode,
+//                 isActive: true,
+//                 expiryDate: { $gte: new Date() },
+//                 minOrderValue: { $lte: subtotal }
+//             });
+
+//             if (coupon) {
+//                 const couponUsage = await CouponUsage.findOne({ user: userId, coupon: coupon._id });
+//                 if (couponUsage) {
+//                     couponError = "You have already used this coupon";
+//                     console.log(`9 - Coupon ${couponCode} already used by user ${userId}`);
+//                 } else {
+//                     couponDiscount = Math.round(afterOfferSubtotal * (coupon.discountValue / 100));
+//                     if (!req.session.appliedCoupon) {
+//                         req.session.appliedCoupon = couponCode;
+//                     }
+//                     console.log(`10 - Coupon applied: ${couponCode}, Discount: ₹${couponDiscount} (${coupon.discountValue}%)`);
+//                 }
+//             } else if (!req.session.appliedCoupon) {
+//                 couponError = "Invalid or expired coupon";
+//                 console.log(`11 - Invalid coupon: ${couponCode}`);
+//             } else {
+//                 req.session.appliedCoupon = null;
+//                 console.log(`12 - Session coupon invalid, cleared`);
+//             }
+//         } else if (req.session.appliedCoupon) {
+//             const coupon = await Coupon.findOne({
+//                 code: req.session.appliedCoupon,
+//                 isActive: true,
+//                 expiryDate: { $gte: new Date() },
+//                 minOrderValue: { $lte: subtotal }
+//             });
+//             if (coupon) {
+//                 const couponUsage = await CouponUsage.findOne({ user: userId, coupon: coupon._id });
+//                 if (couponUsage) {
+//                     req.session.appliedCoupon = null;
+//                     couponError = "You have already used this coupon";
+//                     console.log(`13 - Session coupon ${req.session.appliedCoupon} already used, cleared`);
+//                 } else {
+//                     couponDiscount = Math.round(afterOfferSubtotal * (coupon.discountValue / 100));
+//                     couponCode = req.session.appliedCoupon;
+//                     console.log(`14 - Session coupon reapplied: ${couponCode}, Discount: ₹${couponDiscount}`);
+//                 }
+//             } else {
+//                 req.session.appliedCoupon = null;
+//                 console.log(`15 - Session coupon invalid, cleared`);
+//             }
+//         }
+
+//         const total = (afterOfferSubtotal - couponDiscount) + shippingCost;
+//         console.log(`16 - Totals: Subtotal=₹${subtotal}, After Offer Subtotal=₹${afterOfferSubtotal}, Offer Discount=₹${offerDiscount}, Coupon Discount=₹${couponDiscount}, Shipping=₹${shippingCost}, Total=₹${total}`);
+
+//         const availableCoupons = await Coupon.find({
+//             isActive: true,
+//             expiryDate: { $gte: new Date() }
+//         }).limit(3);
+//         console.log(`17 - Available coupons fetched: ${availableCoupons.length}`);
+
+//         res.render("user/checkout", {
+//             cart,
+//             user: req.session.user,
+//             addresses, // Now limited to 2 latest + default
+//             subtotal,
+//             shippingCost,
+//             offerDiscount,
+//             couponDiscount,
+//             total,
+//             couponCode,
+//             couponError,
+//             availableCoupons,
+//             appliedCoupon: req.session.appliedCoupon
+//         });
+//     } catch (error) {
+//         console.error(`18 - Error loading checkout page: ${error}`);
+//         res.status(500).send("Internal Server Error");
+//     }
+// };
+
+
+
 
 exports.getCheckoutPage = async (req, res) => {
     try {
@@ -567,23 +732,28 @@ exports.getCheckoutPage = async (req, res) => {
             }
         }
 
-        const total = (afterOfferSubtotal - couponDiscount) + shippingCost;
-        console.log(`16 - Totals: Subtotal=₹${subtotal}, After Offer Subtotal=₹${afterOfferSubtotal}, Offer Discount=₹${offerDiscount}, Coupon Discount=₹${couponDiscount}, Shipping=₹${shippingCost}, Total=₹${total}`);
+        const baseAmount = afterOfferSubtotal - couponDiscount; // Amount before GST and shipping
+        const gstAmount = Math.round(baseAmount * 0.12); // 12% GST
+        const total = baseAmount + gstAmount + shippingCost; // Final total including GST
+        console.log(`16 - Totals: Subtotal=₹${subtotal}, After Offer Subtotal=₹${afterOfferSubtotal}, Offer Discount=₹${offerDiscount}, Coupon Discount=₹${couponDiscount}, GST=₹${gstAmount}, Shipping=₹${shippingCost}, Total=₹${total}`);
 
         const availableCoupons = await Coupon.find({
             isActive: true,
             expiryDate: { $gte: new Date() }
-        }).limit(3);
+        })
+            .sort({ createdAt: -1 }) // Sort by creation date, newest first
+            .limit(3);
         console.log(`17 - Available coupons fetched: ${availableCoupons.length}`);
 
         res.render("user/checkout", {
             cart,
             user: req.session.user,
-            addresses, // Now limited to 2 latest + default
+            addresses,
             subtotal,
             shippingCost,
             offerDiscount,
             couponDiscount,
+            gstAmount, // Added GST amount
             total,
             couponCode,
             couponError,
@@ -595,6 +765,7 @@ exports.getCheckoutPage = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 
 

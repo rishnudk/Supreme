@@ -17,34 +17,7 @@
         <div class="row">
             <!-- Product Summary -->
             <div class="col-md-4">
-                <!-- <div class="product-summary">
-                    <h4 class="mb-3">Order Summary</h4>
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center mb-2">
-                            <img src="/api/placeholder/100/100" alt="Modern Sofa" class="img-fluid me-3" style="max-width: 80px; border-radius: 8px;">
-                            <div>
-                                <h6 class="mb-1">Modern Scandinavian Sofa</h6>
-                                <p class="text-muted mb-0">Qty: 1 | Color: Light Grey</p>
-                                <p class="fw-bold mb-0">₹1,299.00</p>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="price-breakdown">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal</span>
-                            <span>₹1,299.00</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Shipping</span>
-                            <span>₹50.00</span>
-                        </div>
-                        <div class="d-flex justify-content-between fw-bold">
-                            <span>Total</span>
-                            <span>₹1,349.00</span>
-                        </div>
-                    </div>
-                </div> -->
+               
 
 
 
@@ -91,6 +64,10 @@
                                 </div>
                             <% } %>
                             <div class="d-flex justify-content-between mb-2">
+                                <span>GST (12%)</span>
+                                <span>₹<%= gstAmount.toFixed(2) %></span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
                                 <span>Shipping</span>
                                 <span>₹<%= shippingCost.toFixed(2) %></span>
                             </div>
@@ -103,7 +80,6 @@
                         <p class="text-center text-muted">Your cart is empty.</p>
                     <% } %>
                 </div>
-
 
 
 

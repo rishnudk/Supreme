@@ -272,9 +272,7 @@
                     </ul>
                 </div>
                 
-                <!-- <button class="btn btn-custom">
-                    <i class="bi bi-sliders"></i> Advanced Filters
-                </button> -->
+               
             </div>
         </div>
         
@@ -309,7 +307,10 @@
             </div>
         
             <!-- Best Selling Sections in One Row -->
+
+
             <div class="row g-3 mb-4">
+                <!-- Best Selling Products -->
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body stat-card products">
@@ -317,6 +318,15 @@
                                 <div>
                                     <p class="stat-title">Best Selling Products (Top 10)</p>
                                     <h3 class="stat-value"><%= report.topProducts ? report.topProducts.length : 0 %> Products</h3>
+                                    <ul class="list-group mt-2">
+                                        <% if (report.topProducts && report.topProducts.length) { %>
+                                            <% report.topProducts.forEach((product, index) => { %>
+                                                <li class="list-group-item"><%= index + 1 %>. <%= product.name %> - <strong>(<%= product.sales %> sold)</strong></li>
+                                            <% }) %>
+                                        <% } else { %>
+                                            <li class="list-group-item text-muted">No products found</li>
+                                        <% } %>
+                                    </ul>
                                 </div>
                                 <div class="stat-icon products">
                                     <i class="bi bi-box-seam"></i>
@@ -325,7 +335,8 @@
                         </div>
                     </div>
                 </div>
-        
+            
+                <!-- Best Selling Categories -->
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body stat-card categories">
@@ -333,6 +344,15 @@
                                 <div>
                                     <p class="stat-title">Best Selling Categories (Top 10)</p>
                                     <h3 class="stat-value"><%= report.topCategories ? report.topCategories.length : 0 %> Categories</h3>
+                                    <ul class="list-group mt-2">
+                                        <% if (report.topCategories && report.topCategories.length) { %>
+                                            <% report.topCategories.forEach((category, index) => { %>
+                                                <li class="list-group-item"><%= index + 1 %>. <%= category.name %> - <strong>(<%= category.sales %> items sold)</strong></li>
+                                            <% }) %>
+                                        <% } else { %>
+                                            <li class="list-group-item text-muted">No categories found</li>
+                                        <% } %>
+                                    </ul>
                                 </div>
                                 <div class="stat-icon categories">
                                     <i class="bi bi-list-ul"></i>
@@ -341,7 +361,8 @@
                         </div>
                     </div>
                 </div>
-        
+            
+                <!-- Best Selling Brands -->
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body stat-card brands">
@@ -349,6 +370,18 @@
                                 <div>
                                     <p class="stat-title">Best Selling Brands (Top 10)</p>
                                     <h3 class="stat-value"><%= report.topBrands ? report.topBrands.length : 0 %> Brands</h3>
+                                    <ul class="list-group mt-2">
+                                        <% if (report.topBrands && report.topBrands.length) { %>
+                                            <% report.topBrands.forEach((brand, index) => { %>
+                                                <li class="list-group-item">
+                                                    <%= index + 1 %>. <%= brand.brand %> - <strong>(<%= brand.totalSold %> items sold)</strong>
+                                                </li>
+                                            <% }) %>
+                                        <% } else { %>
+                                            <li class="list-group-item text-muted">No brands found</li>
+                                        <% } %>
+                                    </ul>
+                                    
                                 </div>
                                 <div class="stat-icon brands">
                                     <i class="bi bi-bookmark-star"></i>
@@ -358,6 +391,10 @@
                     </div>
                 </div>
             </div>
+            
+
+
+
         </div>
 
 

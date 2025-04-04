@@ -23,6 +23,7 @@ const Address = require("../models/Address");
 const Product = require("../models/Product");
 const Cart = require("../models/Cart");
 const Order = require("../models/Order");
+const Offer = require("../models/Offer");
 const User = require("../models/User");
 
 // ===============================
@@ -149,9 +150,7 @@ router.post("/place-order", orderController.placeOrder)
 router.post("/pay-later",  orderController.payLater);
 router.get("/user-orders", orderController.getUserOrders);
 
-// router.put('/order/cancel/:orderId', orderController.cancelEntireOrder);
 
-// router.put('/order/cancel-product/:orderId/:productId', orderController.cancelSingleProduct)
 router.get("/details/:orderId", orderController.getOrderDetails);
 router.get("/order-details/:orderId",  orderController.getOrderDetails);
 
@@ -207,10 +206,38 @@ router.post('/transfer-referral',  userController.transferReferralBalance);
 
 
 
+// before gst
+// router.get("/cart/total",  async (req, res) => {
+//   try {
+//     console.log('adddddddding to cart check ?? ')
 
-router.get("/cart/total",  async (req, res) => {
+//       const userId = req.session.user?._id;
+//       console.log("cart/total - User ID:", userId);
+
+//       const cart = await Cart.findOne({ user: userId }).populate("items.product");
+//       console.log("cart/total - Cart:", cart);
+
+//       if (!cart || cart.items.length === 0) {
+//           console.log("cart/total - No cart or empty cart");
+//           return res.status(200).json({ total: 0 });
+//       }
+
+//       const subtotal = cart.totalPrice;
+//       const shippingCost = 15;
+//       const total = subtotal + shippingCost;
+
+//       console.log("cart/total - Subtotal:", subtotal, "Shipping:", shippingCost, "Total:", total);
+//       res.status(200).json({ total });
+//   } catch (error) {
+//       console.error("cart/total - Error:", error.message, error.stack);
+//       res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+
+router.get("/cart/total", async (req, res) => {
   try {
-    console.log('adddddddding to cart check ?? ')
+      console.log('adddddddding to cart check ?? ');
 
       const userId = req.session.user?._id;
       console.log("cart/total - User ID:", userId);
@@ -220,23 +247,57 @@ router.get("/cart/total",  async (req, res) => {
 
       if (!cart || cart.items.length === 0) {
           console.log("cart/total - No cart or empty cart");
-          return res.status(200).json({ total: 0 });
+          return res.status(200).json({ 
+              subtotal: 0, 
+              shippingCost: 0, 
+              offerDiscount: 0, 
+              gstAmount: 0, 
+              total: 0 
+          });
       }
 
-      const subtotal = cart.totalPrice;
-      const shippingCost = 15;
-      const total = subtotal + shippingCost;
+      let subtotal = 0;
+      let offerDiscount = 0;
 
-      console.log("cart/total - Subtotal:", subtotal, "Shipping:", shippingCost, "Total:", total);
-      res.status(200).json({ total });
+      for (const item of cart.items) {
+          const originalPrice = item.product.price * item.quantity;
+          subtotal += originalPrice;
+
+          const offers = await Offer.find({
+              isActive: true,
+              expiryDate: { $gte: new Date() },
+              $or: [
+                  { applicableTo: "product", productId: item.product._id },
+                  { applicableTo: "category", categoryId: item.product.category }
+              ]
+          });
+
+          if (offers.length > 0) {
+              const bestOffer = offers.reduce((max, offer) => 
+                  offer.discountValue > max.discountValue ? offer : max, offers[0]);
+              const itemDiscount = Math.round(originalPrice * (bestOffer.discountValue / 100));
+              offerDiscount += itemDiscount;
+          }
+      }
+
+      const shippingCost = cart.items.length > 0 ? 15 : 0;
+      const baseAmount = subtotal - offerDiscount; // Amount before GST and shipping
+      const gstAmount = Math.round(baseAmount * 0.12); // 12% GST
+      const total = baseAmount + gstAmount + shippingCost; // Final total including GST
+
+      console.log("cart/total - Subtotal:", subtotal, "Offer Discount:", offerDiscount, "GST:", gstAmount, "Shipping:", shippingCost, "Total:", total);
+      res.status(200).json({ 
+          subtotal, 
+          shippingCost, 
+          offerDiscount, 
+          gstAmount, 
+          total 
+      });
   } catch (error) {
       console.error("cart/total - Error:", error.message, error.stack);
       res.status(500).json({ message: "Server error" });
   }
 });
-
-
-
 
 
 
@@ -342,49 +403,79 @@ router.get("/order-failure/:orderId", async (req, res) => {
 
 
 
+// before gst
+// router.get('/invoice/:orderId',  async (req, res) => {
+//   try {
+//     const orderId = req.params.orderId;
+    
+//     // Fetch the order details
+//     const order = await Order.findById(orderId)
+//       .populate('user', 'email')
+//       .populate('products.product');
+    
+//     if (!order) {
+//       return res.status(404).render('error', { message: 'Order not found' });
+//     }
+    
+//     // Check if the order belongs to the logged-in user
+//     if (order.user._id.toString() !== req.session.user._id.toString()) {
+//       return res.status(403).render('error', { message: 'Unauthorized access' });
+//     }
+    
+//     // Get user details
+//     const user = await User.findById(req.session.user._id);
+    
+//     // Render the invoice template
+//     res.render('user/invoice', { 
+//       order: order, 
+//       user: user,
+//       title: `Invoice #${order.orderID}` 
+//     });
+    
+//   } catch (error) {
+//     console.error('Error generating invoice:', error);
+//     res.status(500).render('error', { message: 'Failed to generate invoice' });
+//   }
+// });
 
-// Add this route to your routes file (e.g., userRoutes.js)
-router.get('/invoice/:orderId',  async (req, res) => {
+
+
+
+router.get('/invoice/:orderId', async (req, res) => {
   try {
-    const orderId = req.params.orderId;
-    
-    // Fetch the order details
-    const order = await Order.findById(orderId)
-      .populate('user', 'email')
-      .populate('products.product');
-    
-    if (!order) {
-      return res.status(404).render('error', { message: 'Order not found' });
-    }
-    
-    // Check if the order belongs to the logged-in user
-    if (order.user._id.toString() !== req.session.user._id.toString()) {
-      return res.status(403).render('error', { message: 'Unauthorized access' });
-    }
-    
-    // Get user details
-    const user = await User.findById(req.session.user._id);
-    
-    // Render the invoice template
-    res.render('user/invoice', { 
-      order: order, 
-      user: user,
-      title: `Invoice #${order.orderID}` 
-    });
-    
+      const orderId = req.params.orderId;
+
+      // Fetch the order details
+      const order = await Order.findById(orderId)
+          .populate('user', 'email')
+          .populate('products.product')
+          .lean(); // Optional: Lean for performance
+
+      if (!order) {
+          return res.status(404).render('error', { message: 'Order not found' });
+      }
+
+      // Check if the order belongs to the logged-in user
+      if (order.user._id.toString() !== req.session.user._id.toString()) {
+          return res.status(403).render('error', { message: 'Unauthorized access' });
+      }
+
+      // Get user details
+      const user = await User.findById(req.session.user._id).lean();
+
+      // Render the invoice template
+      res.render('user/invoice', { 
+          order, 
+          user,
+          title: `Invoice #${order.orderID}` 
+      });
+
   } catch (error) {
-    console.error('Error generating invoice:', error);
-    res.status(500).render('error', { message: 'Failed to generate invoice' });
+      console.error('Error generating invoice:', error);
+      res.status(500).render('error', { message: 'Failed to generate invoice' });
   }
 });
 
-
-
-router.get('/test-error', (req, res, next) => {
-  const error = new Error('Test server error');
-  error.statusCode = 500;
-  throw error;
-});
 
 
 module.exports = router;

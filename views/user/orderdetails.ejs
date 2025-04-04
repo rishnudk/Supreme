@@ -548,44 +548,53 @@
             </div>
           </div>
         
+         
+
           <!-- Order Summary -->
-          <div class="order-summary">
-            <h5 class="info-title">Order Summary</h5>
-            <div class="summary-row">
-              <span>Original Amount</span>
-              <span>₹<%= order.originalAmount.toFixed(2) %></span>
-            </div>
-            <div class="summary-row">
-              <span>Total Offer Discount</span>
-              <span>-₹<%= order.totalOfferDiscount.toFixed(2) %></span>
-            </div>
-            <div class="summary-row">
-              <span>Coupon Discount</span>
-              <span>-₹<%= order.appliedCoupon.discountAmount.toFixed(2) %></span>
-            </div>
-            <div class="summary-row">
-              <span>Subtotal</span>
-              <span>₹<%= order.subtotal.toFixed(2) %></span>
-            </div>
-            <div class="summary-row">
-              <span>Shipping</span>
-              <span>₹<%= order.shippingCost.toFixed(2) %></span> <!-- Fixed from order.shipping -->
-            </div>
-            <div class="summary-row">
-              <span>Tax</span>
-              <span>₹<%= order.tax.toFixed(2) %></span>
-            </div>
-            <div class="summary-row summary-total">
-              <span>Total</span>
-              <span>₹<%= order.totalAmount.toFixed(2) %></span>
-            </div>
-            <% if (order.refundedAmount > 0) { %>
-            <div class="summary-row">
-              <span>Refunded</span>
-              <span>₹<%= order.refundedAmount.toFixed(2) %></span>
-            </div>
-            <% } %>
-          </div>
+<div class="order-summary">
+  <h5 class="info-title">Order Summary</h5>
+  <div class="summary-row">
+      <span>Original Amount</span>
+      <span>₹<%= order.originalAmount.toFixed(2) %></span>
+  </div>
+  <div class="summary-row">
+      <span>Total Offer Discount</span>
+      <span>-₹<%= order.totalOfferDiscount.toFixed(2) %></span>
+  </div>
+  <div class="summary-row">
+      <span>Coupon Discount</span>
+      <span>-₹<%= order.appliedCoupon.discountAmount.toFixed(2) %></span>
+  </div>
+  <div class="summary-row">
+      <span>Subtotal</span>
+      <span>₹<%= order.subtotal.toFixed(2) %></span>
+  </div>
+  <div class="summary-row">
+      <span>GST (12%)</span>
+      <span>₹<%= order.gstAmount.toFixed(2) %></span>
+  </div>
+  <div class="summary-row">
+      <span>Shipping</span>
+      <span>₹<%= order.shippingCost.toFixed(2) %></span> 
+  </div>
+  <div class="summary-row summary-total">
+      <span>Total</span>
+      <span>₹<%= order.totalAmount.toFixed(2) %></span>
+  </div>
+  <% if (order.refundedAmount > 0) { %>
+  <div class="summary-row">
+      <span>Refunded</span>
+      <span>₹<%= order.refundedAmount.toFixed(2) %></span>
+  </div>
+  <% } %>
+</div>
+
+
+
+
+
+
+
         </div>
 
         

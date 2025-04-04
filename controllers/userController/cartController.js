@@ -10,7 +10,78 @@ const User =require('../../models/User')
 
 
 
-//before offer
+//before gst
+
+
+
+// exports.getCartPage = async (req, res) => {
+//     try {
+//         if (!req.session.user) {
+//             console.log(`1 - User not authenticated`);
+//             return res.redirect("/user/login");
+//         }
+
+//         const userId = req.session.user._id;
+//         console.log(`2 - Fetching cart for User ID: ${userId}`);
+
+//         const cart = await Cart.findOne({ user: userId }).populate("items.product");
+//         let subtotal = 0;
+//         let shippingCost = 15;
+//         let offerDiscount = 0;
+
+
+
+//         if (cart && cart.items.length > 0) {
+//             cart.items = await Promise.all(cart.items.map(async (item) => {
+//                 // Always set originalPrice
+//                 item.originalPrice = item.product.price * item.quantity;
+//                 item.discountedPrice = item.originalPrice; // Default to original if no offer
+//                 item.discount = 0; // Default discount
+//                 item.offerPercentage = 0; // Default percentage
+
+//                 const offers = await Offer.find({
+//                     isActive: true,
+//                     expiryDate: { $gte: new Date() },
+//                     $or: [
+//                         { applicableTo: "product", productId: item.product._id },
+//                         { applicableTo: "category", categoryId: item.product.category }
+//                     ]
+//                 });
+
+//                 if (offers.length > 0) {
+//                     const bestOffer = offers.reduce((max, offer) => 
+//                         offer.discountValue > max.discountValue ? offer : max, offers[0]);
+//                     item.discount = Math.round(item.originalPrice * (bestOffer.discountValue / 100));
+//                     item.discountedPrice = item.originalPrice - item.discount;
+//                     item.offerPercentage = bestOffer.discountValue;
+//                     offerDiscount += item.discount;
+//                     console.log(`3 - Offer applied to ${item.product.name}: ${bestOffer.discountValue}% off, Discount: ₹${item.discount}`);
+//                 }
+//                 return item;
+//             }));
+//             subtotal = cart.items.reduce((sum, item) => sum + item.originalPrice, 0);
+//         } else {
+//             shippingCost = 0;
+//             console.log(`4 - Cart is empty, no shipping cost`);
+//         }
+
+//         const total = subtotal - offerDiscount + shippingCost;
+//         console.log(`5 - Totals: Subtotal=₹${subtotal}, Offer Discount=₹${offerDiscount}, Shipping=₹${shippingCost}, Total=₹${total}`);
+
+//         res.render("user/cart", { 
+//             cart, 
+//             user: req.session.user, 
+//             subtotal, 
+//             shippingCost, 
+//             offerDiscount, 
+//             total 
+//         });
+//     } catch (error) {
+//         console.error(`6 - Error loading cart page: ${error.message}`, error.stack);
+//         res.status(500).send("Internal Server Error");
+//     }
+// };
+
 
 
 
@@ -28,8 +99,7 @@ exports.getCartPage = async (req, res) => {
         let subtotal = 0;
         let shippingCost = 15;
         let offerDiscount = 0;
-
-
+        let gstAmount = 0; // New variable for GST
 
         if (cart && cart.items.length > 0) {
             cart.items = await Promise.all(cart.items.map(async (item) => {
@@ -60,20 +130,25 @@ exports.getCartPage = async (req, res) => {
                 return item;
             }));
             subtotal = cart.items.reduce((sum, item) => sum + item.originalPrice, 0);
+            
+            // Calculate GST (12%) on subtotal after discount
+            const baseAmount = subtotal - offerDiscount;
+            gstAmount = Math.round(baseAmount * 0.12);
         } else {
             shippingCost = 0;
             console.log(`4 - Cart is empty, no shipping cost`);
         }
 
-        const total = subtotal - offerDiscount + shippingCost;
-        console.log(`5 - Totals: Subtotal=₹${subtotal}, Offer Discount=₹${offerDiscount}, Shipping=₹${shippingCost}, Total=₹${total}`);
+        const total = subtotal - offerDiscount + gstAmount + shippingCost;
+        console.log(`5 - Totals: Subtotal=₹${subtotal}, Offer Discount=₹${offerDiscount}, GST=₹${gstAmount}, Shipping=₹${shippingCost}, Total=₹${total}`);
 
         res.render("user/cart", { 
             cart, 
             user: req.session.user, 
             subtotal, 
             shippingCost, 
-            offerDiscount, 
+            offerDiscount,
+            gstAmount, // Pass GST amount to the view
             total 
         });
     } catch (error) {
@@ -81,7 +156,6 @@ exports.getCartPage = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
-
 
 
 // og for the product
@@ -582,6 +656,112 @@ exports.removeFromCart = async (req, res) => {
 };
 
 
+
+
+
+// bofore gst
+// exports.updateCartQuantity = async (req, res) => {
+//     try {
+//         if (!req.session.user) {
+//             return res.status(401).json({ success: false, message: "Please login" });
+//         }
+
+//         const userId = req.session.user._id;
+//         const { productId, action } = req.body;
+
+//         const cart = await Cart.findOne({ user: userId }).populate("items.product");
+//         if (!cart) {
+//             return res.status(404).json({ success: false, message: "Cart not found" });
+//         }
+
+//         const itemIndex = cart.items.findIndex(item => item.product._id.toString() === productId);
+//         if (itemIndex === -1) {
+//             return res.status(404).json({ success: false, message: "Item not found in cart" });
+//         }
+
+//         const item = cart.items[itemIndex];
+//         const productPrice = item.product.price;
+
+//         if (action === "increase") {
+//             const newQuantity = item.quantity + 1;
+//             if (newQuantity > 3) {
+//                 return res.status(400).json({
+//                     success: false,
+//                     message: "Maximum quantity (3) reached"
+//                 });
+//             }
+//             if (item.product.variant.stock < newQuantity) {
+//                 console.log(`Stock insufficient for ${item.product.name}: Required ${newQuantity}, Available ${item.product.variant.stock}`);
+//                 return res.status(400).json({
+//                     success: false,
+//                     message: `Insufficient stock for ${item.product.name}. Only ${item.product.variant.stock} left.`
+//                 });
+//             }
+//             item.quantity = newQuantity;
+//         } else if (action === "decrease" && item.quantity > 1) {
+//             item.quantity -= 1;
+//         } else {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Minimum quantity (1) reached"
+//             });
+//         }
+//         await cart.save();
+
+//         // Recalculate totals with offer discount
+//         let subtotal = 0;
+//         let offerDiscount = 0;
+//         let discountedPrice = productPrice * item.quantity; // Default for the updated item
+//         let offerPercentage = 0;
+
+//         for (const cartItem of cart.items) {
+//             const originalPrice = cartItem.product.price * cartItem.quantity;
+//             subtotal += originalPrice;
+
+//             const offers = await Offer.find({
+//                 isActive: true,
+//                 expiryDate: { $gte: new Date() },
+//                 $or: [
+//                     { applicableTo: "product", productId: cartItem.product._id },
+//                     { applicableTo: "category", categoryId: cartItem.product.category }
+//                 ]
+//             });
+
+//             if (offers.length > 0) {
+//                 const bestOffer = offers.reduce((max, offer) => 
+//                     offer.discountValue > max.discountValue ? offer : max, offers[0]);
+//                 const itemDiscount = Math.round(originalPrice * (bestOffer.discountValue / 100));
+//                 offerDiscount += itemDiscount;
+//                 // If this is the updated item, calculate its discounted price
+//                 if (cartItem.product._id.toString() === productId) {
+//                     discountedPrice = originalPrice - itemDiscount;
+//                     offerPercentage = bestOffer.discountValue;
+//                 }
+//             }
+//         }
+
+//         const shippingCost = cart.items.length > 0 ? 15 : 0;
+//         const total = subtotal - offerDiscount + shippingCost;
+
+//         res.json({
+//             success: true,
+//             quantity: item.quantity,
+//             productPrice,
+//             discountedPrice, // Add this
+//             offerPercentage, // Add this
+//             subtotal,
+//             shippingCost,
+//             offerDiscount,
+//             total
+//         });
+//     } catch (error) {
+//         console.error("Error updating quantity:", error.stack);
+//         res.status(500).json({ success: false, message: "Internal Server Error" });
+//     }
+// };
+
+
+
 exports.updateCartQuantity = async (req, res) => {
     try {
         if (!req.session.user) {
@@ -630,7 +810,7 @@ exports.updateCartQuantity = async (req, res) => {
         }
         await cart.save();
 
-        // Recalculate totals with offer discount
+        // Recalculate totals with offer discount and GST
         let subtotal = 0;
         let offerDiscount = 0;
         let discountedPrice = productPrice * item.quantity; // Default for the updated item
@@ -663,17 +843,20 @@ exports.updateCartQuantity = async (req, res) => {
         }
 
         const shippingCost = cart.items.length > 0 ? 15 : 0;
-        const total = subtotal - offerDiscount + shippingCost;
+        const baseAmount = subtotal - offerDiscount; // Amount before GST and shipping
+        const gstAmount = Math.round(baseAmount * 0.12); // 12% GST
+        const total = baseAmount + gstAmount + shippingCost; // Final total including GST
 
         res.json({
             success: true,
             quantity: item.quantity,
             productPrice,
-            discountedPrice, // Add this
-            offerPercentage, // Add this
+            discountedPrice,
+            offerPercentage,
             subtotal,
             shippingCost,
             offerDiscount,
+            gstAmount, // Added GST amount
             total
         });
     } catch (error) {
