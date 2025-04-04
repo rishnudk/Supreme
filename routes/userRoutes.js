@@ -25,6 +25,8 @@ const Cart = require("../models/Cart");
 const Order = require("../models/Order");
 const Offer = require("../models/Offer");
 const User = require("../models/User");
+const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcrypt");
 
 // ===============================
 // 🔹 Authentication Routes

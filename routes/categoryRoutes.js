@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const categoryController = require("../controllers/adminController/categoryController");
 const { adminAuth } = require("../middlewares/authMiddleware");
+const bcrypt = require("bcrypt");
+
 
 
 router.get("/", adminAuth, categoryController.getCategories); 

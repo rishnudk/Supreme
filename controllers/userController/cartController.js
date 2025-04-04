@@ -7,6 +7,8 @@ const Wishlist = require("../../models/Wishlist");
 const mongoose = require('mongoose')
 const User =require('../../models/User')
 const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
+
 
 
 

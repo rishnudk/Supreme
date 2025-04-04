@@ -3,6 +3,8 @@ const Product = require('../../models/Product')
 const Coupon = require('../../models/Coupon')
 const Offer = require('../../models/Offer')
 const mongoose = require('mongoose')
+const bcryptjs = require("bcryptjs");
+
 
 
 

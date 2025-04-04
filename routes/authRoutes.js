@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcrypt");
+
 
 // Google OAuth Login Route
 router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
