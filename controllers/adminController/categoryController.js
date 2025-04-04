@@ -2,10 +2,6 @@ const Category = require('../../models/Category')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs'); 
 
-
-
-
-
 exports.addCategory = async (req, res) => {
     try {
         const { name, description } = req.body;
@@ -22,9 +18,6 @@ exports.addCategory = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
-
-
-
 
 
 exports.getCategories = async (req, res) => {
