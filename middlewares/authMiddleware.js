@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const bcrypt = require("bcrypt");
+
 
 const authMiddleware = async (req, res, next) => {
     try {

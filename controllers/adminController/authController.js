@@ -1,5 +1,5 @@
 const User = require("../../models/User");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const passport = require("passport");
 const Admin = require('../../models/Admin')
 const Order = require('../../models/Order')
