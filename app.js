@@ -11,6 +11,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const User = require("./models/User"); 
+const bcrypt = require('bcryptjs'); 
+
 
 
 dotenv.config();

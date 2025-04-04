@@ -6,8 +6,8 @@ const Offer = require("../../models/Offer");
 const Wishlist = require("../../models/Wishlist");
 const mongoose = require('mongoose')
 const User =require('../../models/User')
-const bcrypt = require("bcrypt");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
+
 
 
 

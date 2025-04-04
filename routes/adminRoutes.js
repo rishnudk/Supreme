@@ -13,8 +13,7 @@ const productRoutes = require("./productRoutes")
 const { adminAuth } = require("../middlewares/authMiddleware");
 const PDFDocument = require('pdfkit');
 const ExcelJS = require('exceljs');
-const bcrypt = require("bcrypt");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
 
 
 

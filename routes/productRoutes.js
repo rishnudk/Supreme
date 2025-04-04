@@ -6,8 +6,7 @@ const adminProductController = require("../controllers/adminController/productCo
 const userProductController = require("../controllers/userController/productController");
 const { upload } = require("../config/cloudinaryConfig");
 const { adminAuth } = require("../middlewares/authMiddleware");
-const bcrypt = require("bcrypt");
-
+const bcrypt = require('bcryptjs'); 
 
 
 

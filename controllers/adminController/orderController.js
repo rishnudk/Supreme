@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const User =require('../../models/User')
 const Order =require('../../models/Order')
 const Wallet = require('../../models/Wallet')
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
 
 
 

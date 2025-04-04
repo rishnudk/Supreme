@@ -1,8 +1,7 @@
 const User =require('../../models/User')
 const Order =require('../../models/Order')
 const Wallet = require('../../models/Wallet')
-const bcrypt = require("bcrypt");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
 
 
 

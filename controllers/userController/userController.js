@@ -7,8 +7,8 @@ const Coupon = require('../../models/Coupon');
 const Address = require("../../models/Address")
 const User =require('../../models/User')
 const Wallet =require('../../models/Wallet')
-const bcrypt = require('bcrypt');
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
+
 
 const mongoose = require("mongoose");
 

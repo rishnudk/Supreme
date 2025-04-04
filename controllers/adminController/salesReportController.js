@@ -1,7 +1,8 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
+
 
 
 const Cart = require("../../models/Cart");

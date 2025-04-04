@@ -5,7 +5,9 @@ const Cart = require("../../models/Cart");
 const Coupon = require("../../models/Coupon");
 const Offer = require("../../models/Offer");
 const CouponUsage = require("../../models/CouponUsage");
-const bcryptjs = require("bcryptjs");
+
+const bcrypt = require('bcryptjs'); 
+
 
 
 

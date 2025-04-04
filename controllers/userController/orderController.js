@@ -9,8 +9,8 @@ const Coupon = require("../../models/Coupon");
 const Offer = require("../../models/Offer");
 const Wallet = require("../../models/Wallet");
 const Razorpay = require("razorpay");
-const bcrypt = require("bcrypt");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
+
 
 
 

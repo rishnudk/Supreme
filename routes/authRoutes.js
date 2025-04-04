@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require('bcryptjs'); 
 const passport = require("passport");
-const bcryptjs = require("bcryptjs");
-const bcrypt = require("bcrypt");
 
 
 // Google OAuth Login Route

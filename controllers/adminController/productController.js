@@ -5,7 +5,7 @@ const path = require("path");
 const sharp = require("sharp");
 const fs = require("fs");
 const Category = require("../../models/Category");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
 
 
 

@@ -1,6 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
 
 // Import Models
 const Admin = require("../models/Admin");

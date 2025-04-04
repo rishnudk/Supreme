@@ -1,7 +1,6 @@
 const Category = require('../../models/Category')
 const mongoose = require('mongoose')
-const bcrypt = require("bcrypt");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
 
 
 

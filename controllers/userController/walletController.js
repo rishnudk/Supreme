@@ -1,6 +1,6 @@
 const Wallet = require('../../models/Wallet');
 const User = require('../../models/User');
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
 
 
 

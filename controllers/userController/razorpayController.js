@@ -4,8 +4,9 @@ const Order = require("../../models/Order");
 const Address = require("../../models/Address")
 const Cart = require("../../models/Cart")
 const User =require('../../models/User')
-const bcrypt = require('bcrypt');
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
+
+
 
 const mongoose = require("mongoose");
 const Razorpay = require("razorpay");

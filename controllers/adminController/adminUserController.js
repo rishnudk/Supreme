@@ -1,7 +1,9 @@
 const User = require("../../models/User");
-const bcrypt = require("bcrypt");
-const bcryptjs = require("bcryptjs");
+
+
 const mongoose = require("mongoose");
+const bcrypt = require('bcryptjs'); 
+
 
 
 

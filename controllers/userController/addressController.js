@@ -3,8 +3,8 @@ const Category = require("../../models/Category");
 const Product = require("../../models/Product");
 const mongoose = require('mongoose')
 const User =require('../../models/User')
-const bcrypt = require("bcrypt");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require('bcryptjs'); 
+
 
 
 
