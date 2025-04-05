@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const WishlistSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // User who added the product
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true }, 
     product: { 
         type: Schema.Types.ObjectId, 
         ref: "Product", 
         required: true 
-    }, // Referencing the Product model
-    addedAt: { type: Date, default: Date.now }, // Timestamp for when the product was added
+    }, 
+    addedAt: { type: Date, default: Date.now }, 
 });
 
 module.exports = mongoose.model("Wishlist", WishlistSchema);

@@ -49,16 +49,16 @@ exports.getSignupPage = (req, res) => {
 
 exports.renderLogin = (req, res) => {
   if (req.session.user) {
-      return res.redirect("/user/shop"); // Redirect if logged in
+      return res.redirect("/user/shop"); 
   }
-  const message = req.query.message || ""; // Get message from query parameter
+  const message = req.query.message || ""; 
   console.log("🔍 Rendering login with message:", message);
   res.render("user/userLogin", { message });
 };
 
 exports.renderSignup = (req, res) => {
     if (req.session.user) {
-        return res.redirect("/user/shop"); // Redirect if logged in
+        return res.redirect("/user/shop"); 
     }
     res.render("user/signup", { title: "User Signup", });
 };
@@ -133,7 +133,6 @@ exports.signup = async (req, res) => {
 
 
 
-//og 
 exports.login = async (req, res) => {
   try {
     console.log(req.body);

@@ -9,7 +9,7 @@ const Order = require('../../models/Order')
 
 exports.renderAdminLogin = (req, res) => {
   if (req.session.admin) {
-      return res.redirect("/admin/salesReport"); // Redirect logged-in admins
+      return res.redirect("/admin/salesReport"); 
   }
   res.render("admin/adminLogin", { title: "Admin Login" });
 };
@@ -149,7 +149,7 @@ exports.dashboard = async (req, res) => {
                         totalCustomers: { $addToSet: "$userId" },
                         productDetails: {
                             $push: {
-                                name: "$orderedItems.product", // You'll need a lookup for actual names
+                                name: "$orderedItems.product", 
                                 quantity: "$orderedItems.quantity"
                             }
                         }
@@ -277,7 +277,7 @@ exports.dashboard = async (req, res) => {
             customers: item.totalCustomers,
             avgOrderValue: item.avgOrderValue.toFixed(2),
             products: item.products.map(p => ({
-                name: p.name, // Note: this is product ID unless you add a lookup
+                name: p.name, 
                 quantity: p.quantity
             }))
         }));
@@ -297,7 +297,7 @@ exports.dashboard = async (req, res) => {
             totalPages,
             periodForPage: period,
             limit,
-            salesData // Added sales data for the table
+            salesData 
         });
 
     } catch (error) {

@@ -28,21 +28,19 @@ exports.getCategories = async (req, res) => {
     page = parseInt(page);
     limit = parseInt(limit);
 
-    // Search logic (case-insensitive search for category name)
     const query = search ? { name: { $regex: search, $options: "i" } } : {};
 
-    // Count total number of categories
     const total = await Category.countDocuments(query);
 
-    // Fetch paginated categories (descending order)
+   
+
     const categories = await Category.find(query)
       .sort({ createdAt: -1 }) 
       .skip((page - 1) * limit)
       .limit(limit);
-
+      
     console.log("Categories fetched:", categories);
 
-    // ✅ Render EJS file and pass pagination data
     res.render("admin/categoryManagement", {
       categories,   
       page,         
@@ -63,12 +61,10 @@ module.exports.getCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Validate MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid category ID" });
     }
 
-    // Find category by ID
     const category = await Category.findById(id);
 
     if (!category) {
@@ -95,11 +91,7 @@ module.exports.updateCategory = async (req, res) => {
     try {
       const { id } = req.params;
       const { name, description, status } = req.body;
-    //   console.log("Category ID received:", id);
-    //   console.log("Request body received:", req.body);
-
-    //  console.log(name, description, status);
-     
+    
          
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({ message: "Invalid category ID" });
@@ -131,41 +123,3 @@ module.exports.updateCategory = async (req, res) => {
 
 
 
-exports.deleteCategory = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const category = await Category.findById(id);
-        if (!category || category.isDeleted) {
-            return res.status(404).json({ message: 'Category not found' });
-        }
-
-        category.isDeleted = true;
-        await category.save();
-
-        res.status(200).json({ message: 'Category deleted (soft delete)', category });
-
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
-    }
-};
-
-
-exports.restoreCategory = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const category = await Category.findById(id);
-        if (!category || !category.isDeleted) {
-            return res.status(404).json({ message: 'Category not found or already active' });
-        }
-
-        category.isDeleted = false;
-        await category.save();
-
-        res.status(200).json({ message: 'Category restored successfully', category });
-
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
-    }
-};

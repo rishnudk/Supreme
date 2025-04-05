@@ -5,7 +5,7 @@ const VariantSchema = new Schema({
     product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
     color: { type: String, required: true },
     stock: { type: Number, required: true, min: 0 },
-    images: [{ type: String }], // Variant-specific images, optional
+    images: [{ type: String }], 
     createdAt: { type: Date, default: Date.now }
 });
 

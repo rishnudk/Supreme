@@ -1,6 +1,5 @@
 // middleware/errorHandler.js
 const errorHandler = (err, req, res, next) => {
-    // Log the error for debugging
     console.error('Error occurred:', {
         message: err.message,
         stack: err.stack,
@@ -9,7 +8,6 @@ const errorHandler = (err, req, res, next) => {
         user: req.session.user ? req.session.user._id : 'Unauthenticated'
     });
 
-    // Determine the status code (default to 500 if not set)
     const statusCode = err.statusCode || 500;
 
     // Handle 404 specifically

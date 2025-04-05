@@ -6,31 +6,6 @@ const bcrypt = require('bcryptjs');
 
 
 
-// exports.getCouponManagePage = async (req, res) => {
-//     try {
-//         const coupons = await Coupon.find()
-//             .sort({ expiryDate: -1 })
-//             .lean();
-//         console.log('Coupons fetched:', coupons.length); // Debug: Check if data is fetched
-//         res.render('admin/couponManage', {
-//             title: 'Coupon Management',
-//             coupons: coupons.map((coupon, index) => ({
-//                 id: coupon._id.toString(),
-//                 code: coupon.code,
-//                 discount: `${coupon.discountValue}%`,
-//                 status: coupon.isActive ? 'active' : 'inactive',
-//                 index: index + 1
-//             }))
-//         });
-//     } catch (error) {
-//         console.error('Error in getCouponManagePage:', error);
-//         res.render('admin/couponManage', {
-//             title: 'Coupon Management',
-//             coupons: [],
-//             error: 'Failed to load coupons'
-//         });
-//     }
-// };
 
 
 
@@ -38,24 +13,20 @@ const bcrypt = require('bcryptjs');
 
 exports.getCouponManagePage = async (req, res) => {
     try {
-        // Get page number from query params, default to 1
         const page = parseInt(req.query.page) || 1;
-        const limit = 3; // Number of coupons per page
+        const limit = 3; 
         const skip = (page - 1) * limit;
 
-        // Get total count of coupons
         const totalCoupons = await Coupon.countDocuments();
 
-        // Fetch coupons with pagination, sorted by createdAt descending (newest first)
         const coupons = await Coupon.find()
-            .sort({ createdAt: -1 }) // Changed from expiryDate to createdAt
+            .sort({ createdAt: -1 }) 
             .skip(skip)
             .limit(limit)
             .lean();
 
         console.log('Coupons fetched:', coupons.length);
 
-        // Calculate pagination details
         const totalPages = Math.ceil(totalCoupons / limit);
 
         res.render('admin/couponManage', {
@@ -65,7 +36,7 @@ exports.getCouponManagePage = async (req, res) => {
                 code: coupon.code,
                 discount: `${coupon.discountValue}%`,
                 status: coupon.isActive ? 'active' : 'inactive',
-                index: skip + index + 1 // Adjust index based on page
+                index: skip + index + 1 
             })),
             pagination: {
                 currentPage: page,
@@ -96,20 +67,20 @@ exports.getCouponManagePage = async (req, res) => {
 
 exports.addCoupon = async (req, res) => {
     try {
-        console.log('Add coupon request body:', req.body); // Debug: Check incoming data
+        console.log('Add coupon request body:', req.body); 
         const { code, discountValue, minOrderValue, expiryDate, isActive } = req.body;
 
         const newCoupon = new Coupon({
             code: code.toUpperCase(),
-            discountType: 'percentage', // Default value since field is removed from modal
+            discountType: 'percentage', 
             discountValue: Number(discountValue),
             minOrderValue: Number(minOrderValue) || 0,
             expiryDate: new Date(expiryDate),
-            isActive: isActive === 'true' // Convert string to boolean
+            isActive: isActive === 'true' 
         });
 
         await newCoupon.save();
-        console.log('Coupon saved:', newCoupon); // Debug: Confirm save
+        console.log('Coupon saved:', newCoupon); 
 
         res.json({
             success: true,
@@ -117,7 +88,7 @@ exports.addCoupon = async (req, res) => {
             coupon: {
                 id: newCoupon._id.toString(),
                 code: newCoupon.code,
-                discount: `${newCoupon.discountValue}%`, // Assuming percentage
+                discount: `${newCoupon.discountValue}%`, 
                 status: newCoupon.isActive ? 'active' : 'inactive'
             }
         });
@@ -134,7 +105,7 @@ exports.addCoupon = async (req, res) => {
 
 exports.updateCoupon = async (req, res) => {
     try {
-        console.log('Update coupon request body:', req.body); // Debug: Check incoming data
+        console.log('Update coupon request body:', req.body); 
         const { id } = req.params;
         const { code, discountValue, minOrderValue, usageLimit, expiryDate, isActive } = req.body;
 
@@ -142,14 +113,14 @@ exports.updateCoupon = async (req, res) => {
             id,
             {
                 code: code.toUpperCase(),
-                discountType: 'percentage', // Fixed as per your modal
+                discountType: 'percentage', 
                 discountValue: Number(discountValue),
                 minOrderValue: Number(minOrderValue) || 0,
                 usageLimit: Number(usageLimit) || 1,
                 expiryDate: new Date(expiryDate),
                 isActive: isActive === 'true'
             },
-            { new: true, runValidators: true } // Return updated doc and validate
+            { new: true, runValidators: true } 
         );
 
         if (!updatedCoupon) {
@@ -159,7 +130,7 @@ exports.updateCoupon = async (req, res) => {
             });
         }
 
-        console.log('Coupon updated:', updatedCoupon); // Debug: Confirm update
+        console.log('Coupon updated:', updatedCoupon); 
         res.json({
             success: true,
             message: 'Coupon updated successfully',
@@ -194,7 +165,7 @@ exports.getCouponById = async (req, res) => {
 
 exports.deleteCoupon = async (req, res) => {
     try {
-        console.log('Delete coupon request for ID:', req.params.id); // Debug: Check ID
+        console.log('Delete coupon request for ID:', req.params.id); 
         const { id } = req.params;
 
         const deletedCoupon = await Coupon.findByIdAndDelete(id);
@@ -206,7 +177,7 @@ exports.deleteCoupon = async (req, res) => {
             });
         }
 
-        console.log('Coupon deleted:', deletedCoupon); // Debug: Confirm deletion
+        console.log('Coupon deleted:', deletedCoupon); 
         res.json({
             success: true,
             message: 'Coupon deleted successfully'

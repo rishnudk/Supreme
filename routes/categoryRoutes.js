@@ -10,8 +10,6 @@ router.get("/", adminAuth, categoryController.getCategories);
 router.post("/add",adminAuth, categoryController.addCategory);
 router.get("/:id", adminAuth, categoryController.getCategory);
 router.put("/:id", adminAuth, categoryController.updateCategory);
-router.delete("/:id",adminAuth, categoryController.deleteCategory);
-router.patch("/:id/restore", adminAuth,categoryController.restoreCategory);
 
 
 

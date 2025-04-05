@@ -107,111 +107,6 @@ exports.getCart = async (req, res) => {
 
 
 
-//before offer
-
-// exports.getProductById = async (req, res) => {
-//     try {
-//         const product = await Product.findById(req.params.id).populate("category");
-
-//         if (!product) {
-//             console.log("Product not found for ID:", req.params.id);
-//             return res.status(404).send("Product not found");
-//         }
-
-//         // Fetch related products only if category exists
-//         let relatedProducts = [];
-//         if (product.category && product.category._id) {
-//             relatedProducts = await Product.find({
-//                 category: product.category._id,
-//                 _id: { $ne: product._id }, 
-//                 status: "Active"
-//             }).limit(4);
-//         }
-
-//         const user = req.session.user || null;
-
-//         // 🛠 Debugging Log
-//         console.log("Product:", product);
-//         console.log("Related Products:", relatedProducts);
-
-//         res.render("user/product", {
-//             product: product,
-//             relatedProducts: relatedProducts, 
-//             user: user
-//         });
-//     } catch (error) {
-//         console.error("Error in getProductById:", error);
-//         res.status(500).send("Server Error");
-//     }
-// };
-
-
-
-// exports.getProductById = async (req, res,next) => {
-//     try {
-//       const product = await Product.findById(req.params.id).populate("category");
-  
-//       if (!product) {
-//         console.log("Product not found for ID:", req.params.id);
-//         return res.status(404).send("Product not found");
-//       }
-  
-//       // Fetch active offers for this product
-//       const currentDate = new Date();
-//       const activeOffers = await Offer.find({
-//         isActive: true,
-//         expiryDate: { $gte: currentDate },
-//         $or: [
-//           { applicableTo: "product", productId: product._id },
-//           { applicableTo: "category", categoryId: product.category?._id }
-//         ]
-//       });
-  
-//       // Fetch related products with their offers
-//       let relatedProducts = [];
-//       if (product.category && product.category._id) {
-//         const relatedProductsFetched = await Product.find({
-//           category: product.category._id,
-//           _id: { $ne: product._id },
-//           status: "Active"
-//         }).limit(4);
-  
-//         // Add offers to related products
-//         relatedProducts = relatedProductsFetched.map(relatedProduct => {
-//           const relatedOffers = activeOffers.filter(offer => 
-//             (offer.applicableTo === "product" && offer.productId?.toString() === relatedProduct._id.toString()) ||
-//             (offer.applicableTo === "category" && offer.categoryId?.toString() === relatedProduct.category?._id.toString())
-//           );
-          
-//           return {
-//             ...relatedProduct.toObject(),
-//             offers: relatedOffers
-//           };
-//         });
-//       }
-  
-//       const user = req.session.user || null;
-  
-//       // Add offers to main product
-//       const productWithOffers = {
-//         ...product.toObject(),
-//         offers: activeOffers
-//       };
-  
-//       console.log("Product with offers:", productWithOffers);
-//       console.log("Related Products with offers:", relatedProducts);
-  
-//       res.render("user/product", {
-//         product: productWithOffers,
-//         relatedProducts: relatedProducts,
-//         user: user
-//       });
-//     } catch (err) {
-//       next(err);
-//     }
-//   };
-
-
 
 
 exports.getProductById = async (req, res, next) => {
@@ -286,13 +181,11 @@ exports.getProductById = async (req, res, next) => {
           user: user
       });
   } catch (err) {
-      // Handle specific Mongoose CastError
       if (err.name === 'CastError') {
           const error = new Error('Invalid product ID');
           error.statusCode = 400;
           return next(error);
       }
-      // Pass other errors to the global error handler
       next(err);
   }
 };
