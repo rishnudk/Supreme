@@ -274,7 +274,7 @@ exports.getOrderDetails = async (req, res) => {
           ]
       };
 
-      res.render("user/orderdetails", {
+      res.render("user/orderDetails", {
           order: response,
           user: req.session.user
       });
