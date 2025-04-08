@@ -322,8 +322,11 @@
           </div>
           <div class="col-md-6 text-md-end mt-3 mt-md-0">
             <% if ((order.paymentMethod === 'razorpay' || order.paymentMethod === 'cod' || order.paymentMethod === 'paylater' ) && order.paymentStatus === 'Pending') { %>
-              <button onclick="payNow('<%= order._id %>', '<%= order.shippingAddress %>')" class="btn btn-track me-2">Pay Now</button>
-            <% } %>
+              <button onclick="payNow('<%= order._id %>', '<%= order.shippingAddress %>')" 
+                class="btn me-2" 
+                style="background-color: #e5574e; color: white; border: none;">
+            Pay Now
+        </button>            <% } %>
           </div>
         </div>
       </div>

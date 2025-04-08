@@ -115,6 +115,17 @@
 .swal2-timer-progress-bar {
     background: #E5574E; /* Coral-red progress bar */
 }
+
+.btn-coral {
+    background-color: #e5574e;
+    color: white;
+    border: none;
+}
+
+.btn-coral:hover {
+    background-color: #d64c43; /* slightly darker on hover */
+    color: white;
+}
     </style>
 </head>
 <body>
@@ -201,79 +212,6 @@
         </div>
 
 
-<!-- 
-
-        <div class="col-lg-4 col-md-5 mt-md-0 mt-4">
-            <div class="summary-card">
-                <h4 class="mb-4">Order Summary</h4>
-                <div class="price-row">
-                    <span>Subtotal</span>
-                    <span id="subtotal-value">₹<%= subtotal ? subtotal.toFixed(2) : "0.00" %></span>
-                </div>
-                <% if (offerDiscount > 0) { %>
-                    <div class="price-row">
-                        <span>Offer Discount</span>
-                        <span id="offer-discount-value" class="text-success">-₹<%= offerDiscount.toFixed(2) %></span>
-                    </div>
-                <% } %>
-                <div class="price-row">
-                    <span>Shipping</span>
-                    <span id="shipping-value">₹<%= shippingCost ? shippingCost.toFixed(2) : "0.00" %></span>
-                </div>
-                <div class="price-row total-row">
-                    <span>Total</span>
-                    <span id="total-value">₹<%= total ? total.toFixed(2) : "0.00" %></span>
-                </div>
-            </div>
-
-            <div class="mt-4">
-                <form action="/user/checkout" method="GET">
-                    <button type="submit" class="btn btn-accent checkout-btn w-100 mb-3">
-                        Proceed to Checkout
-                    </button>
-                </form>
-                <a href="/user/shop" class="continue-shopping">
-                    <i class="bi bi-arrow-left"></i> Continue Shopping
-                </a>
-            </div>
-
-            <div class="mt-4 text-center">
-                <small class="text-muted">
-                    <i class="bi bi-shield-lock me-1"></i> Secure Checkout
-                </small>
-                <div class="mt-2">
-                    <i class="bi bi-credit-card me-2"></i>
-                    <i class="bi bi-paypal me-2"></i>
-                    <i class="bi bi-wallet2 me-2"></i>
-                    <i class="bi bi-apple"></i>
-                </div>
-            </div>
-
-            <div class="summary-card mt-4">
-                <h5 class="mb-3">Need Help?</h5>
-                <div class="mb-2">
-                    <a href="#" class="text-decoration-none d-flex align-items-center">
-                        <i class="bi bi-question-circle me-2"></i>
-                        Shipping Policy
-                    </a>
-                </div>
-                <div class="mb-2">
-                    <a href="#" class="text-decoration-none d-flex align-items-center">
-                        <i class="bi bi-arrow-return-left me-2"></i>
-                        Returns & Exchanges
-                    </a>
-                </div>
-                <div>
-                    <a href="#" class="text-decoration-none d-flex align-items-center">
-                        <i class="bi bi-headset me-2"></i>
-                        Contact Customer Service
-                    </a>
-                </div>
-            </div>
-        </div>
- -->
-
-
 
 
  <div class="col-lg-4 col-md-5 mt-md-0 mt-4">
@@ -305,7 +243,8 @@
 
     <div class="mt-4">
         <form action="/user/checkout" method="GET">
-            <button type="submit" class="btn btn-accent checkout-btn w-100 mb-3">
+            
+            <button type="submit" class="btn checkout-btn w-100 mb-3" style="background-color: #e5574e; color: white; border: none;">
                 Proceed to Checkout
             </button>
         </form>

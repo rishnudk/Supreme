@@ -415,15 +415,7 @@
                         
                         
                         
-                        <!-- <div class="filter-section">
-                            <div class="filter-title">BRANDS</div>
-                            <label><input type="checkbox"> Sheesham</label>
-                            <label><input type="checkbox"> Royaloak</label>
-                            <label><input type="checkbox"> Greylongg (3808)</label>
-                            <label><input type="checkbox"> Daroo</label>
-                            <label><input type="checkbox"> Dallas</label>
-                            <label><input type="checkbox"> Atlas</label>
-                        </div> -->
+                       
                     </div>
                 </div>
     
@@ -539,16 +531,7 @@
             
           
             
-            <!-- <div class="filter-section">
-                <div class="filter-title">BRANDS</div>
-                <label><input type="checkbox"> Sheesham</label>
-                <label><input type="checkbox"> Royaloak</label>
-                <label><input type="checkbox"> Greylongg (3808)</label>
-                <label><input type="checkbox"> Daroo</label>
-                <label><input type="checkbox"> Dallas</label>
-                <label><input type="checkbox"> Atlas</label>
-            </div> -->
-    
+           
             <div class="d-grid gap-2 mt-4">
                 <button class="btn btn-accent" id="apply-filter-btn">Apply Filters</button>
                 <button class="btn btn-outline-secondary" id="reset-filter-btn">Reset</button>
@@ -562,89 +545,6 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-<!-- 
-
-		<script>
-			document.addEventListener("DOMContentLoaded", function() {
-				const categoryInputs = document.querySelectorAll('input[name="category"]');
-				const priceRange = document.getElementById("price-range");
-				const priceValue = document.getElementById("price-value");
-				const searchInput = document.getElementById("search-input");
-				const searchButton = document.getElementById("search-button");
-				const sortBy = document.getElementById("sort-by");
-                const resetButton = document.getElementById("reset-filters");
-			
-				// ✅ Get existing filters from URL
-				const params = new URLSearchParams(window.location.search);
-				const selectedCategory = params.get("category") ? params.get("category").split(",") : [];
-				const selectedPrice = params.get("price") || "10000";
-				const selectedSort = params.get("sort") || "latest";
-				const searchQuery = params.get("search") || "";
-			
-				// ✅ Pre-fill existing filters in the UI
-				categoryInputs.forEach(input => {
-					if (selectedCategory.includes(input.value)) {
-						input.checked = true;
-					}
-				});
-				priceRange.value = selectedPrice;
-				priceValue.textContent = selectedPrice;
-				sortBy.value = selectedSort;
-				searchInput.value = searchQuery;
-			
-				function applyFilters() {
-					let selectedCategory = [];
-					categoryInputs.forEach(input => {
-						if (input.checked) {
-							selectedCategory.push(input.value);
-						}
-					});
-			
-					let selectedPrice = priceRange.value;
-					let selectedSort = sortBy.value;
-					let searchQuery = searchInput.value.trim();
-			
-					let queryParams = new URLSearchParams(window.location.search);
-					queryParams.set("price", selectedPrice);
-					queryParams.set("sort", selectedSort);
-					if (selectedCategory.length > 0) {
-						queryParams.set("category", selectedCategory.join(","));
-					} else {
-						queryParams.delete("category");
-					}
-					if (searchQuery !== "") {
-						queryParams.set("search", searchQuery);
-					} else {
-						queryParams.delete("search");
-					}
-			
-					// ✅ Reload the page with updated filters
-					window.location.href = `/user/shop?${queryParams.toString()}`;
-				}
-			
-				// ✅ Update price value display
-				priceRange.addEventListener("input", function() {
-					priceValue.textContent = this.value;
-				});
-			
-				// ✅ Add event listeners
-				categoryInputs.forEach(input => input.addEventListener("change", applyFilters));
-				priceRange.addEventListener("change", applyFilters);
-				sortBy.addEventListener("change", applyFilters);
-				searchButton.addEventListener("click", applyFilters);
-			
-				// ✅ Search on Enter key press
-				searchInput.addEventListener("keypress", function(event) {
-					if (event.key === "Enter") {
-						applyFilters();
-					}
-				});
-			});
-			</script>
-			
- -->
 
 
 

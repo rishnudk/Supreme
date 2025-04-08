@@ -93,10 +93,14 @@
                placeholder="Enter coupon code" value="<%= couponCode || '' %>"
                <%= appliedCoupon ? 'disabled' : '' %>
                aria-label="Coupon Code" aria-describedby="apply-coupon-btn">
-        <button class="btn btn-accent" type="submit" id="apply-coupon-btn" form="couponForm"
-                <%= appliedCoupon ? 'disabled' : '' %>>
-            Apply Coupon
-        </button>
+               <button class="btn" 
+               style="background-color: #e5574e; color: white; border: none;"
+               type="submit" 
+               id="apply-coupon-btn" 
+               form="couponForm"
+               <%= appliedCoupon ? 'disabled' : '' %>>
+           Apply Coupon
+       </button>
     </div>
     
   <!-- Coupon Validation Feedback -->
@@ -198,11 +202,15 @@
                 <% } %>
             </div>
             
-                    <button class="btn btn-outline-accent w-100 mt-2" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#addAddressModal">
-                        <i class="bi bi-plus"></i> Add New Address
-                    </button>
+                   
+            <button class="btn btn-outline-danger w-100 mt-2" 
+            data-bs-toggle="modal" 
+            data-bs-target="#addAddressModal">
+        <i class="bi bi-plus"></i> Add New Address
+    </button>
+
+
+
                 </div>
 
                 
@@ -247,8 +255,12 @@
 
 
                 <!-- Place Order Button -->
-                <button class="btn btn-accent btn-lg w-100" onclick="placeOrder()">Place Order</button>
 
+                <button class="btn btn-lg w-100" 
+        style="background-color: #e5574e; color: white; border: none;"
+        onclick="placeOrder()">
+    Place Order
+</button>
             </div>
         </div>
     </div>
