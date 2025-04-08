@@ -120,54 +120,50 @@
 			</div>
 		</div>
 		<div id="createAccountForm">
-			<h1>Create an account</h1>
-			<small>"Where Style Meets Comfort – Sign Up & Start Shopping!".</small>
-			<form id="createAccountForm" action="/user/signup" method="POST">
-				<input type="text" name="name" id="name" placeholder="Name" required>
-				<input type="email" name="email" id="email" placeholder="Email" required>
-				<input type="password" name="password" id="password" placeholder="Password" required>
-				<input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password"
-					required>
-				<input type="text" name="phone" id="phone" placeholder="Phone" required>
-				<input type="text" name="referral" id="referral" placeholder="Referral Code (Optional)">
-				<button type="submit" id="createAccount">Create account</button>
-				
-			</form>
-			<button type="button" id="googleLogin">
-				<img draggable="false" src="https://cdn-icons-png.flaticon.com/128/300/300221.png" alt="Google"
-					width="14">
-				Sign up with Google</button>
-
-			<span class="login">
-				<p>Already have an account? </p><a href="/user/login" id="login">Log in</a>
-			</span>
-		</div>
-
-
-		<!-- OTP Modal -->
-		<div id="otpModal" class="modal">
-			<div class="modal-content">
-				<span class="close">&times;</span> <!-- Close button -->
-				<h2>Enter OTP</h2>
-				<p>An OTP has been sent to your email.</p>
-				<input type="text" id="otpInput" placeholder="Enter OTP" required>
-				<button type="button" id="verifyOtp">Verify OTP</button>
-				<button type="button" id="resendOtp" onclick="resendOTP()">Resend OTP</button>
-			</div>
-		</div>
-
-
-
-
-		
-	</section>
-
-
-
+            <h1>Create an account</h1>
+            <small>"Where Style Meets Comfort – Sign Up & Start Shopping!".</small>
+            <form id="createAccountForm" action="/user/signup" method="POST">
+              <input type="text" name="name" id="name" placeholder="Name" required>
+              <input type="email" name="email" id="email" placeholder="Email" required>
+              <input type="password" name="password" id="password" placeholder="Password" required>
+              <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required>
+              <input type="text" name="phone" id="phone" placeholder="Phone" required>
+              <input type="text" name="referral" id="referral" placeholder="Referral Code (Optional)">
+              <button type="submit" id="createAccount">Create account</button>
+            </form>
+            <button type="button" id="googleLogin">
+              <img draggable="false" src="https://cdn-icons-png.flaticon.com/128/300/300221.png" alt="Google" width="14">
+              Sign up with Google
+            </button>
+            <span class="login">
+              <p>Already have an account? </p><a href="/user/login" id="login">Log in</a>
+            </span>
+          </div>
+          
+          <!-- OTP Modal -->
+          <div id="otpModal" class="modal">
+            <div class="modal-content">
+              <span class="close">×</span>
+              <h2>Enter OTP</h2>
+              <p>An OTP has been sent to your email.</p>
+              <input type="text" id="otpInput" placeholder="Enter OTP" required>
+              <button type="button" id="verifyOtp">Verify OTP</button>
+              <button type="button" id="resendOtp">Resend OTP</button>
+            </div>
+          </div>
+          
+         
+          <!-- Include SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // Define CSS for the modal (unchanged)
-    const modalStyle = document.createElement('style');
+  console.log("Script loaded!");
+
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM fully loaded!");
+
+    // Define CSS for the modal
+    const modalStyle = document.createElement("style");
     modalStyle.textContent = `
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); }
         .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 5px; position: relative; }
@@ -179,8 +175,23 @@
     `;
     document.head.appendChild(modalStyle);
 
+    // Google Login Button
+    const googleLoginButton = document.getElementById("googleLogin");
+    console.log("Google button element:", googleLoginButton);
+    if (googleLoginButton) {
+      googleLoginButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        console.log("Google button clicked! Redirecting to /user/auth/google...");
+        window.location.href = "/user/auth/google";
+      });
+    } else {
+      console.error("Google login button not found in DOM!");
+    }
+
     // Form submission
-    document.getElementById("createAccountForm").addEventListener("submit", async function (event) {
+    const createAccountForm = document.getElementById("createAccountForm");
+    if (createAccountForm) {
+      createAccountForm.addEventListener("submit", async function (event) {
         event.preventDefault();
 
         let isValid = true;
@@ -202,22 +213,40 @@
         const phonePattern = /^[0-9]{10}$/;
 
         // Clear previous errors
-        document.querySelectorAll(".error").forEach(el => el.remove());
+        document.querySelectorAll(".error").forEach((el) => el.remove());
 
         function showError(input, message) {
-            const error = document.createElement("small");
-            error.classList.add("error");
-            error.style.color = "red";
-            error.innerText = message;
-            input.parentNode.insertBefore(error, input.nextSibling);
+          const error = document.createElement("small");
+          error.classList.add("error");
+          error.style.color = "red";
+          error.innerText = message;
+          input.parentNode.insertBefore(error, input.nextSibling);
         }
 
         // Validate inputs
-        if (!name) { showError(document.getElementById("name"), "Name cannot be empty."); isValid = false; }
-        if (!emailPattern.test(email)) { showError(document.getElementById("email"), "Enter a valid email."); isValid = false; }
-        if (!passwordPattern.test(password)) { showError(document.getElementById("password"), "Password must be at least 8 characters, include a letter and a number."); isValid = false; }
-        if (password !== confirmPassword) { showError(document.getElementById("confirmPassword"), "Passwords do not match."); isValid = false; }
-        if (!phonePattern.test(phone)) { showError(document.getElementById("phone"), "Enter a valid 10-digit phone number."); isValid = false; }
+        if (!name) {
+          showError(document.getElementById("name"), "Name cannot be empty.");
+          isValid = false;
+        }
+        if (!emailPattern.test(email)) {
+          showError(document.getElementById("email"), "Enter a valid email.");
+          isValid = false;
+        }
+        if (!passwordPattern.test(password)) {
+          showError(
+            document.getElementById("password"),
+            "Password must be at least 8 characters, include a letter and a number."
+          );
+          isValid = false;
+        }
+        if (password !== confirmPassword) {
+          showError(document.getElementById("confirmPassword"), "Passwords do not match.");
+          isValid = false;
+        }
+        if (!phonePattern.test(phone)) {
+          showError(document.getElementById("phone"), "Enter a valid 10-digit phone number.");
+          isValid = false;
+        }
 
         if (!isValid) return;
 
@@ -226,45 +255,66 @@
         submitButton.innerText = "Sending OTP...";
 
         try {
-            const response = await fetch("/user/send-signup-otp", { // Changed to /user
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email })
-            });
+          const response = await fetch("/user/send-signup-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
 
-            const data = await response.json();
-            if (response.ok) {
-                document.getElementById("otpModal").style.display = "block";
-                document.getElementById("otpInput").focus();
-            } else {
-                alert(data.error || "Failed to send OTP");
-            }
+          const data = await response.json();
+          if (response.ok) {
+            document.getElementById("otpModal").style.display = "block";
+            document.getElementById("otpInput").focus();
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: data.error || "Failed to send OTP",
+            });
+          }
         } catch (error) {
-            console.error("Error sending OTP:", error);
-            alert("Error sending OTP");
+          console.error("Error sending OTP:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Error sending OTP",
+          });
         }
 
         submitButton.disabled = false;
         submitButton.innerText = "Create Account";
-    });
+      });
+    } else {
+      console.error("Create account form not found in DOM!");
+    }
 
     // Close modal
-    document.querySelector(".close").addEventListener("click", function() {
+    const closeButton = document.querySelector(".close");
+    if (closeButton) {
+      closeButton.addEventListener("click", function () {
         document.getElementById("otpModal").style.display = "none";
-    });
-    window.addEventListener("click", function(event) {
-        const modal = document.getElementById("otpModal");
-        if (event.target === modal) modal.style.display = "none";
+      });
+    }
+
+    window.addEventListener("click", function (event) {
+      const modal = document.getElementById("otpModal");
+      if (event.target === modal) modal.style.display = "none";
     });
 
     // OTP Verification
-    document.getElementById("verifyOtp").addEventListener("click", async function () {
+    const verifyOtpButton = document.getElementById("verifyOtp");
+    if (verifyOtpButton) {
+      verifyOtpButton.addEventListener("click", async function () {
         const otp = document.getElementById("otpInput").value.trim();
         const { email, name, password, phone, referral } = window.formData;
 
         if (!otp) {
-            alert("Please enter the OTP.");
-            return;
+          Swal.fire({
+            icon: "warning",
+            title: "Missing OTP",
+            text: "Please enter the OTP.",
+          });
+          return;
         }
 
         const verifyButton = document.getElementById("verifyOtp");
@@ -272,28 +322,98 @@
         verifyButton.innerText = "Verifying...";
 
         try {
-            const otpResponse = await fetch("/user/verify-signup-otp", { 
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, name, password, phone, otp, referral })
-            });
+          const otpResponse = await fetch("/user/verify-signup-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, name, password, phone, otp, referral }),
+          });
 
-            const otpData = await otpResponse.json();
-            if (otpResponse.ok) {
-                alert(otpData.message);
+          const otpData = await otpResponse.json();
+          if (otpResponse.ok) {
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: otpData.message,
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
                 window.location.href = otpData.redirect;
-            } else {
-                alert(otpData.error || "Invalid OTP");
-            }
+              }
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: otpData.error || "Invalid OTP",
+            });
+          }
         } catch (error) {
-            console.error("Error during verification:", error);
-            alert("Error during verification process");
+          console.error("Error during verification:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Error during verification process",
+          });
         }
 
         verifyButton.disabled = false;
         verifyButton.innerText = "Verify OTP";
-    });
+      });
+    } else {
+      console.error("Verify OTP button not found in DOM!");
+    }
+
+    // Resend OTP Function
+    const resendOtpButton = document.getElementById("resendOtp");
+    if (resendOtpButton) {
+      resendOtpButton.addEventListener("click", async function () {
+        const { email } = window.formData;
+
+        if (!email) {
+          Swal.fire({
+            icon: "warning",
+            title: "Missing Email",
+            text: "No email available to resend OTP.",
+          });
+          return;
+        }
+
+        try {
+          const response = await fetch("/user/send-signup-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "OTP resent successfully!",
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: data.error || "Failed to resend OTP",
+            });
+          }
+        } catch (error) {
+          console.error("Error resending OTP:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Error resending OTP",
+          });
+        }
+      });
+    } else {
+      console.error("Resend OTP button not found in DOM!");
+    }
+  });
 </script>
+
 
 </body>
 
