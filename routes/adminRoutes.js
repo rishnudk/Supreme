@@ -46,6 +46,18 @@ router.put('/:orderId/update-product-status',adminAuth, orderController.updatePr
 
 
 
+// adminRoutes.js
+router.get('/allOrders', orderController.getAllOrders);
+
+// Put this BEFORE /allOrders/:id
+router.get('/allOrders/filter', orderController.getFilteredOrders);
+
+router.get('/allOrders/:id', orderController.getOrderDetails);
+
+
+
+
+
 //coupon routes
 router.get("/coupons", adminAuth, couponController.getCouponManagePage);
 router.post("/coupons/add", adminAuth, couponController.addCoupon)

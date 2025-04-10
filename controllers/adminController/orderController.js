@@ -406,6 +406,154 @@ exports.updateProductStatus = async (req, res) => {
 
 
 
+
+exports.getAllOrders = async (req, res) => {
+    try {
+        const limit = 10; // Number of orders per page
+        const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+        const skip = (page - 1) * limit; // Calculate how many to skip
+
+        // Get total number of orders
+        const totalOrders = await Order.countDocuments();
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        // Fetch paginated orders
+        const orders = await Order.find()
+            .sort({ orderDate: -1 }) // Newest first
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        res.render('admin/allOrders', {
+            title: 'Order Management',
+            orders: orders,
+            currentPage: page,
+            totalPages: totalPages,
+            pageName: 'orders',
+            filters: {}
+        });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).render('error', {
+            message: 'Failed to fetch orders',
+            error: error
+        });
+    }
+};
+
+// Get orders with filters and pagination
+exports.getFilteredOrders = async (req, res) => {
+    try {
+        const { status, startDate, endDate, customerId } = req.query;
+        const limit = 10; // Number of orders per page
+        const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+        const skip = (page - 1) * limit; // Calculate how many to skip
+
+        const filter = {};
+
+        if (status && status !== 'all') {
+            filter.orderStatus = status;
+        }
+
+        if (startDate && endDate) {
+            filter.orderDate = {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+            };
+        }
+
+        if (customerId) {
+            filter.user = customerId;
+        }
+
+        // Get total number of filtered orders
+        const totalOrders = await Order.countDocuments(filter);
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        // Fetch paginated filtered orders
+        const orders = await Order.find(filter)
+            .sort({ orderDate: -1 }) // Newest first
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        res.render('admin/allOrders', {
+            title: 'Order Management',
+            orders: orders,
+            currentPage: page,
+            totalPages: totalPages,
+            currentPage: 'orders',
+            filters: {
+                status,
+                startDate,
+                endDate,
+                customerId
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching filtered orders:', error);
+        res.status(500).render('error', {
+            message: 'Failed to fetch orders',
+            error: error
+        });
+    }
+};
+
+
+
+
+// Get order details
+exports.getOrderDetails = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const order = await Order.findOne({ orderID: orderId });
+        
+        if (!order) {
+            return res.status(404).render('error', {
+                message: 'Order not found',
+                error: { status: 404 }
+            });
+        }
+        
+        res.render('order-details', {
+            title: `Order #${order.orderID}`,
+            order: order,
+            currentPage: 'orders'
+        });
+    } catch (error) {
+        console.error('Error fetching order details:', error);
+        res.status(500).render('error', {
+            message: 'Failed to fetch order details',
+            error: error
+        });
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function getBadgeClass(status) {
     switch (status) {
         case 'Pending': return 'warning';
@@ -419,5 +567,11 @@ function getBadgeClass(status) {
         default: return 'secondary';
     }
 }
+
+
+
+
+
+
 
 module.exports = exports;

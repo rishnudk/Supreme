@@ -65,12 +65,26 @@ exports.getSalesReport = async (req, res) => {
       };
     } else if (quickSelect && quickSelect !== "custom") {
       switch (quickSelect) {
-        case "today":
-          dateFilter.orderDate = {
-            $gte: new Date(today.setHours(0, 0, 0, 0)),
-            $lte: today,
-          };
-          break;
+
+
+
+       
+
+
+
+          case "today":
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0); // Start of today
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999); // End of today
+  dateFilter.orderDate = {
+    $gte: startOfDay,
+    $lte: endOfDay,
+  };
+
+
+
+  break;
         case "last7days":
           const weekStart = new Date(today);
           weekStart.setDate(today.getDate() - 7);
@@ -196,32 +210,7 @@ exports.getSalesReport = async (req, res) => {
       { $limit: 10 },
     ]);
 
-    // Calculate top selling brands
-    // const topBrandsAggregation = await Order.aggregate([
-    //   { $match: { ...dateFilter, orderStatus: { $nin: ["Cancelled"] } } },
-    //   { $unwind: "$products" },
-    //   {
-    //     $lookup: {
-    //       from: "products",
-    //       localField: "products.product",
-    //       foreignField: "_id",
-    //       as: "productDetails",
-    //     },
-    //   },
-    //   { $unwind: "$productDetails" },
-    //   {
-    //     $group: {
-    //       _id: "$productDetails.brand",
-    //       totalSold: { $sum: "$products.quantity" },
-    //       totalRevenue: {
-    //         $sum: { $multiply: ["$products.price", "$products.quantity"] },
-    //       },
-    //     },
-    //   },
-    //   { $sort: { totalSold: -1 } },
-    //   { $limit: 10 },
-    // ]);
-
+  
     const topBrandsAggregation = await Order.aggregate([
       { $match: { ...dateFilter, orderStatus: { $nin: ["Cancelled"] } } },
       { $unwind: "$products" },

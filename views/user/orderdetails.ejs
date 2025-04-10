@@ -327,6 +327,11 @@
                 style="background-color: #e5574e; color: white; border: none;">
             Pay Now
         </button>            <% } %>
+        <% if (order.orderStatus === 'Delivered' ) { %>
+          <a href="/user/invoice/<%= order._id %>" class="btn btn-secondary">
+            <i class="fas fa-file-invoice me-1"></i> Invoice
+          </a>
+        <% } %>
           </div>
         </div>
       </div>
@@ -378,8 +383,10 @@
 
                       <div class="d-none d-md-block">
                         <!-- Cancel Product Button -->
-                        <% if (product.productStatus !== "Cancelled" && product.productStatus !== "Delivered" && product.productStatus !== "Cancellation Requested" && product.productStatus !== "Return Requested" && product.productStatus !== "Returned") { %>
-                          <% console.log('Product data:', product); %>
+                       
+                        <% if (product.productStatus === "Pending" || product.productStatus === "Processing" || product.productStatus === "Shipped") { %>
+
+
                           <button type="button" class="btn btn-sm btn-warning cancel-product-btn"
                             data-bs-toggle="modal" 
                             data-bs-target="#cancelOrderModal" 
@@ -391,7 +398,7 @@
                           </button>
                         <% } %>
                         <!-- Return Product Button -->
-                        <% if (product.productStatus === "Delivered" && (new Date() - new Date(product.deliveryDate || order.orderDate)) <= 30 * 24 * 60 * 60 * 1000) { %>
+                        <% if (product.productStatus === "Delivered") { %>
                           <button type="button" class="btn btn-sm btn-warning return-product-btn"
                             data-bs-toggle="modal" 
                             data-bs-target="#cancelOrderModal" 
@@ -404,11 +411,7 @@
                         <% } %>
 
 
-                        <% if (order.orderStatus === 'Delivered' || order.orderStatus === 'Shipped' || order.orderStatus === 'Processing' || order.orderStatus === 'Confirmed') { %>
-                          <a href="/user/invoice/<%= order._id %>" class="btn btn-secondary">
-                            <i class="fas fa-file-invoice me-1"></i> Invoice
-                          </a>
-                        <% } %>
+                        
                       </div>
                       
                       <div class="d-md-none text-end mt-2">

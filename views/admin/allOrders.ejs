@@ -1,0 +1,522 @@
+<!-- views/orders.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --sidebar-width: 250px;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: margin-left 0.3s;
+            background-color: #f8f9fa;
+        }
+        
+        #sidebar {
+            position: fixed;
+            height: 100%;
+            width: var(--sidebar-width);
+            background-color: #343a40;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            transition: left 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        #sidebar.collapsed {
+            left: calc(-1 * var(--sidebar-width));
+        }
+        
+        .content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+        
+        .content.expanded {
+            margin-left: 0;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.75);
+            padding: 10px 20px;
+            border-radius: 0;
+        }
+        
+        .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .table th {
+            background-color: #f1f2f3;
+            font-weight: 600;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 123, 255, 0.05);
+            cursor: pointer;
+        }
+        
+        .toggle-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+            background-color: #343a40;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .order-details {
+            display: none;
+            padding: 0 15px;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .product-row {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .badge {
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .summary-card {
+            background-color: #f8fbff;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .customer-info {
+            background-color: #f8fff8;
+            border-left: 4px solid #198754;
+        }
+
+        .payment-info {
+            background-color: #fff8f8;
+            border-left: 4px solid #dc3545;
+        }
+
+        @media (max-width: 992px) {
+            #sidebar {
+                left: calc(-1 * var(--sidebar-width));
+            }
+            
+            #sidebar.expanded {
+                left: 0;
+            }
+            
+            .content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <%- include('../partials/adminSidebar') %>
+
+
+   
+
+    <div class="content" id="mainContent">
+        <div class="container-fluid">
+
+
+
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="mb-3">Order Management</h2>
+                    
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Orders List</h5>
+                    
+
+                    <div class="d-flex align-items-center">
+                       
+
+                        <!-- Sorting Dropdown -->
+
+                        <!-- Sorting Dropdown -->
+<div class="dropdown">
+    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-sort"></i> Sort By Status
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+        <li><a class="dropdown-item" href="/admin/allOrders/filter?status=Pending">Pending</a></li>
+        <li><a class="dropdown-item" href="/admin/allOrders/filter?status=Confirmed">Confirmed</a></li>
+        <li><a class="dropdown-item" href="/admin/allOrders/filter?status=Processing">Processing</a></li>
+        <li><a class="dropdown-item" href="/admin/allOrders/filter?status=Shipped">Shipped</a></li>
+        <li><a class="dropdown-item" href="/admin/allOrders/filter?status=Delivered">Delivered</a></li>
+        <li><a class="dropdown-item" href="/admin/allOrders/filter?status=Cancelled">Cancelled</a></li>
+        <li><a class="dropdown-item" href="/admin/allOrders/filter?status=Return Requested">Return Requested</a></li>
+        <li><a class="dropdown-item" href="/admin/allOrders/filter?status=Returned">Returned</a></li>
+        <li><a class="dropdown-item" href="/admin/allOrders/filter?status=Partially Delivered">Partially Delivered</a></li>
+    </ul>
+</div>
+                        
+                       
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Products</th>
+                                    <th>Subtotal</th>
+                                    <th>Discount</th>
+                                    <th>Coupon</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+
+
+
+
+                            <tbody>
+                                <% if (orders && orders.length > 0) { %>
+                                    <% orders.forEach(order => { %>
+                                        <tr data-order-id="<%= order.orderID %>">
+                                            <td>#ORD-<%= order.orderID || 'N/A' %></td>
+                                            <td><%= new Date(order.orderDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></td>
+                                            <td><%= order.shippingAddress?.fullName || 'Unknown' %></td>
+                                            <td><%= order.products?.length || 0 %> item<%= order.products?.length !== 1 ? 's' : '' %></td>
+                                            <td>₹<%= order.originalAmount ? order.originalAmount.toFixed(2) : '0.00' %></td>
+                                            <td>₹<%= order.totalOfferDiscount ? order.totalOfferDiscount.toFixed(2) : '0.00' %></td>
+                                            <td>
+                                                <%= order.appliedCoupon?.code || 'N/A' %> 
+                                                <%= order.appliedCoupon?.discountAmount ? `(-₹${order.appliedCoupon.discountAmount.toFixed(2)})` : '' %>
+                                            </td>
+                                            <td>₹<%= order.totalAmount ? order.totalAmount.toFixed(2) : '0.00' %></td>
+                                            <td>
+                                                <span class="badge <%= 
+                                                    order.orderStatus === 'Delivered' ? 'bg-success' : 
+                                                    order.orderStatus === 'Shipped' ? 'bg-info' : 
+                                                    order.orderStatus === 'Processing' ? 'bg-warning' : 
+                                                    order.orderStatus === 'Cancelled' ? 'bg-danger' : 'bg-secondary' %>">
+                                                    <%= order.orderStatus %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr class="order-details" id="details-<%= order.orderID %>">
+                                            <td colspan="9">
+                                                <div class="container-fluid py-3">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <div class="card mb-3">
+                                                                <div class="card-header bg-white">
+                                                                    <h5 class="mb-0">Products</h5>
+                                                                </div>
+
+
+
+
+                                                                <div class="card-body">
+                                                                    <% order.products.forEach(product => { %>
+                                                                        <div class="product-row">
+                                                                            <div class="row align-items-center">
+                                                                                <div class="col-md-2 col-sm-3 mb-2 mb-sm-0">
+                                                                                    <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
+                                                                                </div>
+                                                                                <div class="col-md-6 col-sm-9">
+                                                                                    <h6 class="mb-1"><%= product.name %></h6>
+                                                                                    <div class="small text-muted">
+                                                                                        Quantity: <%= product.quantity %> × ₹<%= product.price.toFixed(2) %>
+                                                                                    </div>
+                                                                                    <div class="mt-2">
+                                                                                        <span class="badge <%= 
+                                                                                            product.productStatus === 'Delivered' ? 'bg-success' : 
+                                                                                            product.productStatus === 'Shipped' ? 'bg-info' : 
+                                                                                            product.productStatus === 'Processing' ? 'bg-warning' : 
+                                                                                            product.productStatus === 'Cancelled' ? 'bg-danger' : 'bg-secondary' %>">
+                                                                                            <%= product.productStatus %>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-4 col-sm-12 mt-3 mt-md-0">
+                                                                                    <div class="d-flex justify-content-md-end">
+                                                                                        <div>
+                                                                                            <div class="text-end">
+                                                                                                <span class="text-muted text-decoration-line-through me-2">₹<%= product.price.toFixed(2) %></span>
+                                                                                                <span class="fw-bold">
+                                                                                                    ₹<%= product.appliedOffer && typeof product.appliedOffer.discountAmount === 'number' 
+                                                                                                        ? (product.price - product.appliedOffer.discountAmount).toFixed(2) 
+                                                                                                        : product.price.toFixed(2) %>
+                                                                                                </span>
+                                                                                            </div>
+                                                                                            <% if (product.appliedOffer && typeof product.appliedOffer.discountAmount === 'number') { %>
+                                                                                            <div class="small text-success text-end">
+                                                                                                You saved: ₹<%= product.appliedOffer.discountAmount.toFixed(2) %>
+                                                                                            </div>
+                                                                                            <% } %>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    <% }); %>
+                                                                </div>
+
+
+
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="card summary-card mb-3">
+                                                                <div class="card-header bg-white">
+                                                                    <h5 class="mb-0">Order Summary</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="d-flex justify-content-between mb-2">
+                                                                        <span>Subtotal</span>
+                                                                        <span>₹<%= typeof order.originalAmount === 'number' ? order.originalAmount.toFixed(2) : '0.00' %></span>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mb-2">
+                                                                        <span>Offer Discount</span>
+                                                                        <span class="text-success">-₹<%= typeof order.totalOfferDiscount === 'number' ? order.totalOfferDiscount.toFixed(2) : '0.00' %></span>
+                                                                    </div>
+                                                                    <% if (order.appliedCoupon && typeof order.appliedCoupon.discountAmount === 'number') { %>
+                                                                    <div class="d-flex justify-content-between mb-2">
+                                                                        <span>Coupon (<%= order.appliedCoupon.code %>)</span>
+                                                                        <span class="text-success">-₹<%= order.appliedCoupon.discountAmount.toFixed(2) %></span>
+                                                                    </div>
+                                                                    <% } %>
+                                                                    <div class="d-flex justify-content-between mb-2">
+                                                                        <span>Shipping</span>
+                                                                        <span>₹<%= typeof order.shippingCost === 'number' ? order.shippingCost.toFixed(2) : '0.00' %></span>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mb-2">
+                                                                        <span>GST</span>
+                                                                        <span>₹<%= typeof order.gstAmount === 'number' ? order.gstAmount.toFixed(2) : '0.00' %></span>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="d-flex justify-content-between mb-0">
+                                                                        <span class="fw-bold">Total</span>
+                                                                        <span class="fw-bold">₹<%= typeof order.totalAmount === 'number' ? order.totalAmount.toFixed(2) : '0.00' %></span>
+                                                                    </div>
+                                                                    <% if (order.refundedAmount && typeof order.refundedAmount === 'number') { %>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <span>Refunded Amount</span>
+                                                                        <span class="text-danger">₹<%= order.refundedAmount.toFixed(2) %></span>
+                                                                    </div>
+                                                                    <% } %>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="card customer-info mb-3">
+                                                                <div class="card-header bg-white">
+                                                                    <h5 class="mb-0">Customer Information</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <h6>Shipping Address</h6>
+                                                                    <address class="mb-3">
+                                                                        <%= order.shippingAddress.fullName %><br>
+                                                                        <%= order.shippingAddress.address %><br>
+                                                                        <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %><br>
+                                                                        <%= order.shippingAddress.country %> - <%= order.shippingAddress.pincode %><br>
+                                                                        <abbr title="Phone">P:</abbr> <%= order.shippingAddress.phone %>
+                                                                    </address>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="card payment-info">
+                                                                <div class="card-header bg-white">
+                                                                    <h5 class="mb-0">Payment Information</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="mb-2">
+                                                                        <strong>Method:</strong> <%= order.paymentMethod.charAt(0).toUpperCase() + order.paymentMethod.slice(1) %>
+                                                                    </div>
+                                                                    <div class="mb-2">
+                                                                        <strong>Transaction ID:</strong> <%= order.transactionId %>
+                                                                    </div>
+                                                                    <div>
+                                                                        <strong>Status:</strong> 
+                                                                        <span class="badge <%= 
+                                                                            order.paymentStatus === 'Paid' ? 'bg-success' : 
+                                                                            order.paymentStatus === 'Refunded' ? 'bg-warning' : 
+                                                                            order.paymentStatus === 'Failed' ? 'bg-danger' : 'bg-secondary' %>">
+                                                                            <%= order.paymentStatus %>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="9" class="text-center">No orders found for the selected period.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+
+
+
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+<!-- Pagination Controls -->
+<nav aria-label="Page navigation" class="mt-3">
+    <ul class="pagination justify-content-center">
+        <!-- Previous Button -->
+        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="<%= filters && Object.keys(filters).length > 0 ? `/admin/allOrders/filter?page=${currentPage - 1}&status=${filters.status || ''}&startDate=${filters.startDate || ''}&endDate=${filters.endDate || ''}&customerId=${filters.customerId || ''}` : `/admin/allOrders?page=${currentPage - 1}` %>" aria-label="Previous">
+                <span aria-hidden="true">« Prev</span>
+            </a>
+        </li>
+
+        <!-- Page Numbers (Show only 3 at a time) -->
+        <% 
+            const maxPagesToShow = 3;
+            const totalPagesAdjusted = totalPages > 0 ? totalPages : 1; // Ensure at least 1 page
+            let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            let endPage = Math.min(totalPagesAdjusted, startPage + maxPagesToShow - 1);
+
+            // Adjust startPage if endPage is at the max
+            if (endPage - startPage + 1 < maxPagesToShow && totalPagesAdjusted > maxPagesToShow) {
+                startPage = Math.max(1, endPage - maxPagesToShow + 1);
+            }
+        %>
+        <% for(let i = startPage; i <= endPage; i++) { %>
+            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                <a class="page-link" href="<%= filters && Object.keys(filters).length > 0 ? `/admin/allOrders/filter?page=${i}&status=${filters.status || ''}&startDate=${filters.startDate || ''}&endDate=${filters.endDate || ''}&customerId=${filters.customerId || ''}` : `/admin/allOrders?page=${i}` %>"><%= i %></a>
+            </li>
+        <% } %>
+
+        <!-- Next Button -->
+        <li class="page-item <%= currentPage === totalPagesAdjusted ? 'disabled' : '' %>">
+            <a class="page-link" href="<%= filters && Object.keys(filters).length > 0 ? `/admin/allOrders/filter?page=${currentPage + 1}&status=${filters.status || ''}&startDate=${filters.startDate || ''}&endDate=${filters.endDate || ''}&customerId=${filters.customerId || ''}` : `/admin/allOrders?page=${currentPage + 1}` %>" aria-label="Next">
+                <span aria-hidden="true">Next »</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+</div>
+</div>
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to toggle order details
+        function toggleOrderDetails(orderId) {
+            const detailsRow = document.getElementById(`details-${orderId}`);
+            const allDetails = document.querySelectorAll('.order-details');
+            
+            // Close all other details
+            allDetails.forEach(detail => {
+                if (detail.id !== `details-${orderId}`) {
+                    detail.style.display = 'none';
+                }
+            });
+            
+            // Toggle current details
+            if (detailsRow.style.display === 'table-row') {
+                detailsRow.style.display = 'none';
+            } else {
+                detailsRow.style.display = 'table-row';
+            }
+        }
+
+        // Toggle sidebar function
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('mainContent');
+            
+            if (window.innerWidth <= 992) {
+                sidebar.classList.toggle('expanded');
+            } else {
+                sidebar.classList.toggle('collapsed');
+                content.classList.toggle('expanded');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up order row click events
+            document.querySelectorAll('tr[data-order-id]').forEach(row => {
+                row.addEventListener('click', function() {
+                    const orderId = this.getAttribute('data-order-id');
+                    toggleOrderDetails(orderId);
+                });
+            });
+            
+            // Set up sidebar toggle
+            document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const sidebar = document.getElementById('sidebar');
+                const content = document.getElementById('mainContent');
+                
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('collapsed');
+                    sidebar.classList.remove('expanded');
+                    content.classList.remove('expanded');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

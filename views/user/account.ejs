@@ -321,6 +321,39 @@
     width: 100%;
   }
 }
+
+
+.order-product {
+    margin-bottom: 0.5rem;
+  }
+  .status {
+    font-weight: 500;
+    white-space: nowrap; 
+  }
+  .status.in-stock {
+    color: #28a745; 
+  }
+  .status.out-of-stock {
+    color: #dc3545; 
+  }
+  .status.delivered {
+    color: #17a2b8; 
+  }
+  .status.cancelled {
+    color: #d20b0b; 
+  }
+  .status.cancellation-requested {
+    color: #ffc107; 
+  }
+  .status.return-requested {
+    color: #fd7e14; 
+  }
+  .status.returned {
+    color: #6f42c1; 
+  }
+  .status.pending {
+    color: #007bff; 
+  }
     </style>
 
 
@@ -392,7 +425,7 @@
 
 
 
-
+<!-- 
 
                     <div class="row">
                       <% if (orders && orders.length > 0) { %>
@@ -401,9 +434,7 @@
                             <div class="order-card" id="order-<%= order._id %>">
                               <div class="order-header">
                                 <span class="order-id">Order #<%= order.orderID %></span>
-                                <span class="order-status <%= order.orderStatus.toLowerCase().replace(/\s+/g, '-') %>">
-                                  <%= order.orderStatus %>
-                                </span>
+                                
                               </div>
                     
                               <% order.products.forEach(product => { %>
@@ -412,13 +443,23 @@
                                     <img src="<%= product.image %>" alt="<%= product.name %>" class="order-image">
                                   </div>
                                   <div class="col-md-8 col-sm-8">
+
+
+
+                                   
                                     <div class="order-details">
-                                      <p class="order-product"><%= product.name %></p>
+                                      <p class="order-product d-flex justify-content-between align-items-center">
+                                        <span><%= product.name %></span>
+                                        <span class="status <%= product.productStatus.toLowerCase().replace(' ', '-') %>">
+                                          <%= product.productStatus %>
+                                        </span>
+                                      </p>
+                                      
                                       <p><i class="far fa-calendar-alt me-2"></i>Placed on: <%= new Date(order.orderDate).toDateString() %></p>
                                       <p><i class="fas fa-truck me-2"></i>Expected by: <%= new Date(new Date(order.orderDate).setDate(new Date(order.orderDate).getDate() + 7)).toDateString() %></p>
                                       
                                       <div class="d-flex flex-wrap gap-2 mt-3">
-                                        <% if (product.productStatus !== "Cancelled" && product.productStatus !== "Delivered" && order.orderStatus !== 'Delivered' && order.orderStatus !== 'Returned' && product.productStatus !== "Cancellation Requested" && product.productStatus !== "Return Requested"    && product.productStatus !== "Returned" ) { %>  
+                                        <% if (product.productStatus === "Pending" || product.productStatus === "Processing" ||  product.productStatus === "Shipped"  ) { %>  
                                           <button type="button" class="btn btn-warning btn-sm cancel-product-btn"
                                             data-bs-toggle="modal" 
                                             data-bs-target="#cancelOrderModal" 
@@ -427,7 +468,7 @@
                                             <i class="fas fa-ban me-1"></i> Cancel
                                           </button>
                                         <% } %>
-                                        <% if(product.productStatus === "Delivered" ||order.orderStatus === 'Delivered' ) { %>
+                                        <% if(product.productStatus === "Delivered" ) { %>
                                           <a href="/user/return/<%= order._id %>/<%= product.product %>?name=<%= encodeURIComponent(product.name) %>&orderID=<%= order.orderID %>" 
                                              class="btn btn-warning btn-sm return-product-btn">
                                             <i class="fas fa-undo me-1"></i> Return
@@ -435,6 +476,8 @@
                                         <% } %>
                                       </div>
                                     </div>
+
+
                                   </div>
                                 </div>
                                 <% if (order.products.indexOf(product) !== order.products.length - 1) { %>
@@ -474,7 +517,101 @@
                         </div>
                       <% } %>
                     </div>
-                    
+                     -->
+
+
+
+                     <div class="row">
+                      <% if (orders && orders.length > 0) { %>
+                          <% orders.forEach(order => { %>
+                              <div class="col-xl-6 col-lg-12 mb-4">
+                                  <div class="order-card" id="order-<%= order._id %>">
+                                      <div class="order-header">
+                                          <span class="order-id">Order #<%= order.orderID %></span>
+                                      </div>
+                  
+                                      <% order.products.forEach(product => { %>
+                                          <div class="row align-items-center mb-3">
+                                              <div class="col-md-4 col-sm-4">
+                                                  <img src="<%= product.image %>" alt="<%= product.name %>" class="order-image">
+                                              </div>
+                                              <div class="col-md-8 col-sm-8">
+                                                  <div class="order-details">
+                                                      <p class="order-product d-flex justify-content-between align-items-center">
+                                                          <span><%= product.name %></span>
+                                                          <span class="status <%= product.productStatus.toLowerCase().replace(' ', '-') %>">
+                                                              <%= product.productStatus %>
+                                                          </span>
+                                                      </p>
+                                                      <p><i class="far fa-calendar-alt me-2"></i>Placed on: <%= new Date(order.orderDate).toDateString() %></p>
+                                                      <p><i class="fas fa-truck me-2"></i>Expected by: <%= new Date(new Date(order.orderDate).setDate(new Date(order.orderDate).getDate() + 7)).toDateString() %></p>
+                  
+                                                      <div class="d-flex flex-wrap gap-2 mt-3">
+                                                          <% if (product.productStatus === "Pending" || product.productStatus === "Processing" || product.productStatus === "Shipped") { %>
+                                                              <button type="button" class="btn btn-warning btn-sm cancel-product-btn"
+                                                                  data-bs-toggle="modal" 
+                                                                  data-bs-target="#cancelOrderModal" 
+                                                                  data-order-id="<%= order._id %>" 
+                                                                  data-product-id="<%= product.product %>">
+                                                                  <i class="fas fa-ban me-1"></i> Cancel
+                                                              </button>
+                                                          <% } else { %>
+                                                              <div></div>
+                                                          <% } %>
+                  
+                                                          <% if (product.productStatus === "Delivered") { %>
+                                                              <a href="/user/return/<%= order._id %>/<%= product.product %>?name=<%= encodeURIComponent(product.name) %>&orderID=<%= order.orderID %>" 
+                                                                 class="btn btn-warning btn-sm return-product-btn">
+                                                                  <i class="fas fa-undo me-1"></i> Return
+                                                              </a>
+                                                          <% } else { %>
+                                                              <div></div>
+                                                          <% } %>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <% if (order.products.indexOf(product) !== order.products.length - 1) { %>
+                                              <hr class="my-3">
+                                          <% } %>
+                                      <% }); %>
+                  
+                                      <div class="order-actions d-flex flex-wrap justify-content-between align-items-center">
+
+                                        <% if ((order.products.every(product => product.productStatus === "Pending" || product.productStatus === "Processing" || product.productStatus === "Shipped")) && (order.orderStatus === "Pending" || order.orderStatus === "Processing" || order.orderStatus === "Shipped")) { %>
+                                              <button type="button" class="btn btn-danger btn-sm cancel-order-btn"
+                                                  data-bs-toggle="modal" 
+                                                  data-bs-target="#cancelOrderModal"
+                                                  data-order-id="<%= order._id %>">
+                                                  <i class="fas fa-times me-1"></i> Cancel Order
+                                              </button>
+                                          <% } else { %>
+                                              <div></div> 
+                                          <% } %>
+                  
+                                          <div class="container mt-2">
+                                              <button class="btn btn-primary view-details" id="view" data-order-id="<%= order._id %>">
+                                                  View Details
+                                              </button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          <% }); %>
+                      <% } else { %>
+                          <div class="col-12">
+                              <div class="empty-orders">
+                                  <i class="fas fa-shopping-bag"></i>
+                                  <h3>No Orders Yet</h3>
+                                  <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
+                                  <a href="/user/shop" class="btn btn-primary mt-3">Start Shopping</a>
+                              </div>
+                          </div>
+                      <% } %>
+                  </div>
+
+
+
                     <!-- Pagination -->
                     <div class="pagination-container">
                       <nav aria-label="Page navigation">

@@ -167,60 +167,100 @@
             </div>
         </div>
     
+        
+
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Item</th>
+                    <th>Status</th>
                     <th>Quantity</th>
                     <th>Unit Price</th>
+                    <th>Offer Discount</th>
+                    <th>Coupon Discount</th>
                     <th>Amount</th>
                 </tr>
             </thead>
             <tbody>
                 <% let subtotal = 0; %>
+                <% let totalNonCancelledAmount = 0; %>
                 <% order.products.forEach(product => { %>
-                    <% const itemTotal = product.price * product.quantity; %>
-                    <% subtotal += itemTotal; %>
+                    <% 
+                        const effectivePrice = product.price - (product.appliedOffer?.discountAmount || 0);
+                        const itemTotalBeforeCoupon = (product.productStatus !== 'Cancelled') ? (effectivePrice * product.quantity) : 0;
+                        subtotal += itemTotalBeforeCoupon;
+                        if (product.productStatus !== 'Cancelled') totalNonCancelledAmount += itemTotalBeforeCoupon;
+                    %>
                     <tr>
                         <td><%= product.name %></td>
+                        <td><%= product.productStatus %></td>
                         <td><%= product.quantity %></td>
                         <td>₹<%= product.price.toFixed(2) %></td>
-                        <td>₹<%= itemTotal.toFixed(2) %></td>
+                        <td>
+                            <% if (product.appliedOffer?.discountAmount > 0) { %>
+                                -₹<%= product.appliedOffer.discountAmount.toFixed(2) %>
+                            <% } else { %>
+                                -
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (product.productStatus !== 'Cancelled' && order.appliedCoupon?.discountAmount > 0) { %>
+                                <% const couponPortion = (itemTotalBeforeCoupon / totalNonCancelledAmount) * order.appliedCoupon.discountAmount; %>
+                                -₹<%= couponPortion.toFixed(2) %>
+                            <% } else { %>
+                                -
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (product.productStatus !== 'Cancelled' && order.appliedCoupon?.discountAmount > 0) { %>
+                                <% const finalItemTotal = itemTotalBeforeCoupon - (itemTotalBeforeCoupon / totalNonCancelledAmount) * order.appliedCoupon.discountAmount; %>
+                                ₹<%= finalItemTotal.toFixed(2) %>
+                            <% } else { %>
+                                ₹<%= itemTotalBeforeCoupon.toFixed(2) %>
+                            <% } %>
+                        </td>
                     </tr>
                 <% }); %>
+                <!-- Totals Section -->
+                <tr>
+                    <td colspan="6" class="text-end"><strong>Subtotal:</strong></td>
+                    <td>₹<%= subtotal.toFixed(2) %></td>
+                </tr>
+                <% if (order.totalOfferDiscount > 0) { %>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>Total Offer Discount:</strong></td>
+                        <td>-₹<%= order.totalOfferDiscount.toFixed(2) %></td>
+                    </tr>
+                <% } %>
+                <% if (order.appliedCoupon?.discountAmount > 0) { %>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>Coupon Discount (<%= order.appliedCoupon.code || 'N/A' %>):</strong></td>
+                        <td>-₹<%= order.appliedCoupon.discountAmount.toFixed(2) %></td>
+                    </tr>
+                <% } %>
+                <% if (order.gstAmount > 0) { %>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>GST (12%):</strong></td>
+                        <td>₹<%= order.gstAmount.toFixed(2) %></td>
+                    </tr>
+                <% } %>
+                <% if (order.shippingCost > 0) { %>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>Shipping Cost:</strong></td>
+                        <td>₹<%= order.shippingCost.toFixed(2) %></td>
+                    </tr>
+                <% } %>
+                <tr>
+                    <td colspan="6" class="text-end"><strong>Total Amount:</strong></td>
+                    <td>₹<%= order.totalAmount.toFixed(2) %></td>
+                </tr>
             </tbody>
         </table>
+
+
+        
     
-        <div class="totals-container">
-            <div class="total-row">
-                <div class="total-label">Subtotal:</div>
-                <div>₹<%= subtotal.toFixed(2) %></div>
-            </div>
-            <% if (order.totalOfferDiscount > 0) { %>
-            <div class="total-row">
-                <div class="total-label">Offer Discount:</div>
-                <div>-₹<%= order.totalOfferDiscount.toFixed(2) %></div>
-            </div>
-            <% } %>
-            <% if (order.appliedCoupon && order.appliedCoupon.discountAmount > 0) { %>
-            <div class="total-row">
-                <div class="total-label">Coupon Discount:</div>
-                <div>-₹<%= order.appliedCoupon.discountAmount.toFixed(2) %></div>
-            </div>
-            <% } %>
-            <div class="total-row">
-                <div class="total-label">GST (12%):</div>
-                <div>₹<%= (order.gstAmount || 0).toFixed(2) %></div>
-            </div>
-            <div class="total-row">
-                <div class="total-label">Shipping:</div>
-                <div>₹<%= order.shippingCost.toFixed(2) %></div>
-            </div>
-            <div class="grand-total total-row">
-                <div class="total-label">TOTAL:</div>
-                <div>₹<%= order.totalAmount.toFixed(2) %></div>
-            </div>
-        </div>
+        
     
         <div class="payment-info">
             <h5>Payment Information</h5>
