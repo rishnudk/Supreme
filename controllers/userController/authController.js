@@ -319,27 +319,54 @@ exports.isAuthenticated = (req, res, next) => {
 
 
 
+// exports.sendSignupOTP = async (req, res) => {
+//   try {
+//       const { email } = req.body;
+//       const otp = Math.floor(100000 + Math.random() * 900000);
+//       req.session.storedOtpData = {
+//           otp: String(otp),
+//           expiresAt: Date.now() + 5 * 60 * 1000,
+//       };
+//       console.log(`Generated OTP for ${email}:`, otp);
+//       await transporter.sendMail({
+//           from: process.env.EMAIL,
+//           to: email,
+//           subject: "Your OTP for Signup",
+//           text: `Your OTP is ${otp}. It is valid for 5 minutes.`,
+//       });
+//       res.status(200).json({ message: "OTP sent successfully" });
+//   } catch (error) {
+//       console.error("Error sending OTP:", error);
+//       res.status(500).json({ error: "Error sending OTP" });
+//   }
+// };
+
+
+
 exports.sendSignupOTP = async (req, res) => {
   try {
-      const { email } = req.body;
-      const otp = Math.floor(100000 + Math.random() * 900000);
-      req.session.storedOtpData = {
-          otp: String(otp),
-          expiresAt: Date.now() + 5 * 60 * 1000,
-      };
-      console.log(`Generated OTP for ${email}:`, otp);
-      await transporter.sendMail({
-          from: process.env.EMAIL,
-          to: email,
-          subject: "Your OTP for Signup",
-          text: `Your OTP is ${otp}. It is valid for 5 minutes.`,
-      });
-      res.status(200).json({ message: "OTP sent successfully" });
+    const { email } = req.body;
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    req.session.storedOtpData = {
+      otp: String(otp),
+      expiresAt: Date.now() + 5 * 60 * 1000,
+    };
+    console.log(`Generated OTP for ${email}:`, otp);
+    await transporter.sendMail({
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Your OTP for Signup",
+      text: `Your OTP is ${otp}. It is valid for 5 minutes.`,
+    });
+    res.status(200).json({ message: "OTP sent successfully" });
   } catch (error) {
-      console.error("Error sending OTP:", error);
-      res.status(500).json({ error: "Error sending OTP" });
+    console.error("Error sending OTP:", error);
+    res.status(500).json({ error: "Error sending OTP" });
   }
 };
+
+
+
 
 exports.verifySignupOTP = async (req, res) => {
   try {

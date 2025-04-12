@@ -628,26 +628,30 @@
              function validateProfileForm() {
                  let isValid = true;
          
-                 // Name validation
-                 const name = document.getElementById("name").value.trim();
-                 const nameError = document.getElementById("nameError");
-                 if (!name || name.length < 2) {
-                     nameError.textContent = "Name must be at least 2 characters long";
-                     isValid = false;
-                 } else {
-                     nameError.textContent = "";
-                 }
-         
-                 // Phone validation (10 digits)
-                 const phone = document.getElementById("phone").value.trim();
-                 const phoneError = document.getElementById("phoneError");
-                 const phoneRegex = /^\d{10}$/;
-                 if (!phoneRegex.test(phone)) {
-                     phoneError.textContent = "Phone number must be exactly 10 digits";
-                     isValid = false;
-                 } else {
-                     phoneError.textContent = "";
-                 }
+                // Name validation
+const name = document.getElementById("name").value.trim();
+const nameError = document.getElementById("nameError");
+const nameRegex = /^(?=[A-Za-z]{5}[A-Za-z0-9]*$)[A-Za-z0-9]{5,12}$/;
+if (!name) {
+    nameError.textContent = "Name cannot be empty.";
+    isValid = false;
+} else if (!nameRegex.test(name)) {
+    nameError.textContent = "Name must have exactly 5 letters, optional numbers, up to 12 characters total, no spaces or special characters.";
+    isValid = false;
+} else {
+    nameError.textContent = "";
+}
+
+// Phone validation (10 digits, starting with 7, 8, or 9)
+const phone = document.getElementById("phone").value.trim();
+const phoneError = document.getElementById("phoneError");
+const phoneRegex = /^[789]\d{9}$/;
+if (!phoneRegex.test(phone)) {
+    phoneError.textContent = "Phone number must be exactly 10 digits and start with 7, 8, or 9.";
+    isValid = false;
+} else {
+    phoneError.textContent = "";
+}
          
                  // If valid, submit via AJAX
                  if (isValid) {

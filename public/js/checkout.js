@@ -37,18 +37,18 @@ document.addEventListener("DOMContentLoaded", function () {
         const addressType = form.elements["addressType"];
 
         // Regular expressions for validation
-        const nameRegex = /^[A-Za-z\s]+$/;
+        const nameRegex = /^(?=[A-Za-z]{5}[A-Za-z0-9]*$)[A-Za-z0-9]{5,12}$/;
         const pincodeRegex = /^\d{4,10}$/;
-        const phoneRegex = /^[0-9]{10,15}$/;
+        const phoneRegex = /^[789]\d{9}$/;
 
         // Apply validations
-        isValid &= validateField(fullName, nameRegex, "Full name must contain only letters.");
-        isValid &= validateField(address, null, "Address is required.");
-        isValid &= validateField(city, nameRegex, "City name must contain only letters.");
-        isValid &= validateField(pincode, pincodeRegex, "Pincode must be between 4 to 10 digits.");
-        isValid &= validateField(state, nameRegex, "State name must contain only letters.");
-        isValid &= validateField(country, nameRegex, "Country name must contain only letters.");
-        isValid &= validateField(phone, phoneRegex, "Phone number must be 10-15 digits.");
+        isValid &= validateField(fullName, nameRegex, "Name must have exactly 5 letters, optional numbers, up to 12 characters total, no spaces or special characters.");
+    isValid &= validateField(address, null, "Address is required.");
+    isValid &= validateField(city, nameRegex, "City name must contain only letters.");
+    isValid &= validateField(pincode, pincodeRegex, "Pincode must be between 4 to 10 digits.");
+    isValid &= validateField(state, nameRegex, "State name must contain only letters.");
+    isValid &= validateField(country, nameRegex, "Country name must contain only letters.");
+    isValid &= validateField(phone, phoneRegex, "Phone number must be exactly 10 digits and start with 7, 8, or 9.");
 
         // Address Type validation (Dropdown)
         if (!addressType.value) {
@@ -218,6 +218,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
+
+
+
+
 function updateAddressOnPage(addressId, data) {
     try {
         if (!addressId || !data) {
@@ -231,22 +236,141 @@ function updateAddressOnPage(addressId, data) {
 
         console.log(`Debug: Updating address ID ${addressId} with data:`, data);
 
-        // Replace entire content with updated address
-        addressElement.innerHTML = `
-            ${data.isDefault ? '<span class="badge bg-success me-2">Default</span>' : ''}
-            <span class="full-name">${data.fullName || 'N/A'}</span><br>
-            <span class="address-details">${data.address || ''}, ${data.city || ''}, ${data.state || ''}, ${data.pincode || ''}</span><br>
-            <span class="phone">${data.phone || 'N/A'}</span>
-        `.trim();
+        // Try to find elements with IDs from addNewAddressToPage
+        const fullNameElement = document.getElementById(`fullName-${addressId}`);
+        const addressDetailsElement = document.getElementById(`addressDetails-${addressId}`);
+        const phoneElement = document.getElementById(`phone-${addressId}`);
+        const defaultBadgeElement = document.getElementById(`defaultBadge-${addressId}`);
+        const radioElement = document.getElementById(`addressRadio-${addressId}`);
+        const editButtonElement = document.getElementById(`editAddressBtn-${addressId}`);
+
+        console.log('Debug: Found elements:', {
+            fullName: !!fullNameElement,
+            addressDetails: !!addressDetailsElement,
+            phone: !!phoneElement,
+            defaultBadge: !!defaultBadgeElement,
+            radio: !!radioElement,
+            editButton: !!editButtonElement
+        });
+
+        // Save edit button if it exists
+        let editButtonHTML = '';
+        if (editButtonElement) {
+            editButtonHTML = editButtonElement.outerHTML;
+            console.log('Debug: Edit button HTML saved:', editButtonHTML);
+        } else {
+            console.warn('Debug: Edit button not found, generating new one');
+            editButtonHTML = `
+                <button id="editAddressBtn-${addressId}" class="btn btn-sm btn-outline-secondary"
+                        data-bs-toggle="modal" data-bs-target="#editAddressModal"
+                        data-address-id="${addressId}">
+                    Edit
+                </button>
+            `;
+        }
+
+        // If IDs are found, update them directly
+        if (fullNameElement && addressDetailsElement && phoneElement) {
+            console.log('Debug: Updating using IDs');
+            fullNameElement.textContent = data.fullName || 'N/A';
+            addressDetailsElement.textContent = `${data.address || ''}, ${data.city || ''}, ${data.state || ''}, ${data.pincode || ''}`;
+            phoneElement.textContent = data.phone || 'N/A';
+
+            // Update default badge and radio
+            if (data.isDefault) {
+                if (!defaultBadgeElement) {
+                    const badge = document.createElement('span');
+                    badge.id = `defaultBadge-${addressId}`;
+                    badge.className = 'badge bg-success me-2';
+                    badge.textContent = 'Default';
+                    const buttonContainer = addressElement.querySelector('.d-flex > div:last-child');
+                    if (buttonContainer && editButtonElement) {
+                        buttonContainer.insertBefore(badge, editButtonElement);
+                    } else {
+                        console.warn('Debug: Button container not found for badge');
+                    }
+                }
+                addressElement.classList.add('selected');
+                if (radioElement) {
+                    radioElement.checked = true;
+                }
+            } else {
+                if (defaultBadgeElement) {
+                    defaultBadgeElement.remove();
+                }
+                addressElement.classList.remove('selected');
+                if (radioElement) {
+                    radioElement.checked = false;
+                }
+            }
+        } else {
+            // Fallback: Use innerHTML, preserving edit button
+            console.warn('Debug: Some IDs not found, using innerHTML with preserved edit button');
+
+            addressElement.innerHTML = `
+                <input type="radio" name="selectedAddress" value="${addressId}" 
+                       id="addressRadio-${addressId}" class="hidden-radio" 
+                       ${data.isDefault ? 'checked' : ''}>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 id="fullName-${addressId}" class="mb-1">${data.fullName || 'N/A'}</h6>
+                        <p id="addressDetails-${addressId}" class="text-muted mb-0">
+                            ${data.address || ''}, ${data.city || ''}, ${data.state || ''}, ${data.pincode || ''}
+                        </p>
+                        <small id="phone-${addressId}" class="text-muted">${data.phone || 'N/A'}</small>
+                    </div>
+                    <div>
+                        ${data.isDefault ? `<span id="defaultBadge-${addressId}" class="badge bg-success me-2">Default</span>` : ''}
+                        ${editButtonHTML}
+                    </div>
+                </div>
+            `.trim();
+
+            // Re-attach event listener to edit button
+            const newEditButton = document.getElementById(`editAddressBtn-${addressId}`);
+            if (newEditButton) {
+                newEditButton.addEventListener('click', async () => {
+                    console.log("Debug: Editing address ID:", addressId);
+                    try {
+                        const response = await fetch(`/user/checkout/address/${addressId}`, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.message || `Server returned ${response.status}`);
+                        }
+
+                        const address = await response.json();
+                        console.log("Debug: Fetched address data:", address);
+
+                        const form = document.getElementById('editAddressForm');
+                        form.addressId.value = address._id || '';
+                        form.fullName.value = address.fullName || '';
+                        form.address.value = address.address || '';
+                        form.city.value = address.city || '';
+                        form.pincode.value = address.pincode || '';
+                        form.state.value = address.state || '';
+                        form.country.value = address.country || '';
+                        form.phone.value = address.phone || '';
+                        form.addressType.value = address.addressType || 'Home';
+                        form.isDefault.checked = address.isDefault || false;
+                    } catch (error) {
+                        console.error("Debug: Error fetching address:", error.message);
+                        alert(`Failed to load address: ${error.message}`);
+                    }
+                });
+            } else {
+                console.error('Debug: Failed to find new edit button after innerHTML');
+            }
+        }
 
         console.log("Debug: Address updated successfully in the DOM.");
     } catch (error) {
         console.error("Debug: Error updating address on page:", error.message);
     }
 }
-
-
-
 
 
 function addNewAddressToPage(address) {

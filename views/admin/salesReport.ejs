@@ -423,8 +423,8 @@
             <div class="card-body stat-card orders">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <p class="stat-title">Orders</p>
-                        <h3 class="stat-value"><%= report.totalOrders || 0 %></h3>
+                        <p class="stat-title">Total Products Delivered</p>
+                        <h3 class="stat-value"><%= report.totalDeliveredProducts || 0 %></h3>
                        
                     </div>
                     <div class="stat-icon orders">
@@ -505,34 +505,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% if (report.orders && report.orders.length > 0) { %>
-                                    <% report.orders.forEach(order => { %>
-                                        <tr>
-                                            <td>#ORD-<%= order.orderId || 'N/A' %></td>
-                                            <td><%= new Date(order.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></td>
-                                            <td><%= order.user?.name || 'Unknown' %></td>
-                                            <td><%= order.products?.length || 0 %> item<%= order.products?.length !== 1 ? 's' : '' %></td>
-                                            <td><%= order.originalAmount ? order.originalAmount.toFixed(2) : '0.00' %></td>
-                                            <td><%= order.offerDiscount ? order.offerDiscount.toFixed(2) : '0.00' %></td>
-                                            <td><%= order.couponCode %> <%= order.couponDiscount ? `(-${order.couponDiscount.toFixed(2)})` : '' %></td>
-                                            <td><%= order.totalAmount ? order.totalAmount.toFixed(2) : '0.00' %></td>
-                                            <td>
-                                                <span class="badge <%= 
-                                                    order.status === 'Delivered' ? 'bg-success' : 
-                                                    order.status === 'Shipped' ? 'bg-info' : 
-                                                    order.status === 'Processing' ? 'bg-warning' : 
-                                                    order.status === 'Cancelled' ? 'bg-danger' : 'bg-secondary' %>">
-                                                    <%= order.status %>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    <% }) %>
-                                <% } else { %>
+                                <% if (report.allOrders && report.allOrders.length > 0) { %>
+                                  <% report.allOrders.forEach(order => { %>
                                     <tr>
-                                        <td colspan="9" class="text-center">No orders found for the selected period.</td>
+                                      <td>#ORD-<%= order.orderId || 'N/A' %></td>
+                                      <td><%= new Date(order.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></td>
+                                      <td><%= order.user?.name || 'Unknown' %></td>
+                                      <td><%= order.products.reduce((sum, p) => sum + p.quantity, 0) %> item<%= order.products.reduce((sum, p) => sum + p.quantity, 0) !== 1 ? 's' : '' %></td>
+                                      <td><%= order.originalAmount ? order.originalAmount.toFixed(2) : '0.00' %></td>
+                                      <td><%= order.offerDiscount ? order.offerDiscount.toFixed(2) : '0.00' %></td>
+                                      <td><%= order.couponCode %> <%= order.couponDiscount ? `(-${order.couponDiscount.toFixed(2)})` : '' %></td>
+                                      <td><%= order.totalAmount ? order.totalAmount.toFixed(2) : '0.00' %></td>
+                                      <td>
+                                        <span class="badge <%= 
+                                          order.status === 'Delivered' ? 'bg-success' : 
+                                          order.status === 'Shipped' ? 'bg-info' : 
+                                          order.status === 'Processing' ? 'bg-warning' : 
+                                          order.status === 'Cancelled' ? 'bg-danger' : 'bg-secondary' %>">
+                                          <%= order.status %>
+                                        </span>
+                                      </td>
                                     </tr>
+                                  <% }) %>
+                                <% } else { %>
+                                  <tr>
+                                    <td colspan="9" class="text-center">No orders found for the selected period.</td>
+                                  </tr>
                                 <% } %>
-                            </tbody>
+                              </tbody>
                         </table>
                     </div>
     
