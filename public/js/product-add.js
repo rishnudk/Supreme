@@ -107,6 +107,15 @@ function removeImage(index) {
     processedImages.delete(inputElement.id);
 }
 
+
+
+
+
+
+
+
+
+
 // Function: validateForm (Debug Version)
 function validateForm() {
     console.log("Validating form...");
@@ -186,6 +195,14 @@ function validateForm() {
     return isValid;
 }
 
+
+
+
+
+
+
+
+
 // Function: submitForm
 form.addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -253,8 +270,6 @@ document.querySelectorAll('.image-preview').forEach(img => {
     originalPreviews.set(img.id, img.src);
 });
 
-// Debug Button (Add this to your HTML and script)
-document.getElementById('debugButton') && document.getElementById('debugButton').addEventListener('click', () => {
-    console.log("🛠️ Debug Validation Triggered");
-    validateForm();
+document.getElementById('cancelButton') && document.getElementById('cancelButton').addEventListener('click', () => {
+    window.location.href = '/admin/products';
 });

@@ -43,7 +43,7 @@ exports.addProduct = async (req, res) => {
           brand,
           price: Number(price),
           description,
-          category, // Validated category ID
+          category, 
           status,
           images: productImages,
           variant: { color, stock: Number(stock) }
@@ -63,10 +63,8 @@ exports.addProduct = async (req, res) => {
 exports.GetaddProduct = async (req, res) => {
   try {
     const categories = await Category.find();
-    console.log("Fetched Categories for Add Product:", categories); // Debug log
     res.render("admin/productAdd", { categories });
   } catch (error) {
-    console.error("Error fetching categories:", error);
     res.status(500).send("Internal Server Error");
   }
 };

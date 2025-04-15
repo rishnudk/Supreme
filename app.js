@@ -11,6 +11,9 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const User = require("./models/User"); 
+const Cart = require("./models/Cart"); 
+const Wishlist = require("./models/Wishlist"); 
+
 const bcrypt = require('bcryptjs'); 
 
 
@@ -62,6 +65,85 @@ app.use((req, res, next) => {
 });
 
 
+const migrateWishlists = async () => {
+  try {
+    const wishlists = await Wishlist.find({});
+    console.log(`🔄 Found ${wishlists.length} wishlists to migrate`);
+    for (const wishlist of wishlists) {
+      if (wishlist.product && !wishlist.products) {
+        wishlist.products = [wishlist.product];
+        wishlist.product = undefined;
+        await wishlist.save();
+        console.log(`🔄 Migrated wishlist for user ${wishlist.user}`);
+      }
+    }
+    console.log("🔄 Wishlist migration complete");
+  } catch (error) {
+    console.error("🔄 Migration error:", error);
+  }
+};
+
+// Temporary route
+app.get("/migrate-wishlists", async (req, res) => {
+  await migrateWishlists();
+  res.send("Wishlist migration complete");
+});
+
+
+
+
+const addNavCounts = async (req, res, next) => {
+  try {
+    let cartCount = 0;
+    let wishlistCount = 0;
+
+    console.log("🔍 [addNavCounts] Starting for path:", req.path);
+    console.log("🔍 [addNavCounts] Session user:", req.session.user);
+
+    if (req.session.user) {
+      const userId = req.session.user._id;
+      console.log("🔍 [addNavCounts] User ID:", userId);
+
+      // Fetch cart count
+      const cart = await Cart.findOne({ user: userId });
+      console.log("🔍 [addNavCounts] Cart:", cart);
+      if (cart && cart.items) {
+        cartCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+        console.log("🔍 [addNavCounts] Cart items:", cart.items, "Count:", cartCount);
+      } else {
+        console.log("🔍 [addNavCounts] No cart or empty items");
+      }
+
+      // Fetch wishlist count
+      const wishlist = await Wishlist.findOne({ user: userId });
+      console.log("🔍 [addNavCounts] Wishlist:", wishlist);
+      if (wishlist && wishlist.products) {
+        wishlistCount = wishlist.products.length;
+        console.log("🔍 [addNavCounts] Wishlist products:", wishlist.products, "Count:", wishlistCount);
+      } else {
+        console.log("🔍 [addNavCounts] No wishlist or empty products");
+      }
+    } else {
+      console.log("🔍 [addNavCounts] No user logged in");
+    }
+
+    // Attach counts to res.locals
+    res.locals.cartCount = cartCount;
+    res.locals.wishlistCount = wishlistCount;
+    console.log("🔍 [addNavCounts] Final counts - Cart:", cartCount, "Wishlist:", wishlistCount);
+
+    next();
+  } catch (error) {
+    console.error("❌ [addNavCounts] Error:", error);
+    res.locals.cartCount = 0;
+    res.locals.wishlistCount = 0;
+    next();
+  }
+};
+
+
+app.use(addNavCounts); // Apply middleware to all routes
+
 
 const checkUserStatus = async (req, res, next) => {
 
@@ -89,11 +171,16 @@ const checkUserStatus = async (req, res, next) => {
   }
 };
 
+
+
+
+
 // Import Routes
 const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoutes"); 
 const authRoutes = require("./routes/authRoutes");
 const authMiddleware = require("./middlewares/authMiddleware");
+
 
 
 app.use((req, res, next) => {

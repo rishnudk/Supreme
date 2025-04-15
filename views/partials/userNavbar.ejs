@@ -4,462 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supreme - Modern Furniture</title>
-    <!-- Bootstrap CSS -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-    <!-- Font Awesome for icons -->
+
      <link rel="stylesheet" href="/css/user-navbar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Custom CSS -->
-
-
-
-    <!-- <style>
-      /* Supreme E-commerce Header Styles */
-
-:root {
-    --primary-color: #E5574E;
-    --light-gray: #F4F7F7;
-    --white: #FFFFFF;
-    --dark-text: #333333;
-    --light-text: #777777;
-    --border-color: #EEEEEE;
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --transition: all 0.3s ease;
-}
-
-/* General Styles */
-body {
-    font-family: 'Poppins', sans-serif;
-    color: var(--dark-text);
-    background-color: var(--white);
-}
-
-.btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.btn-primary:hover, .btn-primary:focus {
-    background-color: #d84941;
-    border-color: #d84941;
-}
-
-/* Announcement Bar */
-.announcement-bar {
-    background-color: var(--primary-color);
-    color: var(--white);
-    font-size: 0.85rem;
-}
-
-.announcement-text {
-    letter-spacing: 0.5px;
-}
-
-/* Main Header */
-.supreme-header {
-    position: relative;
-    background-color: var(--white);
-    box-shadow: 0 2px 10px var(--shadow-color);
-}
-
-.navbar {
-    padding: 0.75rem 0;
-}
-
-.logo {
-    height: 38px;
-    width: auto;
-}
-
-/* Navigation Menu */
-.navbar-nav .nav-link {
-    color: var(--dark-text);
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    transition: var(--transition);
-}
-
-.navbar-nav .nav-link:hover,
-.navbar-nav .nav-link:focus {
-    color: var(--primary-color);
-}
-
-.dropdown-menu {
-    border: none;
-    box-shadow: 0 5px 12px var(--shadow-color);
-    padding: 0.75rem 0;
-    border-radius: 0.5rem;
-}
-
-.dropdown-item {
-    font-size: 0.9rem;
-    padding: 0.5rem 1.5rem;
-    color: var(--dark-text);
-    transition: var(--transition);
-}
-
-.dropdown-item:hover,
-.dropdown-item:focus {
-    background-color: var(--light-gray);
-    color: var(--primary-color);
-}
-
-.dropdown-divider {
-    margin: 0.5rem 0;
-    border-color: var(--border-color);
-}
-
-/* Search Form */
-.search-container {
-    position: relative;
-}
-.search-form {
-    position: relative;
-    width: 220px;
-}
-
-.search-input {
-    border-radius: 50px;
-    padding-right: 40px;
-    border: 1px solid var(--border-color);
-    background-color: var(--light-gray);
-    font-size: 0.9rem;
-    transition: var(--transition);
-}
-
-.search-input:focus {
-    box-shadow: none;
-    border-color: var(--primary-color);
-    background-color: var(--white);
-}
-
-.search-button {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background: transparent;
-    border: none;
-    color: var(--light-text);
-    transition: var(--transition);
-}
-
-.search-button:hover {
-    color: var(--primary-color);
-}
-
-.search-toggle {
-    cursor: pointer;
-    padding: 0.5rem;
-    font-size: 1.1rem;
-    color: var(--dark-text);
-    transition: var(--transition);
-}
-
-.search-toggle:hover {
-    color: var(--primary-color);
-}
-
-/* User Navigation */
-.user-nav {
-    display: flex;
-    align-items: center;
-}
-
-.user-nav-item {
-    position: relative;
-    margin-left: 1rem;
-}
-
-.user-nav-link {
-    color: var(--dark-text);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.user-nav-link:hover {
-    color: var(--primary-color);
-}
-
-.user-nav-link i {
-    font-size: 1.2rem;
-}
-
-.badge.cart-count,
-.badge.wishlist-count {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background-color: var(--primary-color);
-    color: var(--white);
-    font-size: 0.65rem;
-    padding: 0.15rem 0.35rem;
-    font-weight: 500;
-    min-width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Cart Dropdown */
-.cart-dropdown {
-    width: 320px;
-    padding: 0;
-    border-radius: 0.5rem;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-    right: -10px;
-    margin-top: 1rem;
-}
-
-.cart-header {
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 0.75rem;
-}
-
-.cart-empty {
-    color: var(--light-text);
-}
-
-.cart-empty i {
-    color: var(--border-color);
-}
-
-/* Mobile Search Overlay */
-.mobile-search-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: var(--white);
-    padding: 1rem 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px var(--shadow-color);
-    transform: translateY(-100%);
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--transition);
-}
-
-.mobile-search-overlay.active {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-}
-
-.mobile-search-form {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.mobile-search-form .form-control {
-    border-radius: 50px;
-    padding: 0.75rem 1.25rem;
-    border: 1px solid var(--border-color);
-    background-color: var(--light-gray);
-    font-size: 1rem;
-}
-
-.mobile-search-form .search-button {
-    position: absolute;
-    right: 50px;
-    padding: 0 1rem;
-}
-
-.close-search {
-    background: transparent;
-    border: none;
-    color: var(--light-text);
-    transition: var(--transition);
-    padding: 0 1rem;
-}
-
-.close-search:hover {
-    color: var(--primary-color);
-}
-/* Mobile Category Navigation */
-.mobile-category-nav {
-    background-color: var(--white);
-    border-bottom: 1px solid var(--border-color);
-    padding: 0.75rem 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-}
-
-.mobile-category-nav::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
-}
-
-.mobile-categories-wrapper {
-    display: flex;
-    min-width: max-content;
-}
-
-.mobile-category-item {
-    flex: 0 0 auto;
-    text-align: center;
-    padding: 0 0.75rem;
-}
-
-.mobile-category-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: var(--dark-text);
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.mobile-category-link:hover {
-    color: var(--primary-color);
-}
-
-.mobile-category-link i {
-    font-size: 1.25rem;
-    margin-bottom: 0.35rem;
-}
-
-.mobile-category-link span {
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 991.98px) {
-    .navbar {
-        padding: 0.5rem 0;
-    }
-    
-    .logo {
-        height: 32px;
-    }
-    
-    .navbar-collapse {
-        background-color: var(--white);
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        padding: 1rem;
-        box-shadow: 0 5px 10px var(--shadow-color);
-        z-index: 999;
-    }
-    
-    .navbar-nav {
-        max-height: 70vh;
-        overflow-y: auto;
-    }
-    
-    .navbar-nav .nav-link {
-        padding: 0.75rem 0;
-        border-bottom: 1px solid var(--border-color);
-    }
-    
-    .dropdown-menu {
-        box-shadow: none;
-        padding: 0 0 0 1rem;
-        margin: 0.5rem 0;
-        border-radius: 0;
-    }
-    
-    .dropdown-item {
-        padding: 0.5rem 0;
-    }
-    
-    .user-nav-item {
-        margin-left: 0.75rem;
-    }
-    
-    .user-nav-link span {
-        display: none;
-    }
-}
-
-@media (max-width: 767.98px) {
-    .cart-dropdown {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        max-width: 350px;
-        margin: 0;
-        border-radius: 0;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        z-index: 1050;
-    }
-    
-    .cart-dropdown.show {
-        transform: translateX(0);
-    }
-    
-    .announcement-text {
-        font-size: 0.75rem;
-    }
-}
-
-@media (max-width: 575.98px) {
-    .logo {
-        height: 28px;
-    }
-    
-    .user-nav-item {
-        margin-left: 0.5rem;
-    }
-    
-    .mobile-category-item {
-        padding: 0 0.5rem;
-    }
-}
-
-/* Sticky Header Effects */
-.supreme-header.sticky {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    animation: slideDown 0.4s forwards;
-}
-
-@keyframes slideDown {
-    from {
-        transform: translateY(-100%);
-    }
-    to {
-        transform: translateY(0);
-    }
-}
-
-/* Additional JavaScript to handle sticky header */
-/* This should be added to a separate JS file */
-/*
-document.addEventListener('DOMContentLoaded', function() {
-    const header = document.querySelector('.supreme-header');
-    const headerOffset = header.offsetTop;
-    
-    function handleSticky() {
-        if (window.pageYOffset > headerOffset) {
-            header.classList.add('sticky');
-        } else {
-            header.classList.remove('sticky');
-        }
-    }
-    
-    window.addEventListener('scroll', handleSticky);
-});
-*/
-    </style> -->
-
-
 
 
 
@@ -562,46 +109,49 @@ document.addEventListener('DOMContentLoaded', function() {
                   <!-- User Navigation -->
 
 
-                  <div class="user-nav">
-                    <!-- Account Dropdown -->
-                    <div class="user-nav-item">
-                      <a href="#" class="user-nav-link" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user"></i>
-                        <span class="d-none d-xl-inline ms-1">
-                          <% if (user) { %>
-                            <%= user.name %>
-                          <% } else { %>
-                            Account
-                          <% } %>
-                        </span>
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-                        <% if (user) { %>
-                          <li><a class="dropdown-item" href="/user/account">Profile</a></li>
-                          <li><a class="dropdown-item" href="/user/account">Order History</a></li>
-                          <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
-                        <% } else { %>
-                          <li><a class="dropdown-item" href="/login">Sign In</a></li>
-                          <li><a class="dropdown-item" href="/user/signup">Create Account</a></li>
-                        <% } %>
-                      </ul>
-                    </div>
-                  
-                    <!-- Wishlist Icon -->
-                    <div class="user-nav-item">
-                      <a href="/user/wishlist" class="user-nav-link">
-                        <i class="far fa-heart"></i>
-                      </a>
-                    </div>
-                  
-                    <!-- Cart Dropdown -->
-                    <div class="user-nav-item">
-                      <a href="/user/cart" class="user-nav-link">
-                        <i class="fas fa-shopping-cart"></i>
-                      </a>
-                     
-                    </div>
-                  </div>
+<!-- DEBUG: Userheader Partial Loaded -->
+<div class="user-nav">
+    <!-- Account Dropdown -->
+    <div class="user-nav-item">
+        <a href="#" class="user-nav-link" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user"></i>
+            <span class="d-none d-xl-inline ms-1">
+                <% if (user) { %>
+                    <%= user.name %>
+                <% } else { %>
+                    Account
+                <% } %>
+            </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+            <% if (user) { %>
+                <li><a class="dropdown-item" href="/user/account">Profile</a></li>
+                <li><a class="dropdown-item" href="/user/account">Order History</a></li>
+                <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+            <% } else { %>
+                <li><a class="dropdown-item" href="/login">Sign In</a></li>
+                <li><a class="dropdown-item" href="/user/signup">Create Account</a></li>
+            <% } %>
+        </ul>
+    </div>
+
+    <!-- Wishlist Icon -->
+    <div class="user-nav-item">
+        <a href="/user/wishlist" class="user-nav-link">
+            <i class="far fa-heart"></i>
+            <span class="badge rounded-pill wishlist-count" style="display: <%= wishlistCount > 0 ? 'inline-block' : 'none' %>;"><%= wishlistCount %></span>
+        </a>
+    </div>
+
+    <!-- Cart Icon -->
+    <div class="user-nav-item">
+        <a href="/user/cart" class="user-nav-link">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge rounded-pill cart-count" style="display: <%= cartCount > 0 ? 'inline-block' : 'none' %>;"><%= cartCount %></span>
+        </a>
+    </div>
+</div>
+                </div>
 
               </div>
           </div>
@@ -682,79 +232,149 @@ document.addEventListener('DOMContentLoaded', function() {
 
       
      
+<script>
 
-      <script>
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    const header = document.querySelector('.supreme-header');
-    const headerOffset = header.offsetTop;
-    
-    function handleSticky() {
-        if (window.pageYOffset > headerOffset) {
-            header.classList.add('sticky');
+
+    // Wishlist and Cart AJAX handlers
+async function addToWishlist(productId) {
+    try {
+        console.log('Adding to wishlist:', productId);
+        const response = await fetch('/user/wishlist/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId }),
+        });
+        const data = await response.json();
+        console.log('Add to wishlist response:', data);
+        if (response.ok) {
+            updateBadge('.wishlist-count', data.wishlistCount);
+            showToast(data.message, 'success');
         } else {
-            header.classList.remove('sticky');
+            showToast(data.error || 'Failed to add to wishlist', 'error');
         }
+    } catch (error) {
+        console.error('Error adding to wishlist:', error);
+        showToast('Error adding to wishlist', 'error');
     }
-    
-    window.addEventListener('scroll', handleSticky);
-});
+}
 
+async function removeFromWishlist(productId) {
+    try {
+        console.log('Removing from wishlist:', productId);
+        const response = await fetch('/user/wishlist/remove', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId }),
+        });
+        const data = await response.json();
+        console.log('Remove from wishlist response:', data);
+        if (response.ok) {
+            updateBadge('.wishlist-count', data.wishlistCount);
+            showToast(data.message, 'success');
+        } else {
+            showToast(data.error || 'Failed to remove from wishlist', 'error');
+        }
+    } catch (error) {
+        console.error('Error removing from wishlist:', error);
+        showToast('Error removing from wishlist', 'error');
+    }
+}
 
-// Supreme E-commerce Header JavaScript
+async function addToCartFromWishlist(productId, quantity = 1, color) {
+    try {
+        console.log('Adding to cart from wishlist:', productId, quantity, color);
+        const response = await fetch('/user/wishlist/add-from-wishlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId, quantity, color }),
+        });
+        const data = await response.json();
+        console.log('Add to cart response:', data);
+        if (response.ok) {
+            updateBadge('.wishlist-count', data.wishlistCount);
+            updateBadge('.cart-count', data.cartCount);
+            showToast(data.message, 'success');
+        } else {
+            showToast(data.message || 'Failed to add to cart', 'error');
+        }
+    } catch (error) {
+        console.error('Error adding to cart from wishlist:', error);
+        showToast('Error adding to cart', 'error');
+    }
+}
 
-document.addEventListener('DOMContentLoaded', function() {
+// Helper to update badge
+function updateBadge(selector, count) {
+    const badge = document.querySelector(selector);
+    if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'inline-block' : 'none';
+    } else {
+        console.error(`${selector} not found`);
+    }
+}
+
+// Toast notification
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }, 100);
+}
+
+// Header functionality
+function initializeHeader() {
+    // Sticky header
+    const header = document.querySelector('.supreme-header');
+    if (header) {
+        let headerOffset = header.offsetTop;
+        window.addEventListener('resize', () => {
+            headerOffset = header.offsetTop;
+        });
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > headerOffset) {
+                header.classList.add('sticky');
+                document.body.style.paddingTop = header.offsetHeight + 'px';
+            } else {
+                header.classList.remove('sticky');
+                document.body.style.paddingTop = '0';
+            }
+        });
+    }
+
     // Mobile search toggle
     const searchToggle = document.querySelector('.search-toggle');
     const mobileSearchOverlay = document.querySelector('.mobile-search-overlay');
     const closeSearch = document.querySelector('.close-search');
-    
     if (searchToggle && mobileSearchOverlay && closeSearch) {
-        searchToggle.addEventListener('click', function() {
+        searchToggle.addEventListener('click', () => {
             mobileSearchOverlay.classList.add('active');
             setTimeout(() => {
-                mobileSearchOverlay.querySelector('input').focus();
+                mobileSearchOverlay.querySelector('input')?.focus();
             }, 300);
         });
-        
-        closeSearch.addEventListener('click', function() {
+        closeSearch.addEventListener('click', () => {
             mobileSearchOverlay.classList.remove('active');
         });
     }
-    
-    // Sticky header
-    const header = document.querySelector('.supreme-header');
-    let headerOffset = header.offsetTop;
-    
-    // Recalculate header offset on window resize
-    window.addEventListener('resize', function() {
-        headerOffset = header.offsetTop;
-    });
-    
-    function handleSticky() {
-        if (window.pageYOffset > headerOffset) {
-            header.classList.add('sticky');
-            document.body.style.paddingTop = header.offsetHeight + 'px';
-        } else {
-            header.classList.remove('sticky');
-            document.body.style.paddingTop = 0;
-        }
-    }
-    
-    window.addEventListener('scroll', handleSticky);
-    
-    // Cart dropdown positioning on mobile
+
+    // Cart dropdown on mobile
     const cartDropdown = document.querySelector('.cart-dropdown');
     const cartToggle = document.querySelector('#cartDropdown');
-    
     if (cartDropdown && cartToggle && window.innerWidth < 768) {
-        cartToggle.addEventListener('click', function(e) {
+        cartToggle.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             cartDropdown.classList.toggle('show');
-            
-            // Close dropdown when clicking outside
             document.addEventListener('click', function closeCart(e) {
                 if (!cartDropdown.contains(e.target) && !cartToggle.contains(e.target)) {
                     cartDropdown.classList.remove('show');
@@ -763,35 +383,34 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
     // Dropdown hover on desktop
     const dropdowns = document.querySelectorAll('.dropdown');
-    
     function handleDropdownHover() {
         if (window.innerWidth >= 992) {
             dropdowns.forEach(dropdown => {
-                dropdown.addEventListener('mouseenter', function() {
-                    this.querySelector('.dropdown-toggle').click();
+                dropdown.addEventListener('mouseenter', () => {
+                    dropdown.querySelector('.dropdown-toggle')?.click();
                 });
-                
-                dropdown.addEventListener('mouseleave', function() {
-                    this.querySelector('.dropdown-toggle').click();
+                dropdown.addEventListener('mouseleave', () => {
+                    dropdown.querySelector('.dropdown-toggle')?.click();
                 });
             });
         }
     }
-    
-    // Initialize dropdown hover
     handleDropdownHover();
-    
-    // Reset dropdown behavior on window resize
     let resizeTimer;
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(handleDropdownHover, 250);
     });
-});
-      </script>
+}
 
+// Initialize everything
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Initializing header and badges');
+    initializeHeader();
+});
+</script>
 </body>
   </html>
