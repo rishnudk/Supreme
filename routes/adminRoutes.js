@@ -46,12 +46,12 @@ router.put('/:orderId/update-product-status',adminAuth, orderController.updatePr
 
 
 
-router.get('/allOrders', orderController.getAllOrders);
+router.get('/allOrders',adminAuth, orderController.getAllOrders);
 
 
-router.get('/allOrders/filter', orderController.getFilteredOrders);
+router.get('/allOrders/filter',adminAuth, orderController.getFilteredOrders);
 
-router.get('/allOrders/:id', orderController.getOrderDetails);
+router.get('/allOrders/:id',adminAuth, orderController.getOrderDetails);
 
 
 
@@ -61,7 +61,7 @@ router.get('/allOrders/:id', orderController.getOrderDetails);
 router.get("/coupons", adminAuth, couponController.getCouponManagePage);
 router.post("/coupons/add", adminAuth, couponController.addCoupon)
 router.put('/coupons/update/:id', couponController.updateCoupon);
-router.get('/coupons/:id', couponController.getCouponById);
+router.get('/coupons/:id', adminAuth,couponController.getCouponById);
 router.delete('/coupons/delete/:id', couponController.deleteCoupon);
 
 
