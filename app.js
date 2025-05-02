@@ -83,7 +83,6 @@ const migrateWishlists = async () => {
   }
 };
 
-// Temporary route
 app.get("/migrate-wishlists", async (req, res) => {
   await migrateWishlists();
   res.send("Wishlist migration complete");
@@ -142,7 +141,7 @@ const addNavCounts = async (req, res, next) => {
 };
 
 
-app.use(addNavCounts); // Apply middleware to all routes
+app.use(addNavCounts); 
 
 
 const checkUserStatus = async (req, res, next) => {
