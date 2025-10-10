@@ -93,7 +93,7 @@ Supreme/
 📧 [rishnudev@gmail.com](mailto:rishnudev@gmail.com)  
 🔗 [GitHub Profile](https://github.com/rishnudk)  
 
-⭐ **Star the repo if you find it useful!**  
+⭐ **Star the repo if you find it useful!!**  
 ![GitHub Stars](https://img.shields.io/github/stars/rishnudk/Supreme?style=social)
 ```
 
