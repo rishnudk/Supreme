@@ -2,14 +2,14 @@ const app = require("./app");
 const connectDB = require("./config/db");
 const mongoose = require("mongoose");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT 
 
 async function startServer() {
   try {
     await connectDB(); 
     console.log("✅ Connected to MongoDB");
 
-    const server = app.listen(PORT, () => {
+    const server = app.listen(PORT || 5000, () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
 
